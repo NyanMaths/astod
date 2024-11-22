@@ -1,3 +1,5 @@
+import java.awt.geom.Point2D;
+
 /*
 Unit : an abstract class to define basics of towers and living entities.
 The default attack mode is intended to be defined by the player directly in order not to bother setting it manually each time they invoke an ally.
@@ -16,11 +18,14 @@ private long health;
 private long attack;
 private long range;  // unit : tiles
 private long attackDelay;  // unit : milliseconds
-
 private AttackMode attackMode;
 
+// stored as proportion of the screen (centered => (0.5, 0.5) for instance)
+// This is intended to be able to resize the game window without making it die.
+private Point2D.Float position;  
 
-public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, long range, long health)
+
+public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, long range, long attackDelay, Point2D.Float spawnPosition, long health)
 {
     this.name = name;
     this.attacker = attacker;
@@ -30,14 +35,16 @@ public Unit (String name, boolean attacker, Element element, long maxHealth, lon
     this.health = health;
     this.attack = attack;
     this.range = range;
-
+	this.attackDelay = attackDelay;
     this.attackMode = defaultAttackMode;
+
+	this.position = spawnPosition;
 }
 /* Initializes a new Unit with full health, use this if unsure, the other constructor is intended to implement debuffs.
  */
-public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, long range)
+public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, long range, long attackDelay, Point2D.Float spawnPosition)
 {
-    this(name, attacker, element, maxHealth, attack, range, maxHealth);
+    this(name, attacker, element, maxHealth, attack, range, attackDelay, spawnPosition, maxHealth);
 }
 
 
@@ -198,5 +205,14 @@ public AttackMode getaAttackMode ()
 public void setAttackMode (AttackMode newAttackmode)
 {
 	this.attackMode = newAttackmode;
+}
+
+public Point2D.Float getPosition ()
+{
+	return this.position;
+}
+public void setPosition (Point2D.Float newPosition)
+{
+	this.position = newPosition;
 }
 }
