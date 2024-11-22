@@ -14,7 +14,8 @@ private boolean attacker;
 private long maxHealth;
 private long health;
 private long attack;
-private long range;
+private long range;  // unit : tiles
+private long attackDelay;  // unit : milliseconds
 
 private AttackMode attackMode;
 
@@ -42,7 +43,7 @@ public Unit (String name, boolean attacker, Element element, long maxHealth, lon
 
 /**
  * 
- * @param what kind of elemental is applied to the Unit
+ * @param what kind of element is applied to the Unit
  * @return the multiplier to be applied to the damage taken
  */
 private float getDamageMultiplier (Element damageElement)
@@ -174,6 +175,21 @@ public long getRange ()
 	return this.range;
 }
 // Setter useless for now
+
+public long getAttackDelay ()
+{
+	return this.attackDelay;
+}
+public boolean setAttackDelay (long newAttackDelay)
+{
+	if (newAttackDelay < 0)
+	{
+		return false;
+	}
+
+	this.attackDelay = newAttackDelay;
+	return true;
+}
 
 public AttackMode getaAttackMode ()
 {
