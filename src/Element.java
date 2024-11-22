@@ -1,8 +1,8 @@
 public enum Element
 {
-    Neutral,
-    Fire,
-    Earth,
-    Wind,
-    Water,
+	Neutral,
+	Fire,
+	Earth,
+	Wind,
+	Water,
 }
