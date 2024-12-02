@@ -13,13 +13,22 @@ public Map (String name)
 {
 	this.location = Paths.get("assets/maps/" + name + "mtp");
 }
-}
 
-/* essais numéro 65485154415415
- * Tentative de lecture de fichier : ECHEC
- * MEME AVEC LE PTN DE CODE DU PROF RIEN NE SE PASSE
- * DROP
- * BREAK
- * KILL
- */
+public  void readFile(Path location)
+{
+	try (BufferedReader reader = Files.newBufferedReader(this.location))
+	{
+		String ligne = null;  
+        while ((ligne = reader.readLine()) != null) 
+		{  
+			System.out.println(ligne);  
+        }  
+        }
+		catch (IOException e) 
+		{
+			System.out.println("An error occurred.");
+			e.printStackTrace();
+		}
+	}
+}
 
