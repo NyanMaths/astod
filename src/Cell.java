@@ -8,7 +8,6 @@ public Cell (CellType type)
 {
 	this.type = type;
 }
-
 public Cell (Character type)
 {
 	this.type = switch (type)
@@ -20,6 +19,12 @@ public Cell (Character type)
 		case 'X' -> CellType.Scenery;
 		default -> throw new IllegalArgumentException("pikmin");
 	};
+}
+
+
+public CellType getType ()
+{
+	return this.type;
 }
 
 public Color getColor()
