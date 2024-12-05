@@ -8,20 +8,20 @@ import java.util.List;
 
 public final class Map
 {
-private Path location;
+private Path name;
 private List<List<Cell>> matrix;
 
-public Map (String mapName) throws InvalidMapException
+public Map (String name) throws InvalidMapException
 {
-	this.loadFromFile(mapName);
+	this.loadFromFile(name);
 }
 
-public void loadFromFile (String mapName) throws InvalidMapException
+public void loadFromFile (String name) throws InvalidMapException
 {
-	this.location = Paths.get("assets/maps/" + location + ".mtp");
+	this.name = Paths.get("assets/maps/" + name + ".mtp");
 	this.matrix = new ArrayList<>();
 
-	try (BufferedReader reader = Files.newBufferedReader(this.location))
+	try (BufferedReader reader = Files.newBufferedReader(this.name))
 	{
 		String currentLine = reader.readLine();
 
@@ -45,7 +45,7 @@ public void loadFromFile (String mapName) throws InvalidMapException
 
 public Path getLocation ()
 {
-	return this.location;
+	return this.name;
 }
 
 public Cell get (int row, int col)
