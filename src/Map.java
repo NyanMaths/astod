@@ -3,32 +3,47 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Map
+public final class Map
 {
-private final Path location;
-private Cell[][] matrix;
+private Path location;
+private List<List<Cell>> matrix;
 
-public Map (String name)
+public Map (Path location) throws InvalidMapException
 {
-	this.location = Paths.get("assets/maps/" + name + "mtp");
+	this.loadFromFile(location);
 }
 
-public  void readFile(Path location)
+public void loadFromFile (Path location) throws InvalidMapException
 {
+	this.location = Paths.get("assets/maps/" + location + ".mtp");
+	this.matrix = new ArrayList<>();
+
 	try (BufferedReader reader = Files.newBufferedReader(this.location))
 	{
-		String ligne = null;  
-        while ((ligne = reader.readLine()) != null) 
-		{  
-			System.out.println(ligne);  
-        }  
-        }
-		catch (IOException e) 
+		String currentLine = reader.readLine();
+
+		while (currentLine != null)
 		{
-			System.out.println("An error occurred.");
-			e.printStackTrace();
+			this.matrix.addLast(new ArrayList<>());
+			for (Character cellType : currentLine.toCharArray())
+			{
+				this.matrix.getLast().addLast(new Cell(cellType));
+			}
+			
+			currentLine = reader.readLine();
 		}
+    }
+	catch (IOException eee)
+	{
+		System.err.println(eee);
 	}
 }
 
+public Path getLocation ()
+{
+	return this.location;
+}
+}

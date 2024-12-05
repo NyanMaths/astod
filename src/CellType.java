@@ -1,4 +1,4 @@
-enum CellType
+public enum CellType
 {
     Spawn,
     Path,
