@@ -11,12 +11,12 @@ public final class Map
 private Path location;
 private List<List<Cell>> matrix;
 
-public Map (Path location) throws InvalidMapException
+public Map (String mapName) throws InvalidMapException
 {
-	this.loadFromFile(location);
+	this.loadFromFile(mapName);
 }
 
-public void loadFromFile (Path location) throws InvalidMapException
+public void loadFromFile (String mapName) throws InvalidMapException
 {
 	this.location = Paths.get("assets/maps/" + location + ".mtp");
 	this.matrix = new ArrayList<>();

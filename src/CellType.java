@@ -1,8 +1,8 @@
 public enum CellType
 {
-    Spawn,
-    Path,
-    Player,
-    Buildable,
-    Scenery,
+	Spawn,
+	Path,
+	Player,
+	Buildable,
+	Scenery,
 }
