@@ -42,8 +42,14 @@ public void loadFromFile (String mapName) throws InvalidMapException
 	}
 }
 
+
 public Path getLocation ()
 {
 	return this.location;
+}
+
+public Cell get (int row, int col)
+{
+	return this.matrix.get(row).get(col);
 }
 }
