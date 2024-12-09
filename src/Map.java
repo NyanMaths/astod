@@ -48,7 +48,17 @@ public Path getLocation ()
 	return this.name;
 }
 
-public Cell get (int row, int col)
+public int getRaw()
+{
+	return matrix.size();
+}
+
+public int getColumn()
+{
+	return matrix.get(0).size();
+}
+
+public Cell getCell(int row, int col)
 {
 	return this.matrix.get(row).get(col);
 }
