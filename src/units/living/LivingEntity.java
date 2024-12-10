@@ -11,8 +11,8 @@ A living entity can move and drops a reward when killed.
 
 public abstract class LivingEntity extends Unit
 {
-private long speed;
-private static final long REWARD = 12;
+protected long speed;
+protected static final long REWARD = 12;
 
 public LivingEntity (String name, boolean attacker, Element element, long maxHealth, long attack, long range, long attackDelay, Point2D.Float spawnPosition, long speed) 
 {
