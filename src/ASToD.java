@@ -4,13 +4,15 @@ public class ASToD
 {
 public static void main (String[] args) throws Exception
 {
-	map.Map map = new map.Map("5-8");
+	map.Map map = new map.Map("10-10");
 
-	StdDraw.setCanvasSize(1600, 900);
+	StdDraw.setCanvasSize(1024, 720);
+    StdDraw.setXscale(-12, 1012);
+    StdDraw.setYscale(-10, 710);
 
-	int rowsCount = map.getRowsCount();
-	int columnsCount = map.getColumnsCount();
-	double cellSize = 1.0 / (double)Math.max(rowsCount, columnsCount);
+    int rowsCount = map.getRowsCount();
+    int columnsCount = map.getColumnsCount();
+    double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
 
 	for (int i = 0 ; i<rowsCount ; i++)
 	{
