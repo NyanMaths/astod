@@ -7,8 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.PriorityQueue;
-import units.living.LivingEntity;
-import units.living.Minion;
+import units.living.*;
 
 
 /*
@@ -29,6 +28,11 @@ private LivingEntity getEntityFromName (String entityName) throws NonExistentEnt
 	return switch (entityName)
 	{
 		case "Minion" -> new Minion(new Point2D.Float(0.0f, 0.0f));
+		case "Fire Grognard" -> new FireGrognard(new Point2D.Float(0.0f, 0.0f));
+		case "Wind Grognard" -> new WindGrognard(new Point2D.Float(0.0f, 0.0f));
+		case "Earth Brute" -> new EarthBrute(new Point2D.Float(0.0f, 0.0f));
+		case "Water Brute" -> new WaterBrute(new Point2D.Float(0.0f, 0.0f));
+		case "Boss" -> new Boss(new Point2D.Float(0.0f, 0.0f));
 		default -> throw new NonExistentEntity(entityName);
 	};
 }
