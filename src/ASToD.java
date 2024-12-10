@@ -1,9 +1,10 @@
 import libraries.StdDraw;
+
 public class ASToD
 {
 public static void main (String[] args) throws Exception
 {
-	Map map = new Map("5-8");
+	map.Map map = new map.Map("5-8");
 
 	StdDraw.setCanvasSize(1600, 900);
 
@@ -15,7 +16,7 @@ public static void main (String[] args) throws Exception
 	{
 		for (int j = 0 ; j<columnsCount ; j++)
 		{
-			Cell currentCell = map.getCell(i, j);
+			map.Cell currentCell = map.getCell(i, j);
 			StdDraw.setPenColor(currentCell.getColor());
 
 			double x = cellSize*i + 0.5*cellSize;
