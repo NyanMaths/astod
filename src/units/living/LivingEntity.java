@@ -13,7 +13,7 @@ public abstract class LivingEntity extends Unit
 {
 protected long speed;
 
-public LivingEntity (String name, boolean attacker, Element element, long maxHealth, long attack, long range, long attackDelay, Point2D.Float spawnPosition, long speed) 
+public LivingEntity (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long speed) 
 {
 	super(name, attacker, element, maxHealth, attack, range, attackDelay, spawnPosition);
 	this.speed = speed;

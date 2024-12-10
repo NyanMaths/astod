@@ -18,7 +18,7 @@ private boolean attacker;
 private long maxHealth;
 private long health;
 private long attack;
-private long range;  // unit : tiles
+private float range;  // unit : tiles
 private long attackDelay;  // unit : milliseconds
 private AttackMode attackMode;
 
@@ -27,7 +27,7 @@ private AttackMode attackMode;
 private Point2D.Float position;  
 
 
-public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, long range, long attackDelay, Point2D.Float spawnPosition, long health)
+public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long health)
 {
     this.name = name;
     this.attacker = attacker;
@@ -44,7 +44,7 @@ public Unit (String name, boolean attacker, Element element, long maxHealth, lon
 }
 /* Initializes a new Unit with full health, use this if unsure, the other constructor is intended to implement debuffs.
  */
-public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, long range, long attackDelay, Point2D.Float spawnPosition)
+public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition)
 {
     this(name, attacker, element, maxHealth, attack, range, attackDelay, spawnPosition, maxHealth);
 }
@@ -179,7 +179,7 @@ public long getAttack ()
 }
 // Setter too dangerous for now
 
-public long getRange ()
+public float getRange ()
 {
 	return this.range;
 }
