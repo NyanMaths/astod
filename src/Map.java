@@ -48,12 +48,12 @@ public Path getLocation ()
 	return this.name;
 }
 
-public int getRaw()
+public int getRowsCount ()
 {
 	return matrix.size();
 }
 
-public int getColumn()
+public int getColumnsCount ()
 {
 	return matrix.get(0).size();
 }

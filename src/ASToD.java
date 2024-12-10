@@ -1,30 +1,26 @@
-import java.nio.file.Path;
-import java.awt.Color;
 import libraries.StdDraw;
 public class ASToD
 {
 public static void main (String[] args) throws Exception
 {
-	Map carte = new Map("beta_test");
-	StdDraw.setCanvasSize (1024 , 720);
-	StdDraw.setXscale ( -12 , 1012);
-	StdDraw.setYscale ( -10 , 710);
-	carte.loadFromFile("beta_test");
-	int nbRaw = carte.getRaw();
-	int nbColumn = carte.getColumn();
-	System.out.println("Nombre lignes = " + nbRaw + "\n Nombre colonnes = " + nbColumn);
-	double caseSize = 350.0/Math.max(nbRaw, nbColumn);
-	for(int i = 0; i<nbRaw;i++)
-	{
-		for(int j = 0; j<nbColumn; j++)
-		{
-			Cell case = (carte.getCell(i, j)); //on récup la cellule
-			Color couleur = Cell.getColor(case); // on determine sa couleur
-			StdDraw.setPenColor(couleur); // on set la couleur
+	Map map = new Map("5-8");
 
-			double x =  //calcul de la taille des cases
-			double y = //calcul de la taille des cases
-			StdDraw.filledSquare(x,y,caseSize) // dessin de la case
+	StdDraw.setCanvasSize(1600, 900);
+
+	int rowsCount = map.getRowsCount();
+	int columnsCount = map.getColumnsCount();
+	double cellSize = 1.0 / (double)Math.max(rowsCount, columnsCount);
+
+	for (int i = 0 ; i<rowsCount ; i++)
+	{
+		for (int j = 0 ; j<columnsCount ; j++)
+		{
+			Cell currentCell = map.getCell(i, j);
+			StdDraw.setPenColor(currentCell.getColor());
+
+			double x = cellSize*i + 0.5*cellSize;
+			double y = cellSize*j + 0.5*cellSize;
+			StdDraw.filledSquare(x, y, cellSize*0.5f);
 		}
 	}
 	StdDraw.enableDoubleBuffering();
