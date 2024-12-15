@@ -1,4 +1,5 @@
 import libraries.StdDraw;
+import java.awt.Color;
 
 public class ASToD
 {
@@ -27,5 +28,12 @@ public static void main (String[] args) throws Exception
 		}
 	}
 	StdDraw.enableDoubleBuffering();
+	while(true)
+	{
+		StdDraw.setPenColor(Color.BLACK);
+		if(StdDraw.isMousePressed())
+		StdDraw.point(StdDraw.mouseX(), StdDraw.mouseY());
+		StdDraw.show();
+	}
 }
 }
