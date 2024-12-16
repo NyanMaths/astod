@@ -1,6 +1,8 @@
 package map;
 
+import graphics.Drawable;
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,10 +10,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-
 import libraries.StdDraw;
 
-public final class Map
+
+public final class Map implements Drawable
 {
 private Path name;
 private List<List<Cell>> matrix;
@@ -30,16 +32,22 @@ public void loadFromFile (String name) throws InvalidMapException
 	{
 		String currentLine = reader.readLine();
 
+		int i = 0;
 		while (currentLine != null)
 		{
 			this.matrix.addLast(new ArrayList<>());
+			int j = 0;
 			for (Character cellType : currentLine.toCharArray())
 			{
-				this.matrix.getLast().addLast(new Cell(cellType));
+				this.matrix.getLast().addLast(new Cell(cellType, new Point2D.Float(i, j)));
+				j++;
 			}
 			
 			currentLine = reader.readLine();
+			i++;
 		}
+
+		Cell.setSize(Math.min(1024.0f, 720.0f) / (float)Math.max(this.getRowsCount(), this.getColumnsCount()));
     }
 	catch (IOException eee)
 	{
@@ -63,29 +71,25 @@ public int getColumnsCount ()
 	return matrix.get(0).size();
 }
 
-public Cell getCell(int row, int col)
+public Cell getCell (int row, int col)
 {
 	return this.matrix.get(row).get(col);
 }
 
-public void draw(Map map)
+@Override
+public void draw ()
 {
-    int rowsCount = map.getRowsCount();
-    int columnsCount = map.getColumnsCount();
-    double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
+    int rowsCount = this.getRowsCount();
+    int columnsCount = this.getColumnsCount();
 
 	for (int i = 0 ; i<rowsCount ; i++)
 	{
 		for (int j = 0 ; j<columnsCount ; j++)
 		{
-			map.Cell currentCell = map.getCell(i, j);
-			StdDraw.setPenColor(currentCell.getColor());
-
-			double x = cellSize*i + 0.5*cellSize;
-			double y = cellSize*j + 0.5*cellSize;
-			StdDraw.filledSquare(x, y, cellSize*0.5f);
+			this.getCell(i, j).draw();
 		}
 	}
+	
 	StdDraw.setPenColor(Color.RED);
 	StdDraw.filledRectangle(865,688,144,12);
 	StdDraw.setPenColor(Color.GREEN);

@@ -1,5 +1,8 @@
-import libraries.StdDraw;
 import java.awt.Color;
+import java.awt.geom.Point2D;
+import libraries.StdDraw;
+import units.Unit;
+import units.living.WindGrognard;
 
 public class ASToD
 {
@@ -9,7 +12,9 @@ public static void main (String[] args) throws Exception
     StdDraw.setXscale(-12, 1012);
     StdDraw.setYscale(-10, 710);
 	map.Map map = new map.Map("10-10");
-	map.draw(map);
+	map.draw();
+
+	Unit testUnit = new WindGrognard(new Point2D.Float(100, 100));
 
 	//Aniation stuff
 	int rowsCount = map.getRowsCount();
@@ -21,12 +26,13 @@ public static void main (String[] args) throws Exception
 		double x = cellSize*i + 0.5*cellSize;
 		double y = cellSize*i + 0.5*cellSize;
 		StdDraw.clear();
-		map.draw(map);
+		map.draw();
 		StdDraw.setPenColor(Color.BLACK);
 		StdDraw.filledSquare(x+i,y+i,cellSize);
+		testUnit.draw();
 		StdDraw.show();
 		StdDraw.pause(20);
-	} 
+	}
 
 	//Drawning in real time stuff
 

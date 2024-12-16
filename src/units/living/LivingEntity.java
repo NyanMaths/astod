@@ -1,6 +1,7 @@
 package units.living;
 
 import java.awt.geom.Point2D;
+import libraries.StdDraw;
 import units.Element;
 import units.Unit;
 
@@ -34,5 +35,14 @@ public boolean setSpeed (long newSpeed)
 
 	this.speed = newSpeed;
 	return true;
+}
+
+@Override
+public void draw ()
+{
+	StdDraw.setPenColor(this.getColour());
+	StdDraw.filledCircle(this.getPosition().x, this.getPosition().y, 20);
+	StdDraw.setPenColor(StdDraw.BLACK);
+	StdDraw.circle(this.getPosition().x, this.getPosition().y, 20.5);
 }
 }

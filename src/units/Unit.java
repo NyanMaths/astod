@@ -1,13 +1,18 @@
 package units;
 
+import graphics.Coloured;
+import graphics.Drawable;
+import java.awt.Color;
 import java.awt.geom.Point2D;
+import libraries.StdDraw;
+
 
 /*
 Unit : an abstract class to define basics of towers and living entities.
 The default attack mode is intended to be defined by the player directly in order not to bother setting it manually each time they invoke an ally.
 The attacker property is a flag to identify a unit as ally or enemy.
 */
-public abstract class Unit
+public abstract class Unit implements Drawable, Coloured
 {
 private static AttackMode defaultAttackMode;
 
@@ -24,6 +29,7 @@ private AttackMode attackMode;
 
 // stored as proportion of the screen (centered => (0.5, 0.5) for instance)
 // This is intended to be able to resize the game window without making it die.
+// lol nope absolute positioning goes brrrr
 private Point2D.Float position;  
 
 
@@ -216,5 +222,19 @@ public Point2D.Float getPosition ()
 public void setPosition (Point2D.Float newPosition)
 {
 	this.position = newPosition;
+}
+
+
+@Override
+public Color getColour ()
+{
+	return switch (this.element)
+	{
+		case Element.Neutral -> StdDraw.GRAY;
+		case Element.Earth -> new Color(0, 167, 15);
+		case Element.Wind -> new Color(242, 211, 0);
+		case Element.Fire -> new Color(184, 22, 1);
+		case Element.Water -> new Color(6, 0, 160);
+	};
 }
 }

@@ -1,6 +1,7 @@
 package units.towers;
 
 import java.awt.geom.Point2D;
+import libraries.StdDraw;
 import units.Element;
 import units.Unit;
 
@@ -16,4 +17,14 @@ public Tower (String name, boolean attacker, Element element, long maxHealth, lo
 }
 
 public abstract long getCost ();
+
+
+@Override
+public void draw ()
+{
+	StdDraw.setPenColor(this.getColour());
+	StdDraw.filledRectangle(this.getPosition().x, this.getPosition().y, 10, 20);
+	StdDraw.setPenColor(StdDraw.BLACK);
+	StdDraw.rectangle(this.getPosition().x, this.getPosition().y, 10.5, 20.5);
+}
 }
