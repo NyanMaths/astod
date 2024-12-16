@@ -69,10 +69,6 @@ public Cell getCell(int row, int col)
 
 public void draw(Map map)
 {
-	StdDraw.setCanvasSize(1024, 720);
-    StdDraw.setXscale(-12, 1012);
-    StdDraw.setYscale(-10, 710);
-
     int rowsCount = map.getRowsCount();
     int columnsCount = map.getColumnsCount();
     double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
