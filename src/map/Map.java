@@ -8,6 +8,8 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import libraries.StdDraw;
+
 public final class Map
 {
 private Path name;
@@ -63,5 +65,29 @@ public int getColumnsCount ()
 public Cell getCell(int row, int col)
 {
 	return this.matrix.get(row).get(col);
+}
+
+public void draw(Map map)
+{
+	StdDraw.setCanvasSize(1024, 720);
+    StdDraw.setXscale(-12, 1012);
+    StdDraw.setYscale(-10, 710);
+
+    int rowsCount = map.getRowsCount();
+    int columnsCount = map.getColumnsCount();
+    double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
+
+	for (int i = 0 ; i<rowsCount ; i++)
+	{
+		for (int j = 0 ; j<columnsCount ; j++)
+		{
+			map.Cell currentCell = map.getCell(i, j);
+			StdDraw.setPenColor(currentCell.getColor());
+
+			double x = cellSize*i + 0.5*cellSize;
+			double y = cellSize*j + 0.5*cellSize;
+			StdDraw.filledSquare(x, y, cellSize*0.5f);
+		}
+	}
 }
 }
