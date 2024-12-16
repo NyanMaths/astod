@@ -1,5 +1,6 @@
 package map;
 
+import java.awt.Color;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -85,5 +86,15 @@ public void draw(Map map)
 			StdDraw.filledSquare(x, y, cellSize*0.5f);
 		}
 	}
+	StdDraw.setPenColor(Color.RED);
+	StdDraw.filledRectangle(865,688,144,12);
+	StdDraw.setPenColor(Color.GREEN);
+	StdDraw.filledRectangle(865,641,144,25);
+	StdDraw.setPenColor(Color.PINK);
+	StdDraw.filledRectangle(865, 303, 144,303);
+	StdDraw.setPenColor(Color.BLACK);
+	StdDraw.text(865, 688, "Level");
+	StdDraw.text(865, 641, "Player");
+	StdDraw.text(865, 303, "Store");
 }
 }

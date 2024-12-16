@@ -26,7 +26,7 @@ public static void main (String[] args) throws Exception
 		StdDraw.filledSquare(x+i,y+i,cellSize);
 		StdDraw.show();
 		StdDraw.pause(20);
-	}
+	} 
 
 	//Drawning in real time stuff
 
