@@ -12,6 +12,7 @@ public static void main (String[] args) throws Exception
     StdDraw.setXscale(-12, 1012);
     StdDraw.setYscale(-10, 710);
 	map.Map map = new map.Map("10-10");
+	Player player = new Player(100,50);
 	map.draw();
 
 	Unit testUnit = new WindGrognard(new Point2D.Float(100, 100));

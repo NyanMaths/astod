@@ -76,6 +76,60 @@ public Cell getCell (int row, int col)
 	return this.matrix.get(row).get(col);
 }
 
+public void drawCoin()
+{
+	StdDraw.setPenColor (new Color(212,175,55));
+	StdDraw.filledCircle (760, 641, 20);
+	StdDraw.text(810, 641, "Coins"); //J'arrive pas avec Player.getCoins...
+	StdDraw.setPenColor (new Color(192,192,192));
+	StdDraw.filledCircle (760, 641, 15);
+
+}
+
+public void drawHeart()
+{
+	int centerX = 930;
+	int centerY = 641;
+	int halfHeight = 20;
+	StdDraw . setPenColor ( new Color (223 , 75 , 95) );
+	double [] listX = new double []
+	{
+		centerX,
+		centerX-halfHeight,
+		centerX-halfHeight,
+		centerX-0.66*halfHeight,
+		centerX-0.33*halfHeight,
+		centerX,
+		centerX+0.33*halfHeight,
+		centerX+0.66*halfHeight,
+		centerX+halfHeight,
+		centerX+halfHeight,
+	};
+	double [] listY = new double []
+	{
+		centerY-halfHeight,
+		centerY,
+		centerY+0.5*halfHeight,
+		centerY+halfHeight,
+		centerY+halfHeight,
+		centerY+0.5*halfHeight,
+		centerY+halfHeight,
+		centerY+halfHeight,
+		centerY+0.5*halfHeight,
+		centerY,
+		};
+		StdDraw.filledPolygon ( listX , listY );
+		StdDraw.text(975,641,"Health"); //J'arrive pas avec Player.getHealth...
+}
+
+public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
+{
+	StdDraw.text(760,688,"LVL:X/X");
+	StdDraw.text(930,688,"WAVE:X/X");
+	//J'aimerais test de changer le font, mais je sais pas si c'est une très bonne idée, car faudra le changer entre les fonctions. 
+	//Genre pour la vie et la thune, c'est un style différent de celui pour la vague et le niveau en terme d'écriture.
+}
+
 @Override
 public void draw ()
 {
@@ -90,15 +144,13 @@ public void draw ()
 		}
 	}
 	
-	StdDraw.setPenColor(Color.RED);
-	StdDraw.filledRectangle(865,688,144,12);
-	StdDraw.setPenColor(Color.GREEN);
-	StdDraw.filledRectangle(865,641,144,25);
-	StdDraw.setPenColor(Color.PINK);
-	StdDraw.filledRectangle(865, 303, 144,303);
 	StdDraw.setPenColor(Color.BLACK);
-	StdDraw.text(865, 688, "Level");
-	StdDraw.text(865, 641, "Player");
-	StdDraw.text(865, 303, "Store");
+	StdDraw.rectangle(867,688,144,12);
+	StdDraw.rectangle(867,641,144,25);
+	StdDraw.rectangle(867, 303, 144,303);
+	this.drawLevelInfo();
+	StdDraw.text(867, 303, "Store");
+	this.drawCoin();
+	this.drawHeart();
 }
 }
