@@ -1,3 +1,5 @@
+import units.living.Minion;
+
 public class Player 
 {
     private double health;
@@ -17,5 +19,10 @@ public class Player
     public double getMoney()
     {
         return this.money;
+    }
+
+    public double getReward(Minion monster)
+    {
+        return this.money + monster.getReward();
     }
 }

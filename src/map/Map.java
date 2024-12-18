@@ -119,7 +119,7 @@ public void drawHeart()
 		centerY,
 		};
 		StdDraw.filledPolygon ( listX , listY );
-		StdDraw.text(975,641,"Health"); //J'arrive pas avec Player.getHealth...
+		StdDraw.text(980,641,"Health"); //J'arrive pas avec Player.getHealth...
 }
 
 public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
@@ -128,6 +128,27 @@ public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
 	StdDraw.text(930,688,"WAVE:X/X");
 	//J'aimerais test de changer le font, mais je sais pas si c'est une très bonne idée, car faudra le changer entre les fonctions. 
 	//Genre pour la vie et la thune, c'est un style différent de celui pour la vague et le niveau en terme d'écriture.
+}
+
+public void drawShop()
+{
+	double x1 = 795;
+	double y1 = 545;
+	double halfWidth = 72;
+	double halfHeight = 60.5;
+	double x2 = x1+2*halfWidth;
+	double y2 = y1-2*halfHeight;
+	double y3 = y1-4*halfHeight;
+	StdDraw.rectangle(x1, y1, halfWidth, halfHeight);
+	StdDraw.text(x1, y1, "Tower1");
+	StdDraw.rectangle(x2, y1, halfWidth, halfHeight);
+	StdDraw.text(x2, y1, "Tower2");
+	StdDraw.rectangle(x1,y2,halfWidth,halfHeight);
+	StdDraw.text(x1, y2, "Tower3");
+	StdDraw.rectangle(x2,y2,halfWidth,halfHeight);
+	StdDraw.text(x2, y2, "Tower4");
+	StdDraw.rectangle(x1,y3,halfWidth,halfHeight);
+	StdDraw.text(x1, y3, "Tower5");
 }
 
 @Override
@@ -149,7 +170,7 @@ public void draw ()
 	StdDraw.rectangle(867,641,144,25);
 	StdDraw.rectangle(867, 303, 144,303);
 	this.drawLevelInfo();
-	StdDraw.text(867, 303, "Store");
+	this.drawShop();
 	this.drawCoin();
 	this.drawHeart();
 }
