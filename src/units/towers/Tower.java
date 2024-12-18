@@ -27,4 +27,15 @@ public void draw ()
 	StdDraw.setPenColor(StdDraw.BLACK);
 	StdDraw.rectangle(this.getPosition().x, this.getPosition().y, 10.5, 20.5);
 }
+/* 	public void drawText()
+	{
+		StdDraw.text(this.getPosition().x, this.getPosition().y, 
+		"\nName : " + getName() +  
+		"\n Healt : " + getMaxHealth() + 
+		"\n Attack : " + getAttack() +
+		"\n Attack Speed : " + getAttackDelay() +
+		"\n Range : " + getRange() +
+		"\n Element : " + getElement() +
+		"\n Cost : " + getCost()); 
+	} */
 }

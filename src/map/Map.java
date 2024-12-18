@@ -3,6 +3,7 @@ package map;
 import graphics.Drawable;
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Float;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,6 +12,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import libraries.StdDraw;
+import units.towers.Archer;
+import units.towers.EarthCaster;
+import units.towers.FireCaster;
+import units.towers.Tower;
+import units.towers.WaterCaster;
+import units.towers.WindCaster;
 
 
 public final class Map implements Drawable
@@ -132,23 +139,34 @@ public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
 
 public void drawShop()
 {
-	double x1 = 795;
-	double y1 = 545;
-	double halfWidth = 72;
-	double halfHeight = 60.5;
-	double x2 = x1+2*halfWidth;
-	double y2 = y1-2*halfHeight;
-	double y3 = y1-4*halfHeight;
+
+	float x1 = 795;
+	float y1 = 545;
+	float halfWidth = 72;
+	float halfHeight = (float) 60.5;
+	float x2 = x1+2*halfWidth;
+	float y2 = y1-2*halfHeight;
+	float y3 = y1-4*halfHeight;
 	StdDraw.rectangle(x1, y1, halfWidth, halfHeight);
-	StdDraw.text(x1, y1, "Tower1");
+	Point2D.Float spawnPosition = new Float(x1-55,y1);
+	Archer archer = new Archer(spawnPosition);
+	archer.draw();
 	StdDraw.rectangle(x2, y1, halfWidth, halfHeight);
-	StdDraw.text(x2, y1, "Tower2");
+	spawnPosition.setLocation(x2-55,y1);
+	EarthCaster earth = new EarthCaster(spawnPosition);
+	earth.draw();
 	StdDraw.rectangle(x1,y2,halfWidth,halfHeight);
-	StdDraw.text(x1, y2, "Tower3");
+	spawnPosition.setLocation(x1-55,y2);
+	FireCaster fire = new FireCaster(spawnPosition);
+	fire.draw();
 	StdDraw.rectangle(x2,y2,halfWidth,halfHeight);
-	StdDraw.text(x2, y2, "Tower4");
+	spawnPosition.setLocation(x2-55,y2);
+	WaterCaster water = new WaterCaster(spawnPosition);
+	water.draw();
 	StdDraw.rectangle(x1,y3,halfWidth,halfHeight);
-	StdDraw.text(x1, y3, "Tower5");
+	spawnPosition.setLocation(x1-55,y3);
+	WindCaster wind = new WindCaster(spawnPosition);
+	wind.draw();
 }
 
 @Override
