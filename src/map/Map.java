@@ -15,7 +15,6 @@ import libraries.StdDraw;
 import units.towers.Archer;
 import units.towers.EarthCaster;
 import units.towers.FireCaster;
-import units.towers.Tower;
 import units.towers.WaterCaster;
 import units.towers.WindCaster;
 
