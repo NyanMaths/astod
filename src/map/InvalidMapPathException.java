@@ -3,13 +3,13 @@ package map;
 import java.nio.file.Path;
 
 
-public class InvalidMapException extends Exception
+public class InvalidMapPathException extends Exception
 {
 private final Path location;
 
-public InvalidMapException (Path mapLocation)
+public InvalidMapPathException (Path mapLocation)
 {
-	super(mapLocation + " is screwed !");
+	super(mapLocation + " does not exist !");
 	this.location = mapLocation;
 }
 

@@ -1,28 +1,39 @@
-import units.living.Minion;
+import units.living.LivingEntity;
 
-public class Player 
+
+public class Player
 {
-    private double health;
-    private double money;
+private long health;
+private long money;
 
-    public Player(double health, double money)
-    {
-        this.health = health;
-        this.money = money;
-    }
+public Player(long health, long money)
+{
+	this.health = health;
+	this.money = money;
+}
 
-    public double getHealth() 
-    {
-        return this.health;
-    }
+public long getHealth () 
+{
+	return this.health;
+}
+public boolean setHealth (long newHealth)
+{
+	if (newHealth < 0)
+	{
+		return false;
+	}
 
-    public double getMoney()
-    {
-        return this.money;
-    }
+	this.health = newHealth;
+	return true;
+}
 
-    public double getReward(Minion monster)
-    {
-        return this.money + monster.getReward();
-    }
+public long getMoney ()
+{
+	return this.money;
+}
+
+public void reward (LivingEntity monster)
+{
+	this.money += monster.getReward();
+}
 }

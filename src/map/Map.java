@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,14 +25,26 @@ public final class Map implements Drawable
 private Path name;
 private List<List<Cell>> matrix;
 
-public Map (String name) throws InvalidMapException
+public Map (String name) throws InvalidMapException, InvalidMapPathException
 {
-	this.loadFromFile(name);
+	this.load(name);
+}
+public Map () throws InvalidMapException, InvalidMapPathException
+{
+	// nothing here
 }
 
-public void loadFromFile (String name) throws InvalidMapException
+public void load (String name) throws InvalidMapException, InvalidMapPathException
 {
 	this.name = Paths.get("assets/maps/" + name + ".mtp");
+
+	File mapFile = new File("assets/maps/" + name + ".mtp");
+	if (!mapFile.exists() || mapFile.isDirectory())
+	{
+		throw new InvalidMapPathException(this.name);
+	}
+
+
 	this.matrix = new ArrayList<>();
 
 	try (BufferedReader reader = Files.newBufferedReader(this.name))
@@ -57,7 +70,7 @@ public void loadFromFile (String name) throws InvalidMapException
     }
 	catch (IOException eee)
 	{
-		System.err.println(eee);
+		throw new InvalidMapException(this.name);
 	}
 }
 
@@ -86,7 +99,7 @@ public void drawCoin()
 {
 	StdDraw.setPenColor (new Color(212,175,55));
 	StdDraw.filledCircle (760, 641, 20);
-	StdDraw.text(810, 641, "Coins"); //J'arrive pas avec Player.getCoins...
+	StdDraw.text(810, 641, "Coins"); //J'arrive pas avec Player.getCoins... normal, where player ?
 	StdDraw.setPenColor (new Color(192,192,192));
 	StdDraw.filledCircle (760, 641, 15);
 

@@ -17,10 +17,19 @@ public final class Spawner
 {
 private String waveName;
 private PriorityQueue<LivingEntity> enemies;
+private boolean ready;
+private boolean active;
 
 public Spawner (String waveName)
 {
+	this.ready = false;
+	this.active = false;
 	this.setWave(waveName);
+}
+public Spawner ()
+{
+	this.ready = false;
+	this.active = false;
 }
 
 private LivingEntity getEntityFromName (String entityName) throws NonExistentEntity
@@ -39,13 +48,14 @@ private LivingEntity getEntityFromName (String entityName) throws NonExistentEnt
 
 /*
  * Load wave from assets. It only reads enemies, not their spawn timestamp yet.
- * @return whether the wave is properly loaded
+ * This method nneds to be called before using the spawner unless you want an UninitializedSpawner exception kicking in
+ * @return whether the wave is properly loaded or not
  */
 public boolean setWave (String newWaveName)
 {
 	this.waveName = newWaveName;
 	this.enemies = new PriorityQueue<>();
-	Path wavePath = Paths.get("assets/waves/" + newWaveName + ".mtp");
+	Path wavePath = Paths.get("assets/waves/" + newWaveName + ".wve");
 
 	try (BufferedReader reader = Files.newBufferedReader(wavePath))
 	{
@@ -66,6 +76,8 @@ public boolean setWave (String newWaveName)
 				System.err.println(eee);
 				return false;
 			}
+
+			currentLine = reader.readLine();
 		}
 	}
 	catch (IOException eee)
@@ -73,11 +85,35 @@ public boolean setWave (String newWaveName)
 		System.err.println(eee);
 	}
 
+	this.ready = true;
 	return true;
 }
 
-public String getWaveName ()
+public String getWaveName () throws UninitializedSpawner
 {
-	return this.waveName;
+	if (!this.ready)
+	{
+		return this.waveName;
+	}
+	
+	throw new UninitializedSpawner();
+}
+
+public boolean isActive ()
+{
+	return this.active;
+}
+
+
+public void start () throws UninitializedSpawner
+{
+	if (!this.ready)
+	{
+		throw new UninitializedSpawner();
+	}
+
+	// todo : schedule spawn tasks
+
+	this.active = true;
 }
 }

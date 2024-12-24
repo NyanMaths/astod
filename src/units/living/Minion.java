@@ -17,6 +17,6 @@ public Minion (Point2D.Float spawnPosition)
 @Override
 public long getReward ()
 {
-    return 1;
+	return 1;
 }
 }
