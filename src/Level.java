@@ -108,23 +108,23 @@ public boolean startWave ()
 	while (this.spawner.isActive())
 	{
 	this.map.draw();
-
-	//Aniation stuff
-	int rowsCount = map.getRowsCount();
-	int columnsCount = map.getColumnsCount();
-	double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
 	StdDraw.enableDoubleBuffering();
 	for(double i = 0; true; i += 0.02)
 	{
-		double x = cellSize*i + 0.5*cellSize;
-		double y = cellSize*i + 0.5*cellSize;
 		StdDraw.clear();
 		map.draw();
+		testUnit.draw();
+
+		/* //Aniation stuff
+		int rowsCount = map.getRowsCount();
+		int columnsCount = map.getColumnsCount();
+		double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
+		double x = cellSize*i + 0.5*cellSize;
+		double y = cellSize*i + 0.5*cellSize;
 		StdDraw.setPenColor(Color.BLACK);
 		StdDraw.filledSquare(x+i,y+i,cellSize);
-		testUnit.draw();
 		StdDraw.show();
-		StdDraw.pause(20);
+		StdDraw.pause(20); */
 	}
 
 	//Drawning in real time stuff
