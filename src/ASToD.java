@@ -5,9 +5,12 @@ public class ASToD
 {
 public static void main (String[] args) throws Exception
 {
-	Scanner reader = new Scanner(System.in);
-	System.out.println("Which level ? ");
-	String levelId = reader.nextLine();
+    String levelId;
+    try (Scanner reader = new Scanner(System.in))
+	{
+        System.out.println("Which level ? ");
+        levelId = reader.nextLine();
+    }
 	if (levelId.isEmpty())
 	{
 		levelId = "1";

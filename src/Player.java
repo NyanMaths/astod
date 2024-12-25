@@ -1,21 +1,29 @@
+import graphics.Coloured;
+import graphics.Drawable;
+import graphics.Utils;
+import java.awt.Color;
+import units.Element;
 import units.living.LivingEntity;
 
 
-public class Player
+public class Player implements Drawable, Coloured
 {
+private final String name;
+private long maxHealth;
 private long health;
 private long money;
+private final Element element;
 
-public Player(long health, long money)
+public Player(String name, Element element, long maxHealth, long health, long initialMoney)
 {
+	this.name = name;
+	this.maxHealth = maxHealth;
 	this.health = health;
-	this.money = money;
+	this.money = initialMoney;
+	this.element = element;
 }
 
-public long getHealth () 
-{
-	return this.health;
-}
+
 public boolean setHealth (long newHealth)
 {
 	if (newHealth < 0)
@@ -35,5 +43,17 @@ public long getMoney ()
 public void reward (LivingEntity monster)
 {
 	this.money += monster.getReward();
+}
+
+@Override
+public Color getColour ()
+{
+	return Utils.colorFromElement(this.element);
+}
+
+@Override
+public void draw ()
+{
+	// todo : draw a heart or something dunno
 }
 }

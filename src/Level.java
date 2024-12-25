@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import units.Element;
 import libraries.StdDraw;
 import map.InvalidMapException;
 import map.InvalidMapPathException;
@@ -23,7 +24,7 @@ import units.living.WindGrognard;
 public final class Level
 {
 private Queue<String> waves;
-private Map map;
+private final Map map;
 private final Spawner spawner;
 
 private final Player player;
@@ -33,7 +34,7 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 {
 	this.map = new Map();
 	this.spawner = new Spawner();
-	this.player = new Player(500, 0);
+	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 100, 50);
 
 	this.load(levelName);
 }
