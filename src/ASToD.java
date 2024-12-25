@@ -15,7 +15,6 @@ public static void main (String[] args) throws Exception
 	{
 		levelId = "1";
 	}
-	reader.close();
 
 	StdDraw.setCanvasSize(1024, 720);
     StdDraw.setXscale(-12, 1012);

@@ -16,6 +16,22 @@ public Tower (String name, boolean attacker, Element element, long maxHealth, lo
 	super(name, attacker, element, maxHealth, attack, range, attackDelay, spawnPosition);
 }
 
+/*
+ * Constructor from name
+ */
+public static Tower fromName (String name, Point2D.Float spawnPosition)
+{
+	return switch (name)
+	{
+		case "Archer" -> new Archer(spawnPosition);
+		case "Earth Caster" -> new EarthCaster(spawnPosition);
+		case "Fire Caster" -> new FireCaster(spawnPosition);
+		case "Water Caster" -> new WaterCaster(spawnPosition);
+		case "Wind Caster" -> new WindCaster(spawnPosition);
+		default -> null;
+	};
+}
+
 public abstract long getCost ();
 
 

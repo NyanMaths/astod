@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import units.Element;
 import libraries.StdDraw;
 import map.InvalidMapException;
 import map.InvalidMapPathException;
 import map.Map;
+import units.Element;
 import units.Spawner;
 import units.UninitializedSpawner;
 import units.Unit;
@@ -34,7 +34,7 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 {
 	this.map = new Map();
 	this.spawner = new Spawner();
-	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 100, 50);
+	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 50, new Point2D.Float(100, 100), 100);  // spawned to wrong position, should be center of spawn cell
 
 	this.load(levelName);
 }
@@ -104,19 +104,20 @@ public boolean start () throws UninitializedSpawner
  */
 public boolean startWave ()
 {
-	Unit testUnit = new WindGrognard(new Point2D.Float(100, 100));
+	Unit testUnit = new WindGrognard(new Point2D.Float(150, 100));
 
-	while (this.spawner.isActive())
+	while (this.spawner.isActive() && this.player.isAlive())
 	{
 	this.map.draw();
 	StdDraw.enableDoubleBuffering();
-	for(double i = 0; true; i += 0.02)
+	for (double i = 0.0 ; true ; i += 0.02)  // E
 	{
 		StdDraw.clear();
 		map.draw();
 		testUnit.draw();
+		this.player.draw();
 
-		/* //Aniation stuff
+		//Aniation stuff
 		int rowsCount = map.getRowsCount();
 		int columnsCount = map.getColumnsCount();
 		double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
@@ -125,7 +126,7 @@ public boolean startWave ()
 		StdDraw.setPenColor(Color.BLACK);
 		StdDraw.filledSquare(x+i,y+i,cellSize);
 		StdDraw.show();
-		StdDraw.pause(20); */
+		StdDraw.pause(20);
 	}
 
 	//Drawning in real time stuff
@@ -139,6 +140,6 @@ public boolean startWave ()
 	}*/
 	}
 
-	return true;
+	return this.player.isAlive();
 }
 }
