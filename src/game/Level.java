@@ -1,5 +1,6 @@
+package game;
+
 import java.awt.Color;
-import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,9 +17,8 @@ import map.Map;
 import units.Element;
 import units.Spawner;
 import units.UninitializedSpawner;
-import units.Unit;
 import units.living.LivingEntity;
-import units.living.WindGrognard;
+import units.towers.Tower;
 
 
 public final class Level
@@ -26,6 +26,8 @@ public final class Level
 private Queue<String> waves;
 private final Map map;
 private final Spawner spawner;
+private final List<LivingEntity> enemies;
+private final List<Tower> towers;
 
 private final Player player;
 
@@ -33,8 +35,10 @@ private final Player player;
 public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException
 {
 	this.map = new Map();
-	this.spawner = new Spawner();
-	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 50, new Point2D.Float(100, 100), 100);  // spawned to wrong position, should be center of spawn cell
+	this.spawner = new Spawner(this);
+	this.enemies = new ArrayList<>();
+	this.towers = new ArrayList<>();
+	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 50, 100);
 
 	this.load(levelName);
 }
@@ -53,6 +57,10 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 			throw new InvalidLevelException(location);
 		}
 		this.map.load(currentLine);
+
+		System.out.println(map.getPlayerPosition() + "  --  " + this.map.getSpawnerPosition());
+		this.spawner.setPosition(this.map.getSpawnerPosition());
+		this.player.setPosition(this.map.getPlayerPosition());
 
 		// then get all waves, possibly none, should result in instant victory
 		currentLine = reader.readLine();
@@ -82,7 +90,6 @@ public boolean start () throws UninitializedSpawner
 	{
 		this.spawner.setWave(wave);
 		this.spawner.start();
-		List<LivingEntity> enemies = new ArrayList<>();
 
 		if (this.startWave() == false)
 		{
@@ -95,6 +102,25 @@ public boolean start () throws UninitializedSpawner
 	// the player made it though all waves
 	return true;
 }
+/*
+ * Adds the newly spawned enemy into battle
+ */
+public void spawn (LivingEntity enemy, Spawner funnyToken)
+{
+	this.enemies.add(enemy);
+}
+
+
+/*
+ * Draws enemies, towers then player from bottom to top layer.
+ * Can raise ConcurrentModificationException for funny reasons.
+ */
+private void drawEntities ()
+{
+	this.enemies.stream().forEach(enemy->enemy.draw());
+	this.towers.stream().forEach(tower->tower.draw());
+	this.player.draw();
+}
 
 
 /*
@@ -104,18 +130,13 @@ public boolean start () throws UninitializedSpawner
  */
 public boolean startWave ()
 {
-	Unit testUnit = new WindGrognard(new Point2D.Float(150, 100));
-
-	while (this.spawner.isActive() && this.player.isAlive())
+	for (double i = 0.0 ; this.player.isAlive() || this.spawner.isActive() ; i += 0.02)  // E
 	{
-	this.map.draw();
-	StdDraw.enableDoubleBuffering();
-	for (double i = 0.0 ; true ; i += 0.02)  // E
-	{
+		try
+		{
 		StdDraw.clear();
 		map.draw();
-		testUnit.draw();
-		this.player.draw();
+		this.drawEntities();
 
 		//Aniation stuff
 		int rowsCount = map.getRowsCount();
@@ -125,8 +146,14 @@ public boolean startWave ()
 		double y = cellSize*i + 0.5*cellSize;
 		StdDraw.setPenColor(Color.BLACK);
 		StdDraw.filledSquare(x+i,y+i,cellSize);
+
+		// finalize draw
 		StdDraw.show();
 		StdDraw.pause(20);
+		}
+		catch (java.util.ConcurrentModificationException eee)  // get fucked haha
+		{
+		}
 	}
 
 	//Drawning in real time stuff
@@ -138,7 +165,6 @@ public boolean startWave ()
 		StdDraw.point(StdDraw.mouseX(), StdDraw.mouseY());
 		StdDraw.show();
 	}*/
-	}
 
 	return this.player.isAlive();
 }

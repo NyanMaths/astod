@@ -24,6 +24,8 @@ public final class Map implements Drawable
 {
 private Path name;
 private List<List<Cell>> matrix;
+private Point2D.Float playerPosition;
+private Point2D.Float spawnerPosition;
 
 public Map (String name) throws InvalidMapException, InvalidMapPathException
 {
@@ -51,6 +53,9 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 	{
 		String currentLine = reader.readLine();
 
+		Point2D.Float playerCoordinates = new Point2D.Float(0.0f, 0.0f);
+		Point2D.Float spawnerCoordinates = new Point2D.Float(0.0f, 0.0f);
+
 		int i = 0;
 		while (currentLine != null)
 		{
@@ -58,6 +63,15 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 			int j = 0;
 			for (Character cellType : currentLine.toCharArray())
 			{
+				if (cellType == 'B')
+				{
+					playerCoordinates = new Point2D.Float(i, j);
+				}
+				if (cellType == 'S')
+				{
+					spawnerCoordinates = new Point2D.Float(i, j);
+				}
+
 				this.matrix.getLast().addLast(new Cell(cellType, new Point2D.Float(i, j)));
 				j++;
 			}
@@ -67,6 +81,9 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 		}
 
 		Cell.setSize(Math.min(1024.0f, 720.0f) / (float)Math.max(this.getRowsCount(), this.getColumnsCount()));
+
+		this.playerPosition = new Point2D.Float(Cell.getSize()*playerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*playerCoordinates.y + 0.5f*Cell.getSize());
+		this.spawnerPosition = new Point2D.Float(Cell.getSize()*spawnerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*spawnerCoordinates.y + 0.5f*Cell.getSize());
     }
 	catch (IOException eee)
 	{
@@ -74,6 +91,16 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 	}
 }
 
+
+public Point2D.Float getPlayerPosition ()
+{
+	return this.playerPosition;
+}
+
+public Point2D.Float getSpawnerPosition ()
+{
+	return this.spawnerPosition;
+}
 
 public Path getLocation ()
 {

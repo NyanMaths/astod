@@ -1,12 +1,15 @@
 package units;
 
+import game.Level;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Timer;
 import units.living.*;
 
 
@@ -15,33 +18,35 @@ import units.living.*;
  */
 public final class Spawner
 {
+private final Level level;
 private String waveName;
-private PriorityQueue<LivingEntity> enemies;
+private Queue<LivingEntity> enemies;
+private Queue<Long> spawnDelays;
 private boolean ready;
 private boolean active;
+private Point2D.Float position;
 
-public Spawner (String waveName)
+private final Timer scheduler;
+
+
+public Spawner (Level parent)
 {
+	this.level = parent;
 	this.ready = false;
 	this.active = false;
-	this.setWave(waveName);
-}
-public Spawner ()
-{
-	this.ready = false;
-	this.active = false;
+	this.scheduler = new Timer();
 }
 
 private LivingEntity getEntityFromName (String entityName) throws NonExistentEntity
 {
 	return switch (entityName)
 	{
-		case "Minion" -> new Minion(new Point2D.Float(0.0f, 0.0f));
-		case "Fire Grognard" -> new FireGrognard(new Point2D.Float(0.0f, 0.0f));
-		case "Wind Grognard" -> new WindGrognard(new Point2D.Float(0.0f, 0.0f));
-		case "Earth Brute" -> new EarthBrute(new Point2D.Float(0.0f, 0.0f));
-		case "Water Brute" -> new WaterBrute(new Point2D.Float(0.0f, 0.0f));
-		case "Boss" -> new Boss(new Point2D.Float(0.0f, 0.0f));
+		case "Minion" -> new Minion(this.position);
+		case "Fire Grognard" -> new FireGrognard(this.position);
+		case "Wind Grognard" -> new WindGrognard(this.position);
+		case "Earth Brute" -> new EarthBrute(this.position);
+		case "Water Brute" -> new WaterBrute(this.position);
+		case "Boss" -> new Boss(this.position);
 		default -> throw new NonExistentEntity(entityName);
 	};
 }
@@ -54,12 +59,14 @@ private LivingEntity getEntityFromName (String entityName) throws NonExistentEnt
 public boolean setWave (String newWaveName)
 {
 	this.waveName = newWaveName;
-	this.enemies = new PriorityQueue<>();
+	this.enemies = new LinkedList<>();
+	this.spawnDelays = new LinkedList<>();
 	Path wavePath = Paths.get("assets/waves/" + newWaveName + ".wve");
 
 	try (BufferedReader reader = Files.newBufferedReader(wavePath))
 	{
 		String currentLine = reader.readLine();
+		long cumSum = 0;  // skull emoji
 
 		while (currentLine != null)
 		{
@@ -67,11 +74,15 @@ public boolean setWave (String newWaveName)
 			{
 				String[] entityData = currentLine.split("\\|");
 
+				long currentSpawnTime = (long)(Double.parseDouble(entityData[0]) * 1000);
+				this.spawnDelays.offer(currentSpawnTime - cumSum);
+				cumSum = currentSpawnTime;
 				this.enemies.offer(getEntityFromName(entityData[1]));
 			}
 			catch (NonExistentEntity | IndexOutOfBoundsException eee)
 			{
-				this.enemies = new PriorityQueue<>();
+				this.enemies = new LinkedList<>();
+				this.spawnDelays = new LinkedList<>();
 				this.waveName = "";
 				System.err.println(eee);
 				return false;
@@ -89,6 +100,12 @@ public boolean setWave (String newWaveName)
 	return true;
 }
 
+public void setPosition (Point2D.Float newPosition)
+{
+	this.position = newPosition;
+}
+
+
 public String getWaveName () throws UninitializedSpawner
 {
 	if (!this.ready)
@@ -105,6 +122,19 @@ public boolean isActive ()
 }
 
 
+/*
+ * Spawn the next enemy then start the timer for next
+ */
+public void spawnNext (SpawnTask funnyToken)
+{
+	this.level.spawn(this.enemies.poll(), this);
+
+	if (this.enemies.peek() != null)
+	{
+		this.scheduler.schedule(new SpawnTask(this), this.spawnDelays.poll());
+	}
+}
+
 public void start () throws UninitializedSpawner
 {
 	if (!this.ready)
@@ -112,8 +142,8 @@ public void start () throws UninitializedSpawner
 		throw new UninitializedSpawner();
 	}
 
-	// todo : schedule spawn tasks
-
+	this.scheduler.schedule(new SpawnTask(this), this.spawnDelays.poll());
+	
 	this.active = true;
 }
 }

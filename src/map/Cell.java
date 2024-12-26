@@ -38,6 +38,10 @@ public CellType getType ()
 	return this.type;
 }
 
+public static float getSize ()
+{
+	return size;
+}
 public static boolean setSize (float newSize)
 {
 	if (newSize <= 0.0)
@@ -51,7 +55,7 @@ public static boolean setSize (float newSize)
 
 
 @Override
-public Color getColour()
+public Color getColour ()
 {
 	return switch (this.type)
 	{

@@ -1,3 +1,5 @@
+package game;
+
 import graphics.Coloured;
 import graphics.Drawable;
 import graphics.Utils;
@@ -16,16 +18,20 @@ private final long maxHealth;
 private long health;
 private long money;
 private final Element element;
-private final Point2D.Float position;
+private Point2D.Float position;
 
-public Player (String name, Element element, long maxHealth, long initialMoney, Point2D.Float spawnPosition, long health)
+public Player (String name, Element element, long maxHealth, long initialMoney, long health)
 {
 	this.name = name;
 	this.maxHealth = maxHealth;
 	this.health = health;
 	this.money = initialMoney;
 	this.element = element;
-	this.position = spawnPosition;
+}
+
+public void setPosition (Point2D.Float newPosition)
+{
+	this.position = newPosition;
 }
 
 
