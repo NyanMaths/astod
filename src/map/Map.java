@@ -234,12 +234,30 @@ public void draw ()
 
 public boolean isShopClicked()
 {
-	return StdDraw.isMousePressed() && StdDraw.mouseX() > 876-144 && StdDraw.mouseX() < 867+144 && StdDraw.mouseY() > 303-303 && StdDraw.mouseY() < 303+303;
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > 876-144 && StdDraw.mouseX() < 867+144 && StdDraw.mouseY() > 303-303 && StdDraw.mouseY() < 303+303)
+	{
+		StdDraw.pause(100);
+		return true;
+	}
+	return false;
 }
 
 public boolean isMapClicked()
 {
-	return StdDraw.isMousePressed() && StdDraw.mouseX() > 350-350 && StdDraw.mouseX() < 350+350 && StdDraw.mouseY() > 350-350 && StdDraw.mouseY() < 350+350;
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > 350-350 && StdDraw.mouseX() < 350+350 && StdDraw.mouseY() > 350-350 && StdDraw.mouseY() < 350+350)
+	{
+		StdDraw.pause(100);
+		return true;
+	}
+	return false;
 }
 
+public boolean isCellBuildable(double x, double y)
+{
+	x = StdDraw.mouseX();
+	y = StdDraw.mouseY();
+	//Cell cell = new Cell(null, new Point2D.Float((float)x, (float)y));
+	//return cell.getType() == CellType.Buildable;
+	return true;
+}
 }
