@@ -151,6 +151,7 @@ public boolean startWave ()
 		StdDraw.show();
 		StdDraw.pause(20);
 		//System.out.println(map.isShopClicked()); test si shop est cliqué : REUSSI
+		//System.out.println(map.isMapClicked()); pareil pour la map : REUSSI
 		}
 		catch (java.util.ConcurrentModificationException eee)  // get fucked haha
 		{
