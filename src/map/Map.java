@@ -231,4 +231,10 @@ public void draw ()
 	this.drawCoin();
 	this.drawHeart();
 }
+
+public boolean isShopClicked()
+{
+	return StdDraw.isMousePressed() && StdDraw.mouseX() > 876-144 && StdDraw.mouseX() < 867+144 && StdDraw.mouseY() > 303-303 && StdDraw.mouseY() < 303+303;
+}
+
 }
