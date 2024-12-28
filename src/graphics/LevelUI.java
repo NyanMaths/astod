@@ -60,7 +60,7 @@ public void drawHeart()
 		centerY,
 		};
 		StdDraw.filledPolygon(listX , listY);
-		StdDraw.text(980,641, ((Long)this.player.getHealth()).toString()); //J'arrive pas avec Player.getHealth...
+		StdDraw.text(980,641, ((Long)this.player.getHealth()).toString());
 }
 
 public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
