@@ -10,14 +10,12 @@ import units.towers.*;
 public class LevelUI implements Drawable
 {
 private final Player player;
-
 private Tower spawningTower;
 
 
 public LevelUI (Player player)
 {
 	this.player = player;
-
 	this.spawningTower = null;
 }
 
@@ -88,24 +86,44 @@ public void drawShop()
 	float y3 = y1-4*halfHeight;
 	StdDraw.rectangle(x1, y1, halfWidth, halfHeight);
 	Point2D.Float spawnPosition = new Point2D.Float(x1-55,y1);
+	Point2D.Float buttonPosition = new Point2D.Float(x1+25,y1-48);
 	Archer archer = new Archer(spawnPosition);
 	archer.draw();
+	archer.drawText();
+	SpawnButton archerButton = new SpawnButton("Archer",buttonPosition);
+	archerButton.draw();
 	StdDraw.rectangle(x2, y1, halfWidth, halfHeight);
 	spawnPosition.setLocation(x2-55,y1);
+	buttonPosition.setLocation(x2+25,y1-48);
 	EarthCaster earth = new EarthCaster(spawnPosition);
 	earth.draw();
+	earth.drawText();
+	SpawnButton earthButton = new SpawnButton("Earth Caster",buttonPosition);
+	earthButton.draw();
 	StdDraw.rectangle(x1,y2,halfWidth,halfHeight);
 	spawnPosition.setLocation(x1-55,y2);
+	buttonPosition.setLocation(x1+25,y2-48);
 	FireCaster fire = new FireCaster(spawnPosition);
 	fire.draw();
+	fire.drawText();
+	SpawnButton fireButton = new SpawnButton("Fire Caster",buttonPosition);
+	fireButton.draw();
 	StdDraw.rectangle(x2,y2,halfWidth,halfHeight);
 	spawnPosition.setLocation(x2-55,y2);
+	buttonPosition.setLocation(x2+25,y2-48);
 	WaterCaster water = new WaterCaster(spawnPosition);
 	water.draw();
+	water.drawText();
+	SpawnButton waterButton = new SpawnButton("Water Caster",buttonPosition);
+	waterButton.draw();
 	StdDraw.rectangle(x1,y3,halfWidth,halfHeight);
 	spawnPosition.setLocation(x1-55,y3);
+	buttonPosition.setLocation(x1+25,y3-48);
 	WindCaster wind = new WindCaster(spawnPosition);
 	wind.draw();
+	wind.drawText();
+	SpawnButton windButton = new SpawnButton("Wind Caster",buttonPosition);
+	windButton.draw();
 }
 
 @Override

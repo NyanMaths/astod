@@ -43,15 +43,14 @@ public void draw ()
 	StdDraw.setPenColor(StdDraw.BLACK);
 	StdDraw.rectangle(this.getPosition().x, this.getPosition().y, 10.5, 20.5);
 }
-/* 	public void drawText()
-	{
-		StdDraw.text(this.getPosition().x, this.getPosition().y, 
-		"\nName : " + getName() +  
-		"\n Healt : " + getMaxHealth() + 
-		"\n Attack : " + getAttack() +
-		"\n Attack Speed : " + getAttackDelay() +
-		"\n Range : " + getRange() +
-		"\n Element : " + getElement() +
-		"\n Cost : " + getCost()); 
-	} */
+public void drawText()
+{
+	StdDraw.text(this.getPosition().x+60, this.getPosition().y+50, getName());  
+	StdDraw.text(this.getPosition().x+15, this.getPosition().y+30,"HP : " + getMaxHealth()); 
+	StdDraw.text(this.getPosition().x+80, this.getPosition().y+30,"ATK : " + getAttack());
+	StdDraw.text(this.getPosition().x+60, this.getPosition().y+10,"Delay: " + getAttackDelay());
+	StdDraw.text(this.getPosition().x+60, this.getPosition().y-10,"Range : " + getRange());
+	StdDraw.text(this.getPosition().x+50, this.getPosition().y-30,"Element : " + getElement());
+	StdDraw.text(this.getPosition().x+15, this.getPosition().y-50,"$ : " + getCost()); 
+} 
 }
