@@ -289,12 +289,26 @@ public boolean isMapClicked()
 	return false;
 }
 
-public boolean isCellBuildable(double x, double y)
+public Point2D whereInMatrix(double x, double y)
+{
+	if(StdDraw.isMousePressed())
+	{
+		if(isMapClicked())
+		{
+			x = x/Cell.getSize();
+			y = y/Cell.getSize();
+			if((int)x >= 0 && (int)x < this.getRowsCount() && (int)y >= 0 && (int)y < this.getColumnsCount()) return new Point2D.Float((int)x, (int)y);
+		}
+	}
+	return null;
+}
+
+/*public boolean isCellBuildable(double x, double y)
 {
 	x = StdDraw.mouseX();
 	y = StdDraw.mouseY();
-	//Cell cell = new Cell(null, new Point2D.Float((float)x, (float)y));
-	//return cell.getType() == CellType.Buildable;
+	Cell cell = new Cell(null, new Point2D.Float((float)x, (float)y));
+	return cell.getType() == CellType.Buildable;
 	return true;
-}
+} */
 }
