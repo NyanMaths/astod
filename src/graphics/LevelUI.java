@@ -11,9 +11,14 @@ public class LevelUI implements Drawable
 {
 private final Player player;
 
+private Tower spawningTower;
+
+
 public LevelUI (Player player)
 {
 	this.player = player;
+
+	this.spawningTower = null;
 }
 
 
