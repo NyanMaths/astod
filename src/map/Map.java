@@ -303,12 +303,10 @@ public Point2D whereInMatrix(double x, double y)
 	return null;
 }
 
-/*public boolean isCellBuildable(double x, double y)
+public boolean isBuildable(Point2D position)
 {
-	x = StdDraw.mouseX();
-	y = StdDraw.mouseY();
-	Cell cell = new Cell(null, new Point2D.Float((float)x, (float)y));
-	return cell.getType() == CellType.Buildable;
-	return true;
-} */
+	if(position == null) return false;
+	if(this.matrix.get((int)position.getX()).get((int)position.getY()).getType() == CellType.Buildable) return true;
+	return false;
+}
 }
