@@ -1,6 +1,8 @@
 package game;
 
+import graphics.LevelUI;
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,6 +33,8 @@ private final List<Tower> towers;
 
 private final Player player;
 
+private final LevelUI UI;
+
 
 public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException
 {
@@ -39,6 +43,7 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 	this.enemies = new ArrayList<>();
 	this.towers = new ArrayList<>();
 	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 50, 100);
+	this.UI = new LevelUI(this.player);
 
 	this.load(levelName);
 }
@@ -58,7 +63,6 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 		}
 		this.map.load(currentLine);
 
-		System.out.println(map.getPlayerPosition() + "  --  " + this.map.getSpawnerPosition());
 		this.spawner.setPosition(this.map.getSpawnerPosition());
 		this.player.setPosition(this.map.getPlayerPosition());
 
@@ -137,6 +141,7 @@ public boolean startWave ()
 		StdDraw.clear();
 		map.draw();
 		this.drawEntities();
+		this.UI.draw();
 
 		//Aniation stuff
 		int rowsCount = map.getRowsCount();
@@ -154,22 +159,15 @@ public boolean startWave ()
 		//System.out.println("Map cliced : " +map.isMapClicked()); //pareil pour la map : REUSSI
 		//System.out.println("Tower : " + map.whichTower()); //test pour savoir quel tour est choisi : REUSSI
 		//System.out.println("Cell" + map.whereInMatrix(StdDraw.mouseX(),StdDraw.mouseY())); //test pour savoir quelle cellule est cliquée : REUSSI
-		System.out.println("Buildable? " + map.isBuildable(map.whereInMatrix(StdDraw.mouseX(), StdDraw.mouseY()))); //test pour savoir si la cellule est buildable : REUSSI
+		if (StdDraw.isMousePressed())
+		{
+			System.out.println("Buildable? " + map.isBuildable(new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY())));
+		}
 		}
 		catch (java.util.ConcurrentModificationException eee)  // get fucked haha
 		{
 		}
 	}
-
-	//Drawning in real time stuff
-
-	/*while(true)
-	{
-		StdDraw.setPenColor(Color.BLACK);
-		if(StdDraw.isMousePressed())
-		StdDraw.point(StdDraw.mouseX(), StdDraw.mouseY());
-		StdDraw.show();
-	}*/
 
 	return this.player.isAlive();
 }

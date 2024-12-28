@@ -1,9 +1,7 @@
 package map;
 
 import graphics.Drawable;
-import java.awt.Color;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -13,11 +11,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import libraries.StdDraw;
-import units.towers.Archer;
-import units.towers.EarthCaster;
-import units.towers.FireCaster;
-import units.towers.WaterCaster;
-import units.towers.WindCaster;
 
 
 public final class Map implements Drawable
@@ -122,91 +115,6 @@ public Cell getCell (int row, int col)
 	return this.matrix.get(row).get(col);
 }
 
-public void drawCoin()
-{
-	StdDraw.setPenColor (new Color(212,175,55));
-	StdDraw.filledCircle (760, 641, 20);
-	StdDraw.text(810, 641, "Coins"); //J'arrive pas avec Player.getCoins... normal, where player ?
-	StdDraw.setPenColor (new Color(192,192,192));
-	StdDraw.filledCircle (760, 641, 15);
-
-}
-
-public void drawHeart()
-{
-	int centerX = 930;
-	int centerY = 641;
-	int halfHeight = 20;
-	StdDraw . setPenColor ( new Color (223 , 75 , 95) );
-	double [] listX = new double []
-	{
-		centerX,
-		centerX-halfHeight,
-		centerX-halfHeight,
-		centerX-0.66*halfHeight,
-		centerX-0.33*halfHeight,
-		centerX,
-		centerX+0.33*halfHeight,
-		centerX+0.66*halfHeight,
-		centerX+halfHeight,
-		centerX+halfHeight,
-	};
-	double [] listY = new double []
-	{
-		centerY-halfHeight,
-		centerY,
-		centerY+0.5*halfHeight,
-		centerY+halfHeight,
-		centerY+halfHeight,
-		centerY+0.5*halfHeight,
-		centerY+halfHeight,
-		centerY+halfHeight,
-		centerY+0.5*halfHeight,
-		centerY,
-		};
-		StdDraw.filledPolygon ( listX , listY );
-		StdDraw.text(980,641,"Health"); //J'arrive pas avec Player.getHealth...
-}
-
-public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
-{
-	StdDraw.text(760,688,"LVL:X/X");
-	StdDraw.text(930,688,"WAVE:X/X");
-	//J'aimerais test de changer le font, mais je sais pas si c'est une très bonne idée, car faudra le changer entre les fonctions. 
-	//Genre pour la vie et la thune, c'est un style différent de celui pour la vague et le niveau en terme d'écriture.
-}
-
-public void drawShop()
-{
-
-	float x1 = 795;
-	float y1 = 545;
-	float halfWidth = 72;
-	float halfHeight = (float) 60.5;
-	float x2 = x1+2*halfWidth;
-	float y2 = y1-2*halfHeight;
-	float y3 = y1-4*halfHeight;
-	StdDraw.rectangle(x1, y1, halfWidth, halfHeight);
-	Point2D.Float spawnPosition = new Float(x1-55,y1);
-	Archer archer = new Archer(spawnPosition);
-	archer.draw();
-	StdDraw.rectangle(x2, y1, halfWidth, halfHeight);
-	spawnPosition.setLocation(x2-55,y1);
-	EarthCaster earth = new EarthCaster(spawnPosition);
-	earth.draw();
-	StdDraw.rectangle(x1,y2,halfWidth,halfHeight);
-	spawnPosition.setLocation(x1-55,y2);
-	FireCaster fire = new FireCaster(spawnPosition);
-	fire.draw();
-	StdDraw.rectangle(x2,y2,halfWidth,halfHeight);
-	spawnPosition.setLocation(x2-55,y2);
-	WaterCaster water = new WaterCaster(spawnPosition);
-	water.draw();
-	StdDraw.rectangle(x1,y3,halfWidth,halfHeight);
-	spawnPosition.setLocation(x1-55,y3);
-	WindCaster wind = new WindCaster(spawnPosition);
-	wind.draw();
-}
 
 @Override
 public void draw ()
@@ -221,15 +129,6 @@ public void draw ()
 			this.getCell(i, j).draw();
 		}
 	}
-	
-	StdDraw.setPenColor(Color.BLACK);
-	StdDraw.rectangle(867,688,144,12);
-	StdDraw.rectangle(867,641,144,25);
-	StdDraw.rectangle(867, 303, 144,303);
-	this.drawLevelInfo();
-	this.drawShop();
-	this.drawCoin();
-	this.drawHeart();
 }
 
 /* public boolean isShopClicked()
@@ -279,7 +178,7 @@ public String whichTower()
 	return null;
 }
 
-public boolean isMapClicked()
+public boolean isMapClicked ()
 {
 	if(StdDraw.isMousePressed() && StdDraw.mouseX() > 350-350 && StdDraw.mouseX() < 350+350 && StdDraw.mouseY() > 350-350 && StdDraw.mouseY() < 350+350)
 	{
@@ -289,24 +188,27 @@ public boolean isMapClicked()
 	return false;
 }
 
-public Point2D whereInMatrix(double x, double y)
+
+/*
+ * @return the coordinates of the point's cell, null i not on the map
+ */
+public Point2D.Float getCellCoordinates (Point2D.Float point)
 {
-	if(StdDraw.isMousePressed())
-	{
-		if(isMapClicked())
-		{
-			x = x/Cell.getSize();
-			y = y/Cell.getSize();
-			if((int)x >= 0 && (int)x < this.getRowsCount() && (int)y >= 0 && (int)y < this.getColumnsCount()) return new Point2D.Float((int)x, (int)y);
-		}
-	}
+	point.x = point.x/Cell.getSize();
+	point.y = point.y/Cell.getSize();
+	if((int)point.x >= 0 && (int)point.x < this.getRowsCount() && (int)point.y >= 0 && (int)point.y < this.getColumnsCount()) return new Point2D.Float((int)point.x, (int)point.y);
 	return null;
 }
 
-public boolean isBuildable(Point2D position)
+public boolean isBuildable(Point2D.Float position)
 {
-	if(position == null) return false;
-	if(this.matrix.get((int)position.getX()).get((int)position.getY()).getType() == CellType.Buildable) return true;
-	return false;
+	if (position == null) return false;
+
+	position = this.getCellCoordinates(position);
+
+	if (position == null) return false;
+
+
+	return this.getCell((int)position.x, (int)position.y).getType() == CellType.Buildable;
 }
 }
