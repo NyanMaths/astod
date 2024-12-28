@@ -232,7 +232,7 @@ public void draw ()
 	this.drawHeart();
 }
 
-public boolean isShopClicked()
+/* public boolean isShopClicked()
 {
 	if(StdDraw.isMousePressed() && StdDraw.mouseX() > 876-144 && StdDraw.mouseX() < 867+144 && StdDraw.mouseY() > 303-303 && StdDraw.mouseY() < 303+303)
 	{
@@ -240,6 +240,43 @@ public boolean isShopClicked()
 		return true;
 	}
 	return false;
+} */
+
+public String whichTower()
+{
+	float x1 = 795;
+	float y1 = 545;
+	float halfWidth = 72;
+	float halfHeight = (float) 60.5;
+	float x2 = x1+2*halfWidth;
+	float y2 = y1-2*halfHeight;
+	float y3 = y1-4*halfHeight;
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x1-halfWidth && StdDraw.mouseX() < x1+halfWidth && StdDraw.mouseY() > y1-halfHeight && StdDraw.mouseY() < y1+halfHeight)
+	{
+		StdDraw.pause(100);
+		return "Archer";
+	}
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x2-halfWidth && StdDraw.mouseX() < x2+halfWidth && StdDraw.mouseY() > y1-halfHeight && StdDraw.mouseY() < y1+halfHeight)
+	{
+		StdDraw.pause(100);
+		return "Earth Caster";
+	}
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x1-halfWidth && StdDraw.mouseX() < x1+halfWidth && StdDraw.mouseY() > y2-halfHeight && StdDraw.mouseY() < y2+halfHeight)
+	{
+		StdDraw.pause(100);
+		return "Fire Caster";
+	}
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x2-halfWidth && StdDraw.mouseX() < x2+halfWidth && StdDraw.mouseY() > y2-halfHeight && StdDraw.mouseY() < y2+halfHeight)
+	{
+		StdDraw.pause(100);
+		return "Water Caster";
+	}
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x1-halfWidth && StdDraw.mouseX() < x1+halfWidth && StdDraw.mouseY() > y3-halfHeight && StdDraw.mouseY() < y3+halfHeight)
+	{
+		StdDraw.pause(100);
+		return "Wind Caster";
+	}
+	return null;
 }
 
 public boolean isMapClicked()
