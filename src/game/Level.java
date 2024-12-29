@@ -1,7 +1,6 @@
 package game;
 
 import graphics.LevelUI;
-import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -126,35 +125,18 @@ private void drawEntities ()
 	this.player.draw();
 }
 
-public void buildTower()
+public void buildTower (Point2D.Float position)
 {
-	String name = " ";
-	Point2D.Float spawnposition = new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY());
-	Point2D.Float clickposition = spawnposition;
-	while(this.map.whichTower()==null)
+	Tower newTower = player.buy(this.UI.takeTowerName(), position);
+
+	if (newTower == null)
 	{
-		System.out.println("Waiting for tower selection");
-		if(this.map.whichTower()!=null)
-		{
-			name = this.map.whichTower();
-			System.out.println(name);
-			break;
-		} 
+		System.err.println("you are poor");
+		return;
 	}
-	while(!this.map.isBuildable(this.map.getCellCoordinates(clickposition)));
-	{
-		if(StdDraw.isMousePressed()) clickposition.setLocation(StdDraw.mouseX(),StdDraw.mouseY());
-		System.out.println("Waiting for buildable cell");
-	}
-	spawnposition.setLocation(this.map.getCellCoordinates(clickposition));
-	System.out.println("Tower built at : " + spawnposition);
-	Tower tower = this.player.buy(name,spawnposition);
-	System.out.println("Tower bought : " + tower);
-	this.towers.add(tower);
-	System.out.println("Tower added to list");
-	System.out.println("Drawing tower");
-	tower.draw();
-	System.out.println("Tower drawn");
+
+	this.towers.add(newTower);
+	System.err.println("spawned new " + this.towers.getLast().getName() + " at :" + position);
 }
 
 
@@ -165,7 +147,7 @@ public void buildTower()
  */
 public boolean startWave ()
 {
-	for (double i = 0.0 ; this.player.isAlive() || this.spawner.isActive() ; i += 0.02)  // E
+	while (this.player.isAlive() || this.spawner.isActive())  // E
 	{
 		try
 		{
@@ -173,34 +155,43 @@ public boolean startWave ()
 		map.draw();
 		this.drawEntities();
 		this.UI.draw();
-
-		//Aniation stuff
+		
+		StdDraw.show();  // finalize draw
+		//StdDraw.pause(20);
+		/*//Aniation stuff
 		int rowsCount = map.getRowsCount();
 		int columnsCount = map.getColumnsCount();
 		double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
 		double x = cellSize*i + 0.5*cellSize;
 		double y = cellSize*i + 0.5*cellSize;
 		StdDraw.setPenColor(Color.BLACK);
-		StdDraw.filledSquare(x+i,y+i,cellSize);
+		StdDraw.filledSquare(x+i,y+i,cellSize);*/
 
-		// finalize draw
-		StdDraw.show();
-		StdDraw.pause(20);
-		//System.out.println("Shop clicked : " + map.isShopClicked()); //test si shop est cliqué : REUSSI
-		//System.out.println("Map cliced : " +map.isMapClicked()); //pareil pour la map : REUSSI
-		//System.out.println("Tower : " + map.whichTower()); //test pour savoir quel tour est choisi : REUSSI
-		//System.out.println("Cell" + map.whereInMatrix(StdDraw.mouseX(),StdDraw.mouseY())); //test pour savoir quelle cellule est cliquée : REUSSI
+
 		if (StdDraw.isMousePressed())
 		{
-			//System.out.println("Buildable? " + map.isBuildable(new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY())));
-			if(this.map.whichTower()!=null)
+			Point2D.Float position = new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY());
+
+			if (this.UI.isShopPressed())
 			{
-				buildTower();
+				this.UI.setSpawningTower(this.UI.getPressedTowerType());  // cancel spawn if the player clicks on a blank area of the shop, easier to code and better for the game
+			}
+			else if (this.UI.isBuildingTower())
+			{
+				if (map.isBuildable(position))
+				{
+					buildTower(position);
+				}
+				else
+				{
+					System.err.println("unable to build here");
+				}
 			}
 		}
 		}
-		catch (java.util.ConcurrentModificationException eee)  // get fucked haha
+		catch (java.util.ConcurrentModificationException eee)
 		{
+			// dunno how to fix concurrent accesses to entities list between display and game, they are ignored for now as they just stall display for a bit
 		}
 	}
 

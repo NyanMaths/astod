@@ -141,45 +141,6 @@ public void draw ()
 	return false;
 } */
 
-public String whichTower()
-{
-	float x1 = 795;
-	float y1 = 545;
-	float halfWidth = 72;
-	float halfHeight = (float) 60.5;
-	float x2 = x1+2*halfWidth;
-	float y2 = y1-2*halfHeight;
-	float y3 = y1-4*halfHeight;
-	halfWidth = (float) 20.5;
-	halfHeight = (float) 10.5;
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x1+25)-halfWidth && StdDraw.mouseX() < (x1+25)+halfWidth && StdDraw.mouseY() > (y1-48)-halfHeight && StdDraw.mouseY() < (y1-48)+halfHeight)
-	{
-		StdDraw.pause(100);
-		return "Archer";
-	}
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x2+25)-halfWidth && StdDraw.mouseX() < (x2+25)+halfWidth && StdDraw.mouseY() > (y1-48)-halfHeight && StdDraw.mouseY() < (y1-48)+halfHeight)
-	{
-		StdDraw.pause(100);
-		return "Earth Caster";
-	}
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x1+25)-halfWidth && StdDraw.mouseX() < (x1+25)+halfWidth && StdDraw.mouseY() > (y2-48)-halfHeight && StdDraw.mouseY() < (y2-48)+halfHeight)
-	{
-		StdDraw.pause(100);
-		return "Fire Caster";
-	}
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x2+25)-halfWidth && StdDraw.mouseX() < (x2+25)+halfWidth && StdDraw.mouseY() > (y2-48)-halfHeight && StdDraw.mouseY() < (y2-48)+halfHeight)
-	{
-		StdDraw.pause(100);
-		return "Water Caster";
-	}
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x1+25)-halfWidth && StdDraw.mouseX() < (x1+25)+halfWidth && StdDraw.mouseY() > (y3-48)-halfHeight && StdDraw.mouseY() < (y3-48)+halfHeight)
-	{
-		StdDraw.pause(100);
-		return "Wind Caster";
-	}
-	return null;
-}
-
 public boolean isMapClicked ()
 {
 	if(StdDraw.isMousePressed() && StdDraw.mouseX() > 350-350 && StdDraw.mouseX() < 350+350 && StdDraw.mouseY() > 350-350 && StdDraw.mouseY() < 350+350)
@@ -202,11 +163,11 @@ public Point2D.Float getCellCoordinates (Point2D.Float point)
 	return null;
 }
 
-public boolean isBuildable(Point2D.Float position)
+public boolean isBuildable (Point2D.Float position)
 {
 	if (position == null) return false;
 
-	position = this.getCellCoordinates(position);
+	position = this.getCellCoordinates((Point2D.Float)position.clone());
 
 	if (position == null) return false;
 

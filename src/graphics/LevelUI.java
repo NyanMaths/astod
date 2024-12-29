@@ -3,6 +3,8 @@ package graphics;
 import game.Player;
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
 import libraries.StdDraw;
 import units.towers.*;
 
@@ -12,11 +14,67 @@ public class LevelUI implements Drawable
 private final Player player;
 private Tower spawningTower;
 
+private final List<SpawnButton> spawnButtons;
+
 
 public LevelUI (Player player)
 {
 	this.player = player;
+	this.spawningTower = null;	
+
+	this.spawnButtons = new ArrayList<>();
+
+	float buttonWidth = 144.0f;
+	float buttonHeight = 121.0f;
+
+	spawnButtons.add(new SpawnButton("Archer", new Point2D.Float(795, 545)));
+	spawnButtons.add(new SpawnButton("Earth Caster", new Point2D.Float(795, 545 - buttonHeight)));
+	spawnButtons.add(new SpawnButton("Fire Caster", new Point2D.Float(795 + buttonWidth, 545 - buttonHeight)));
+	spawnButtons.add(new SpawnButton("Water Caster", new Point2D.Float(795, 545 - 2*buttonHeight)));
+	spawnButtons.add(new SpawnButton("Wind Caster", new Point2D.Float(795 + buttonWidth, 545 - 2*buttonHeight)));
+}
+
+
+public boolean isBuildingTower ()
+{
+	return this.spawningTower != null;
+}
+public boolean isShopPressed ()
+{
+	return StdDraw.mouseX() >= 795 - SpawnButton.getHalfWidth() && StdDraw.mouseY() <= 545 + SpawnButton.getHalfHeight();
+}
+
+public String takeTowerName ()
+{
+	if (this.spawningTower == null)
+	{
+		return null;
+	}
+
+	String towerName = this.spawningTower.getName();
 	this.spawningTower = null;
+
+	return towerName;
+}
+public void setSpawningTower (String towerName)  // supposes non-goofy argument
+{
+	this.spawningTower = Tower.fromName(towerName, new Point2D.Float(0, 0));
+}
+
+/*
+ * @return the pressed tower's type, null if no tower was selected (the shop is not full)
+ */
+public String getPressedTowerType ()
+{
+	for (SpawnButton spawnButton : this.spawnButtons)
+	{
+		if (spawnButton.isPressed())
+		{
+			return spawnButton.getTowerName();
+		}
+	}
+
+	return null;
 }
 
 
@@ -74,56 +132,9 @@ public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
 	//Genre pour la vie et la thune, c'est un style différent de celui pour la vague et le niveau en terme d'écriture.
 }
 
-public void drawShop()
+public void drawShop ()
 {
-
-	float x1 = 795;
-	float y1 = 545;
-	float halfWidth = 72;
-	float halfHeight = (float) 60.5;
-	float x2 = x1+2*halfWidth;
-	float y2 = y1-2*halfHeight;
-	float y3 = y1-4*halfHeight;
-	StdDraw.rectangle(x1, y1, halfWidth, halfHeight);
-	Point2D.Float spawnPosition = new Point2D.Float(x1-55,y1);
-	Point2D.Float buttonPosition = new Point2D.Float(x1+25,y1-48);
-	Archer archer = new Archer(spawnPosition);
-	archer.draw();
-	archer.drawText();
-	SpawnButton archerButton = new SpawnButton("Archer",buttonPosition);
-	archerButton.draw();
-	StdDraw.rectangle(x2, y1, halfWidth, halfHeight);
-	spawnPosition.setLocation(x2-55,y1);
-	buttonPosition.setLocation(x2+25,y1-48);
-	EarthCaster earth = new EarthCaster(spawnPosition);
-	earth.draw();
-	earth.drawText();
-	SpawnButton earthButton = new SpawnButton("Earth Caster",buttonPosition);
-	earthButton.draw();
-	StdDraw.rectangle(x1,y2,halfWidth,halfHeight);
-	spawnPosition.setLocation(x1-55,y2);
-	buttonPosition.setLocation(x1+25,y2-48);
-	FireCaster fire = new FireCaster(spawnPosition);
-	fire.draw();
-	fire.drawText();
-	SpawnButton fireButton = new SpawnButton("Fire Caster",buttonPosition);
-	fireButton.draw();
-	StdDraw.rectangle(x2,y2,halfWidth,halfHeight);
-	spawnPosition.setLocation(x2-55,y2);
-	buttonPosition.setLocation(x2+25,y2-48);
-	WaterCaster water = new WaterCaster(spawnPosition);
-	water.draw();
-	water.drawText();
-	SpawnButton waterButton = new SpawnButton("Water Caster",buttonPosition);
-	waterButton.draw();
-	StdDraw.rectangle(x1,y3,halfWidth,halfHeight);
-	spawnPosition.setLocation(x1-55,y3);
-	buttonPosition.setLocation(x1+25,y3-48);
-	WindCaster wind = new WindCaster(spawnPosition);
-	wind.draw();
-	wind.drawText();
-	SpawnButton windButton = new SpawnButton("Wind Caster",buttonPosition);
-	windButton.draw();
+	spawnButtons.stream().forEach(spawnButton -> spawnButton.draw());
 }
 
 @Override
