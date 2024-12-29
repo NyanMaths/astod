@@ -21,6 +21,7 @@ public Tower (String name, boolean attacker, Element element, long maxHealth, lo
  */
 public static Tower fromName (String name, Point2D.Float spawnPosition)
 {
+	if(name == null) return null;
 	return switch (name)
 	{
 		case "Archer" -> new Archer(spawnPosition);
