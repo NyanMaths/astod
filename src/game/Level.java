@@ -126,6 +126,37 @@ private void drawEntities ()
 	this.player.draw();
 }
 
+public void buildTower()
+{
+	String name = " ";
+	Point2D.Float spawnposition = new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY());
+	Point2D.Float clickposition = spawnposition;
+	while(this.map.whichTower()==null)
+	{
+		System.out.println("Waiting for tower selection");
+		if(this.map.whichTower()!=null)
+		{
+			name = this.map.whichTower();
+			System.out.println(name);
+			break;
+		} 
+	}
+	while(!this.map.isBuildable(this.map.getCellCoordinates(clickposition)));
+	{
+		if(StdDraw.isMousePressed()) clickposition.setLocation(StdDraw.mouseX(),StdDraw.mouseY());
+		System.out.println("Waiting for buildable cell");
+	}
+	spawnposition.setLocation(this.map.getCellCoordinates(clickposition));
+	System.out.println("Tower built at : " + spawnposition);
+	Tower tower = this.player.buy(name,spawnposition);
+	System.out.println("Tower bought : " + tower);
+	this.towers.add(tower);
+	System.out.println("Tower added to list");
+	System.out.println("Drawing tower");
+	tower.draw();
+	System.out.println("Tower drawn");
+}
+
 
 /*
  * Ticks one wave, this method exists for the sole purpose of reducing indentation level of the game loop.
@@ -157,12 +188,16 @@ public boolean startWave ()
 		StdDraw.pause(20);
 		//System.out.println("Shop clicked : " + map.isShopClicked()); //test si shop est cliqué : REUSSI
 		//System.out.println("Map cliced : " +map.isMapClicked()); //pareil pour la map : REUSSI
-		System.out.println("Tower : " + map.whichTower()); //test pour savoir quel tour est choisi : REUSSI
+		//System.out.println("Tower : " + map.whichTower()); //test pour savoir quel tour est choisi : REUSSI
 		//System.out.println("Cell" + map.whereInMatrix(StdDraw.mouseX(),StdDraw.mouseY())); //test pour savoir quelle cellule est cliquée : REUSSI
-		/*if (StdDraw.isMousePressed())
+		if (StdDraw.isMousePressed())
 		{
-			System.out.println("Buildable? " + map.isBuildable(new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY())));
-		}*/
+			//System.out.println("Buildable? " + map.isBuildable(new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY())));
+			if(this.map.whichTower()!=null)
+			{
+				buildTower();
+			}
+		}
 		}
 		catch (java.util.ConcurrentModificationException eee)  // get fucked haha
 		{
