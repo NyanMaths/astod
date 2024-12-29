@@ -150,27 +150,29 @@ public String whichTower()
 	float x2 = x1+2*halfWidth;
 	float y2 = y1-2*halfHeight;
 	float y3 = y1-4*halfHeight;
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x1-halfWidth && StdDraw.mouseX() < x1+halfWidth && StdDraw.mouseY() > y1-halfHeight && StdDraw.mouseY() < y1+halfHeight)
+	halfWidth = (float) 20.5;
+	halfHeight = (float) 10.5;
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x1+25)-halfWidth && StdDraw.mouseX() < (x1+25)+halfWidth && StdDraw.mouseY() > (y1-48)-halfHeight && StdDraw.mouseY() < (y1-48)+halfHeight)
 	{
 		StdDraw.pause(100);
 		return "Archer";
 	}
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x2-halfWidth && StdDraw.mouseX() < x2+halfWidth && StdDraw.mouseY() > y1-halfHeight && StdDraw.mouseY() < y1+halfHeight)
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x2+25)-halfWidth && StdDraw.mouseX() < (x2+25)+halfWidth && StdDraw.mouseY() > (y1-48)-halfHeight && StdDraw.mouseY() < (y1-48)+halfHeight)
 	{
 		StdDraw.pause(100);
 		return "Earth Caster";
 	}
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x1-halfWidth && StdDraw.mouseX() < x1+halfWidth && StdDraw.mouseY() > y2-halfHeight && StdDraw.mouseY() < y2+halfHeight)
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x1+25)-halfWidth && StdDraw.mouseX() < (x1+25)+halfWidth && StdDraw.mouseY() > (y2-48)-halfHeight && StdDraw.mouseY() < (y2-48)+halfHeight)
 	{
 		StdDraw.pause(100);
 		return "Fire Caster";
 	}
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x2-halfWidth && StdDraw.mouseX() < x2+halfWidth && StdDraw.mouseY() > y2-halfHeight && StdDraw.mouseY() < y2+halfHeight)
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x2+25)-halfWidth && StdDraw.mouseX() < (x2+25)+halfWidth && StdDraw.mouseY() > (y2-48)-halfHeight && StdDraw.mouseY() < (y2-48)+halfHeight)
 	{
 		StdDraw.pause(100);
 		return "Water Caster";
 	}
-	if(StdDraw.isMousePressed() && StdDraw.mouseX() > x1-halfWidth && StdDraw.mouseX() < x1+halfWidth && StdDraw.mouseY() > y3-halfHeight && StdDraw.mouseY() < y3+halfHeight)
+	if(StdDraw.isMousePressed() && StdDraw.mouseX() > (x1+25)-halfWidth && StdDraw.mouseX() < (x1+25)+halfWidth && StdDraw.mouseY() > (y3-48)-halfHeight && StdDraw.mouseY() < (y3-48)+halfHeight)
 	{
 		StdDraw.pause(100);
 		return "Wind Caster";

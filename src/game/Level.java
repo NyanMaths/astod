@@ -157,12 +157,12 @@ public boolean startWave ()
 		StdDraw.pause(20);
 		//System.out.println("Shop clicked : " + map.isShopClicked()); //test si shop est cliqué : REUSSI
 		//System.out.println("Map cliced : " +map.isMapClicked()); //pareil pour la map : REUSSI
-		//System.out.println("Tower : " + map.whichTower()); //test pour savoir quel tour est choisi : REUSSI
+		System.out.println("Tower : " + map.whichTower()); //test pour savoir quel tour est choisi : REUSSI
 		//System.out.println("Cell" + map.whereInMatrix(StdDraw.mouseX(),StdDraw.mouseY())); //test pour savoir quelle cellule est cliquée : REUSSI
-		if (StdDraw.isMousePressed())
+		/*if (StdDraw.isMousePressed())
 		{
 			System.out.println("Buildable? " + map.isBuildable(new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY())));
-		}
+		}*/
 		}
 		catch (java.util.ConcurrentModificationException eee)  // get fucked haha
 		{
