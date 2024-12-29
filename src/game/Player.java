@@ -106,7 +106,7 @@ public Color getColour ()
 @Override
 public void draw ()
 {
-	StdDraw.setPenColor(StdDraw.PINK);
-	StdDraw.filledCircle(this.position.x, this.position.y, 20);
+	graphics.Utils.drawHeart(this.position.x, this.position.y, 25, StdDraw.BLACK);
+	graphics.Utils.drawHeart(this.position.x, this.position.y, 23);
 }
 }

@@ -1,10 +1,9 @@
 package graphics;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
-
 import libraries.StdDraw;
 import units.towers.Tower;
-import java.awt.Color;
 
 
 
@@ -26,7 +25,7 @@ public String getTowerName ()
 
 public Tower spawn ()
 {
-	return Tower.fromName(this.towerName,new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY()));
+	return Tower.fromName(this.towerName, new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY()));
 }
 
 @Override

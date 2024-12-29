@@ -1,21 +1,12 @@
 package graphics;
 
 import java.awt.Color;
-import game.Player;
 import libraries.StdDraw;
 import units.Element;
 
 
 public class Utils
 {
-
-private final Player player;
-
-public Utils (Player player)
-{
-	this.player = player;
-}
-
 public static java.awt.Color colorFromElement (Element element)
 {
 	return switch (element)
@@ -27,12 +18,12 @@ public static java.awt.Color colorFromElement (Element element)
 		case Element.Water -> new Color(6, 0, 160);
 	};
 }
-public void drawHeart(double x, double y, double height)
+public static void drawHeart(double x, double y, double height, java.awt.Color colour)
 {
-	double centerX = 930;
-	double centerY = 641;
+	double centerX = x;
+	double centerY = y;
 	double halfHeight = height;
-	StdDraw . setPenColor ( new Color (223 , 75 , 95) );
+	StdDraw.setPenColor(colour);
 	double [] listX = new double []
 	{
 		centerX,
@@ -60,5 +51,9 @@ public void drawHeart(double x, double y, double height)
 		centerY,
 		};
 		StdDraw.filledPolygon(listX , listY);
+}
+public static void drawHeart(double x, double y, double height)
+{
+	Utils.drawHeart(x, y, height, new Color(223 , 75 , 95));
 }
 }

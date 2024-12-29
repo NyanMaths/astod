@@ -192,7 +192,7 @@ public boolean isMapClicked ()
 
 
 /*
- * @return the coordinates of the point's cell, null i not on the map
+ * @return the coordinates of the point's cell, null if not on the map
  */
 public Point2D.Float getCellCoordinates (Point2D.Float point)
 {
