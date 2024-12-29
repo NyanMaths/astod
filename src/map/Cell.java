@@ -10,12 +10,14 @@ public class Cell implements Drawable, Coloured
 {
 private final CellType type;
 private final Point2D.Float position;
+private boolean occupied;
 private static float size;
 
-public Cell (CellType type, Point2D.Float position)
+public Cell (CellType type, Point2D.Float position, boolean occupied)
 {
 	this.type = type;
 	this.position = position;
+	this.occupied = false;
 }
 public Cell (Character type, Point2D.Float position)
 {
@@ -53,6 +55,15 @@ public static boolean setSize (float newSize)
 	return true;
 }
 
+public boolean isOccupied()
+{
+	return this.occupied;
+}
+
+public void setOccupied()
+{
+	occupied = !occupied; //pas certain a 100% de ce que je fais, mais : Just works	
+}
 
 @Override
 public Color getColour ()
