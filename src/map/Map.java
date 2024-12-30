@@ -20,7 +20,7 @@ private List<List<Cell>> matrix;
 private Point2D.Float playerPosition;
 private Point2D.Float spawnerPosition;
 
-public Map (String name) throws InvalidMapException, InvalidMapPathException
+public Map (String name) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException
 {
 	this.load(name);
 }
@@ -29,7 +29,7 @@ public Map () throws InvalidMapException, InvalidMapPathException
 	// nothing here
 }
 
-public void load (String name) throws InvalidMapException, InvalidMapPathException
+public void load (String name) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException
 {
 	this.name = Paths.get("assets/maps/" + name + ".mtp");
 
@@ -77,6 +77,7 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 
 		this.playerPosition = new Point2D.Float(Cell.getSize()*playerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*playerCoordinates.y + 0.5f*Cell.getSize());
 		this.spawnerPosition = new Point2D.Float(Cell.getSize()*spawnerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*spawnerCoordinates.y + 0.5f*Cell.getSize());
+		initializesPath(null, this.getCell(this.getCellCoordinates(this.spawnerPosition)));
     }
 	catch (IOException eee)
 	{
@@ -84,6 +85,39 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 	}
 }
 
+public void initializesPath(Cell previous, Cell current) throws NoEnemySpawnException, InvalidMapPathException
+{
+	if (current==null) throw new NoEnemySpawnException(this.name);
+	if (current.getType()==CellType.Player) return;
+	Cell[] adjacentCells = getAdjacentCells(current);
+	
+
+    for (Cell next : adjacentCells) 
+	{
+        if (next != null && next.getType() == CellType.Path && next != previous) 
+		{
+            current.setNextCell(next);
+            initializesPath(current, next);
+            break;
+		}
+	}
+	//throw new InvalidMapPathException(this.name);
+}
+
+private Cell[] getAdjacentCells(Cell cell) {
+	Point2D.Float cellPosition = cell.getPosition();
+	Point2D.Float up = new Point2D.Float(cellPosition.x, (cellPosition.y - 1));
+	Point2D.Float down = new Point2D.Float(cellPosition.x, (cellPosition.y + 1));
+	Point2D.Float left = new Point2D.Float((cellPosition.x - 1), cellPosition.y);
+	Point2D.Float right = new Point2D.Float((cellPosition.x + 1), cellPosition.y);
+
+    Cell cellUp = getCell(up);
+    Cell cellDown = getCell(down);
+    Cell cellLeft = getCell(left);
+    Cell cellRight = getCell(right);
+
+    return new Cell[]{cellUp, cellDown, cellLeft, cellRight};
+}
 
 public Point2D.Float getPlayerPosition ()
 {
@@ -132,6 +166,17 @@ public void draw ()
 		{
 			this.getCell(i, j).draw();
 		}
+	}
+}
+
+public void listCells()
+{
+	Point2D.Float spawn = this.spawnerPosition;
+	Cell spawner = getCell(this.getCellCoordinates(spawn));
+	while(spawner.getNextCell() != null)
+	{
+		System.out.println(spawner.getPosition());
+		spawner = spawner.getNextCell();
 	}
 }
 

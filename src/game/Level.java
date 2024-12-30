@@ -16,6 +16,7 @@ import libraries.StdDraw;
 import map.InvalidMapException;
 import map.InvalidMapPathException;
 import map.Map;
+import map.NoEnemySpawnException;
 import units.Element;
 import units.Spawner;
 import units.UninitializedSpawner;
@@ -37,7 +38,7 @@ private final Player player;
 private final LevelUI UI;
 
 
-public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException
+public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
 {
 	this.map = new Map();
 	this.spawner = new Spawner(this);
@@ -49,7 +50,7 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 	this.load(levelName);
 }
 
-public void load (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException
+public void load (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
 {
 	Path location = Paths.get("assets/levels/level" + levelName + ".lvl");
 	this.waves = new LinkedList<>();
@@ -178,6 +179,7 @@ public void buildTower (Point2D.Float position)
  */
 public boolean startWave ()
 {
+	int test = 0;
 	while (this.player.isAlive() || this.spawner.isActive())  // E
 	{
 		try
@@ -186,7 +188,11 @@ public boolean startWave ()
 		map.draw();
 		this.drawEntities();
 		this.UI.draw();
-		
+		if(test==0) 
+		{
+			this.map.listCells();
+			test++;
+		}
 		StdDraw.show();  // finalize draw
 		//StdDraw.pause(20);
 		/*//Aniation stuff

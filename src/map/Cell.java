@@ -12,12 +12,14 @@ private final CellType type;
 private final Point2D.Float position;
 private boolean occupied;
 private static float size;
+private Cell nextCell;
 
 public Cell (CellType type, Point2D.Float position)
 {
 	this.type = type;
 	this.position = position;
 	this.occupied = false;
+	this.nextCell = null;
 }
 public Cell (Character type, Point2D.Float position)
 {
@@ -63,6 +65,21 @@ public boolean isOccupied()
 public void toggleOccupied()
 {
 	occupied = !occupied;
+}
+
+public Cell getNextCell()
+{
+	return this.nextCell;
+}
+
+public void setNextCell(Cell nextCell)
+{
+	this.nextCell = nextCell;
+}
+
+public Point2D.Float getPosition()
+{
+	return this.position;
 }
 
 @Override
