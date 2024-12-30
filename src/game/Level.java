@@ -137,6 +137,8 @@ public void buildTower (Point2D.Float position)
 
 	this.towers.add(newTower);
 	System.err.println("spawned new " + this.towers.getLast().getName() + " at :" + position);
+	Point2D.Float cellPos =  this.map.getCellCoordinates(position);
+	this.map.getCell(cellPos).toggleOccupied();
 }
 
 

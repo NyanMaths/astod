@@ -161,8 +161,9 @@ public boolean isMapClicked ()
  */
 public Point2D.Float getCellCoordinates (Point2D.Float point)
 {
-	point.x = point.x/Cell.getSize();
-	point.y = point.y/Cell.getSize();
+	point = (Point2D.Float)point.clone();
+	point.x /= Cell.getSize();
+	point.y /= Cell.getSize();
 	if((int)point.x >= 0 && (int)point.x < this.getRowsCount() && (int)point.y >= 0 && (int)point.y < this.getColumnsCount()) return new Point2D.Float((int)point.x, (int)point.y);
 	return null;
 }
@@ -176,7 +177,6 @@ public boolean isBuildable (Point2D.Float position)
 	if (position == null) return false;
 	if (this.getCell((int)position.x, (int)position.y).isOccupied()) return false; //Ici, on pourra mettre le TileOccupiedException quand tu l'auras crée. J'ose pas le faire, j'ai peur de faire de la merde.
 	
-	this.getCell((int)position.x, (int)position.y).toggleOccupied();
 	return this.getCell((int)position.x, (int)position.y).getType() == CellType.Buildable;
 }
 }

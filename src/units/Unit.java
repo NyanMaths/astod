@@ -233,13 +233,13 @@ public void drawHealthBar(Point2D.Float position)
 	position = this.getPosition();
 	double healthRemaning = this.getHealth()/this.getMaxHealth();
 	StdDraw.setPenColor(Color.BLACK);
-	StdDraw.filledRectangle(position.x,position.y+15,10,5);
+	StdDraw.filledRectangle(position.x,position.y+20,10,5);
 	StdDraw.setPenColor(Color.GREEN);
-	StdDraw.filledRectangle(position.x,position.y+15,9*healthRemaning,4);
+	StdDraw.filledRectangle(position.x,position.y+20,9*healthRemaning,4);
 	if (healthRemaning < 1)
 	{
 	StdDraw.setPenColor(Color.RED);
-	StdDraw.rectangle(position.x,position.y+15,9*(1-healthRemaning),4);
+	StdDraw.rectangle(position.x,position.y+20,9*(1-healthRemaning),4);
 	}
 	StdDraw.setPenColor(Color.BLACK);
 }
