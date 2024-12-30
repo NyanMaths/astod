@@ -72,5 +72,6 @@ public void draw ()
 	StdDraw.filledCircle(this.getPosition().x, this.getPosition().y, 20);
 	StdDraw.setPenColor(StdDraw.BLACK);
 	StdDraw.circle(this.getPosition().x, this.getPosition().y, 20.5);
+	this.drawHealthBar(this.getPosition());
 }
 }

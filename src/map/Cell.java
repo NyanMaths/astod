@@ -55,7 +55,7 @@ public static boolean setSize (float newSize)
 	return true;
 }
 
-public boolean isOccupied()
+public boolean toggleOccupied()
 {
 	return this.occupied;
 }

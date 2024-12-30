@@ -170,7 +170,7 @@ public boolean isBuildable (Point2D.Float position)
 	position = this.getCellCoordinates((Point2D.Float)position.clone());
 
 	if (position == null) return false;
-	if (this.getCell((int)position.x, (int)position.y).isOccupied()) return false; //Ici, on pourra mettre le TileOccupiedException quand tu l'auras crée. J'ose pas le faire, j'ai peur de faire de la merde.
+	if (this.getCell((int)position.x, (int)position.y).toggleOccupied()) return false; //Ici, on pourra mettre le TileOccupiedException quand tu l'auras crée. J'ose pas le faire, j'ai peur de faire de la merde.
 	
 	this.getCell((int)position.x, (int)position.y).setOccupied();
 	return this.getCell((int)position.x, (int)position.y).getType() == CellType.Buildable;

@@ -43,5 +43,6 @@ public void draw ()
 	StdDraw.filledRectangle(this.getPosition().x, this.getPosition().y, 10, 20);
 	StdDraw.setPenColor(StdDraw.BLACK);
 	StdDraw.rectangle(this.getPosition().x, this.getPosition().y, 10.5, 20.5);
+	this.drawHealthBar(this.getPosition());
 }
 }

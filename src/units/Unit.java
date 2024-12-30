@@ -2,6 +2,8 @@ package units;
 
 import graphics.Coloured;
 import graphics.Drawable;
+import libraries.StdDraw;
+
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
@@ -154,6 +156,7 @@ public long hurt (long damage, Element damageElement)
 	if (damageToInflict < this.maxHealth && damage >= 0)  // Normal damage case
 	{
 		this.setHealth(this.maxHealth - damageToInflict);
+		this.drawHealthBar(this.position);
 		return damageToInflict;
 	}
 	else if (damageToInflict < this.maxHealth)  // Healing case
@@ -163,10 +166,12 @@ public long hurt (long damage, Element damageElement)
 		if (uncappedHealth > this.maxHealth)
 		{
 			this.setHealth(this.maxHealth);
+			this.drawHealthBar(this.position);
 			return uncappedHealth - this.maxHealth;
 		}
 
 		this.setHealth(uncappedHealth);
+		this.drawHealthBar(this.position);
 		return damageToInflict;
 	}
 
@@ -223,6 +228,21 @@ public void setPosition (Point2D.Float newPosition)
 	this.position = newPosition;
 }
 
+public void drawHealthBar(Point2D.Float position)
+{
+	position = this.getPosition();
+	double healthRemaning = this.getHealth()/this.getMaxHealth();
+	StdDraw.setPenColor(Color.BLACK);
+	StdDraw.filledRectangle(position.x,position.y+15,10,5);
+	StdDraw.setPenColor(Color.GREEN);
+	StdDraw.filledRectangle(position.x,position.y+15,9*healthRemaning,4);
+	if (healthRemaning < 1)
+	{
+	StdDraw.setPenColor(Color.RED);
+	StdDraw.rectangle(position.x,position.y+15,9*(1-healthRemaning),4);
+	}
+	StdDraw.setPenColor(Color.BLACK);
+}
 
 @Override
 public Color getColour ()
