@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.Collectors;
 import libraries.StdDraw;
 import map.InvalidMapException;
 import map.InvalidMapPathException;
@@ -18,6 +19,7 @@ import map.Map;
 import units.Element;
 import units.Spawner;
 import units.UninitializedSpawner;
+import units.Unit;
 import units.living.LivingEntity;
 import units.towers.Tower;
 
@@ -77,6 +79,33 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 	{
 		System.err.println(eee);
 	}
+}
+
+
+/*
+ * @return the nearest in-range enemy from the unit's side
+ */
+public Unit getNearestEnemy (Unit unit, float maxDistance)
+{
+	List<Unit> nearbyEnemies = (List)(List) (unit.isAttacker() ? this.towers : this.enemies)  // no primitive switch ? no dxvk ?
+								.stream().filter(enemy->unit.getPosition().distance(((Unit)enemy).getPosition()) <= maxDistance).collect(Collectors.toList());
+	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
+
+	Unit currentNearest = null;
+
+	for (Unit currentEnemy : nearbyEnemies)
+	{
+		if (currentNearest == null)
+		{
+			currentNearest = currentEnemy;
+		}
+		else if (unit.getPosition().distance(currentNearest.getPosition()) > unit.getPosition().distance(currentEnemy.getPosition()))
+		{
+			currentNearest = currentEnemy;
+		}
+	}
+
+	return currentNearest;
 }
 
 
