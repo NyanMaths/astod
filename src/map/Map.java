@@ -114,6 +114,10 @@ public Cell getCell (int row, int col)
 {
 	return this.matrix.get(row).get(col);
 }
+public Cell getCell (Point2D.Float coordinates)
+{
+	return this.matrix.get((int)coordinates.x).get((int)coordinates.y);
+}
 
 
 @Override
@@ -170,9 +174,9 @@ public boolean isBuildable (Point2D.Float position)
 	position = this.getCellCoordinates((Point2D.Float)position.clone());
 
 	if (position == null) return false;
-	if (this.getCell((int)position.x, (int)position.y).toggleOccupied()) return false; //Ici, on pourra mettre le TileOccupiedException quand tu l'auras crée. J'ose pas le faire, j'ai peur de faire de la merde.
+	if (this.getCell((int)position.x, (int)position.y).isOccupied()) return false; //Ici, on pourra mettre le TileOccupiedException quand tu l'auras crée. J'ose pas le faire, j'ai peur de faire de la merde.
 	
-	this.getCell((int)position.x, (int)position.y).setOccupied();
+	this.getCell((int)position.x, (int)position.y).toggleOccupied();
 	return this.getCell((int)position.x, (int)position.y).getType() == CellType.Buildable;
 }
 }

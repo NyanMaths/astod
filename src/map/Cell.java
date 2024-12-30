@@ -13,7 +13,7 @@ private final Point2D.Float position;
 private boolean occupied;
 private static float size;
 
-public Cell (CellType type, Point2D.Float position, boolean occupied)
+public Cell (CellType type, Point2D.Float position)
 {
 	this.type = type;
 	this.position = position;
@@ -55,14 +55,14 @@ public static boolean setSize (float newSize)
 	return true;
 }
 
-public boolean toggleOccupied()
+public boolean isOccupied()
 {
 	return this.occupied;
 }
 
-public void setOccupied()
+public void toggleOccupied()
 {
-	occupied = !occupied; //pas certain a 100% de ce que je fais, mais : Just works	
+	occupied = !occupied;
 }
 
 @Override
