@@ -68,7 +68,7 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 				this.matrix.getLast().addLast(new Cell(cellType, new Point2D.Float(i, j)));
 				j++;
 			}
-			
+
 			currentLine = reader.readLine();
 			i++;
 		}
@@ -90,11 +90,17 @@ public void initializesPath(Cell previous, Cell current) throws NoEnemySpawnExce
 	if (current==null) throw new NoEnemySpawnException(this.name);
 	if (current.getType()==CellType.Player) return;
 	Cell[] adjacentCells = getAdjacentCells(current);
-	
 
-    for (Cell next : adjacentCells) 
+
+    for (Cell next : adjacentCells)
 	{
-        if (next != null && next.getType() == CellType.Path && next != previous) 
+        if (next != null && next.getType() == CellType.Path && next != previous)
+		{
+            current.setNextCell(next);
+            initializesPath(current, next);
+            break;
+		}
+		if (next != null && next.getType() == CellType.Player && next != previous)
 		{
             current.setNextCell(next);
             initializesPath(current, next);
@@ -178,6 +184,7 @@ public void listCells()
 		System.out.println(spawner.getPosition());
 		spawner = spawner.getNextCell();
 	}
+	System.out.println(spawner.getPosition());
 }
 
 /* public boolean isShopClicked()
@@ -221,7 +228,7 @@ public boolean isBuildable (Point2D.Float position)
 
 	if (position == null) return false;
 	if (this.getCell((int)position.x, (int)position.y).isOccupied()) return false; //Ici, on pourra mettre le TileOccupiedException quand tu l'auras crée. J'ose pas le faire, j'ai peur de faire de la merde.
-	
+
 	return this.getCell((int)position.x, (int)position.y).getType() == CellType.Buildable;
 }
 }
