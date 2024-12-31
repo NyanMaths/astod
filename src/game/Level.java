@@ -128,7 +128,7 @@ public boolean start () throws UninitializedSpawner
 		{
 			return false;
 		}
-		
+
 		wave = this.waves.poll();
 	}
 
@@ -179,7 +179,6 @@ public void buildTower (Point2D.Float position)
  */
 public boolean startWave ()
 {
-	int test = 0;
 	while (this.player.isAlive() || this.spawner.isActive())  // E
 	{
 		try
@@ -188,11 +187,6 @@ public boolean startWave ()
 		map.draw();
 		this.drawEntities();
 		this.UI.draw();
-		if(test==0) 
-		{
-			this.map.listCells();
-			test++;
-		}
 		StdDraw.show();  // finalize draw
 		//StdDraw.pause(20);
 		/*//Aniation stuff
