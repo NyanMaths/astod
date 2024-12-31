@@ -89,14 +89,25 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 }
 
 
+private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
+{
+	List<Unit> nearbyEnemies = (List)(List) (unit.isAttacker() ? this.towers : this.enemies);  // no primitive switch ? no dxvk ?
+	if (maxDistance <= 0.001)
+	{
+		nearbyEnemies = nearbyEnemies.stream().filter(enemy->unit.getPosition().distance(((Unit)enemy).getPosition()) <= maxDistance).collect(Collectors.toList());
+	}
+	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
+
+	return nearbyEnemies;
+}
+
 /*
+ * Set maxDistance to 0 to get unlimited range
  * @return the nearest in-range enemy from the unit's side
  */
 public Unit getNearestEnemy (Unit unit, float maxDistance)
 {
-	List<Unit> nearbyEnemies = (List)(List) (unit.isAttacker() ? this.towers : this.enemies)  // no primitive switch ? no dxvk ?
-								.stream().filter(enemy->unit.getPosition().distance(((Unit)enemy).getPosition()) <= maxDistance).collect(Collectors.toList());
-	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
+	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
 
 	Unit currentNearest = null;
 
@@ -116,34 +127,102 @@ public Unit getNearestEnemy (Unit unit, float maxDistance)
 }
 
 /*
- * @return the nearest in-range enemy from the unit's side
+ * @return the weakest(attack-wise) in-range enemy from the unit's side
  */
 public Unit getWeakest (Unit unit, float maxDistance)
 {
-	List<Unit> nearbyEnemies = (List)(List) (unit.isAttacker() ? this.towers : this.enemies)  // no primitive switch ? no dxvk ?
-								.stream().filter(enemy->unit.getPosition().distance(((Unit)enemy).getPosition()) <= maxDistance).collect(Collectors.toList());
-	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
+	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
 
-	Unit currentNearest = null;
+	Unit currentWeakest = null;
 
 	for (Unit currentEnemy : nearbyEnemies)
 	{
-		if (currentNearest == null)
+		if (currentWeakest == null)
 		{
-			currentNearest = currentEnemy;
+			currentWeakest = currentEnemy;
 		}
-		else if (unit.getPosition().distance(currentNearest.getPosition()) > unit.getPosition().distance(currentEnemy.getPosition()))
+		else if (currentEnemy.getAttack() < currentWeakest.getAttack())
 		{
-			currentNearest = currentEnemy;
+			currentWeakest = currentEnemy;
 		}
 	}
 
-	return currentNearest;
+	return currentWeakest;
+}
+/*
+ * @return the strongest(attack-wise) in-range enemy from the unit's side
+ */
+public Unit getStrongest (Unit unit, float maxDistance)
+{
+	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
+
+	Unit currentStrongest = null;
+
+	for (Unit currentEnemy : nearbyEnemies)
+	{
+		if (currentStrongest == null)
+		{
+			currentStrongest = currentEnemy;
+		}
+		else if (currentEnemy.getAttack() > currentStrongest.getAttack())
+		{
+			currentStrongest = currentEnemy;
+		}
+	}
+
+	return currentStrongest;
+}
+
+/*
+ * @return the most wounded in-range enemy from the unit's side
+ */
+public Unit getMostWounded (Unit unit, float maxDistance)
+{
+	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
+
+	Unit currentMostWounded = null;
+
+	for (Unit currentEnemy : nearbyEnemies)
+	{
+		if (currentMostWounded == null)
+		{
+			currentMostWounded = currentEnemy;
+		}
+		else if (currentEnemy.getHealth() < currentMostWounded.getHealth())
+		{
+			currentMostWounded = currentEnemy;
+		}
+	}
+
+	return currentMostWounded;
+}
+/*
+ * @return the healthiest in-range enemy from the unit's side
+ */
+public Unit getHealthiest (Unit unit, float maxDistance)
+{
+	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
+
+	Unit currentHealthiest = null;
+
+	for (Unit currentEnemy : nearbyEnemies)
+	{
+		if (currentHealthiest == null)
+		{
+			currentHealthiest = currentEnemy;
+		}
+		else if (currentEnemy.getHealth() > currentHealthiest.getHealth())
+		{
+			currentHealthiest = currentEnemy;
+		}
+	}
+
+	return currentHealthiest;
 }
 
 
 /*
- * Yeet a unit from the game and make it woe
+ * Yeet a unit from the game and make it woe (LOUD)
  */
 public void blight (Unit unit)
 {
