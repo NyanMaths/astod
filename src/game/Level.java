@@ -3,6 +3,7 @@ package game;
 import graphics.LevelUI;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +13,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import libraries.StdDraw;
 import map.InvalidMapException;
 import map.InvalidMapPathException;
@@ -109,6 +115,54 @@ public Unit getNearestEnemy (Unit unit, float maxDistance)
 	return currentNearest;
 }
 
+/*
+ * @return the nearest in-range enemy from the unit's side
+ */
+public Unit getWeakest (Unit unit, float maxDistance)
+{
+	List<Unit> nearbyEnemies = (List)(List) (unit.isAttacker() ? this.towers : this.enemies)  // no primitive switch ? no dxvk ?
+								.stream().filter(enemy->unit.getPosition().distance(((Unit)enemy).getPosition()) <= maxDistance).collect(Collectors.toList());
+	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
+
+	Unit currentNearest = null;
+
+	for (Unit currentEnemy : nearbyEnemies)
+	{
+		if (currentNearest == null)
+		{
+			currentNearest = currentEnemy;
+		}
+		else if (unit.getPosition().distance(currentNearest.getPosition()) > unit.getPosition().distance(currentEnemy.getPosition()))
+		{
+			currentNearest = currentEnemy;
+		}
+	}
+
+	return currentNearest;
+}
+
+
+/*
+ * Yeet a unit from the game and make it woe
+ */
+public void blight (Unit unit)
+{
+	(unit.isAttacker() ? this.enemies : this.towers).remove(unit);
+
+	try
+	{
+		File f = new File("assets/woe.wav");
+		AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+		Clip clip = AudioSystem.getClip();
+		clip.open(audioIn);
+		clip.start();
+	}
+	catch (IOException | LineUnavailableException | UnsupportedAudioFileException e)
+	{
+		System.err.println(e.getMessage());
+	}
+}
+
 
 /*
  * Starts the level : spawns enemies and ticks the game.
@@ -117,6 +171,7 @@ public Unit getNearestEnemy (Unit unit, float maxDistance)
  */
 public boolean start () throws UninitializedSpawner
 {
+	Unit.setLevel(this);
 	String wave = this.waves.poll();
 
 	while (wave != null)
@@ -128,7 +183,7 @@ public boolean start () throws UninitializedSpawner
 		{
 			return false;
 		}
-		
+
 		wave = this.waves.poll();
 	}
 
@@ -166,7 +221,6 @@ public void buildTower (Point2D.Float position)
 	}
 
 	this.towers.add(newTower);
-	System.err.println("spawned new " + this.towers.getLast().getName() + " at :" + position);
 	Point2D.Float cellPos =  this.map.getCellCoordinates(position);
 	this.map.getCell(cellPos).toggleOccupied();
 }
@@ -188,21 +242,13 @@ public boolean startWave ()
 		map.draw();
 		this.drawEntities();
 		this.UI.draw();
-		if(test==0) 
+		if(test==0)
 		{
 			this.map.listCells();
 			test++;
 		}
 		StdDraw.show();  // finalize draw
 		//StdDraw.pause(20);
-		/*//Aniation stuff
-		int rowsCount = map.getRowsCount();
-		int columnsCount = map.getColumnsCount();
-		double cellSize = Math.min(1024.0, 720.0) / (double)Math.max(rowsCount, columnsCount);
-		double x = cellSize*i + 0.5*cellSize;
-		double y = cellSize*i + 0.5*cellSize;
-		StdDraw.setPenColor(Color.BLACK);
-		StdDraw.filledSquare(x+i,y+i,cellSize);*/
 
 
 		if (StdDraw.isMousePressed())
@@ -222,6 +268,10 @@ public boolean startWave ()
 				else
 				{
 					System.err.println("unable to build here");
+					if (!this.enemies.isEmpty())
+					{
+						this.blight(this.enemies.getFirst());
+					}
 				}
 			}
 		}

@@ -1,11 +1,11 @@
 package units;
 
+import game.Level;
 import graphics.Coloured;
 import graphics.Drawable;
-import libraries.StdDraw;
-
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import libraries.StdDraw;
 
 
 /*
@@ -31,7 +31,10 @@ private AttackMode attackMode;
 // stored as proportion of the screen (centered => (0.5, 0.5) for instance)
 // This is intended to be able to resize the game window without making it die.
 // lol nope absolute positioning goes brrrr
-private Point2D.Float position;  
+private Point2D.Float position;
+
+// the level the units belong to, used to get nearby units to attack or heal
+protected static Level level = null;
 
 
 public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long health)
@@ -57,8 +60,24 @@ public Unit (String name, boolean attacker, Element element, long maxHealth, lon
 }
 
 
+/*
+ * Sets the level to ask for nearby units when attacking, healing and so on
+ */
+public static boolean setLevel (Level newLevel)
+{
+	if (newLevel == null)
+	{
+		return false;
+	}
+
+	level = newLevel;
+	return true;
+}
+
+
+
 /**
- * 
+ *
  * @param what kind of element is applied to the Unit
  * @return the multiplier to be applied to the damage taken
  */
@@ -180,6 +199,7 @@ public long hurt (long damage, Element damageElement)
 
 	long currentHealth = this.health;
 	this.setHealth(0);
+	level.blight(this);
 	return currentHealth;
 }
 
