@@ -262,10 +262,6 @@ public boolean startWave ()
 				else
 				{
 					System.err.println("unable to build here");
-					if (!this.enemies.isEmpty())
-					{
-						this.blight(this.enemies.getFirst());
-					}
 				}
 			}
 		}
