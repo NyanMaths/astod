@@ -59,7 +59,7 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 
 public void load (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
 {
-	Path location = Paths.get("assets/levels/level" + levelName + ".lvl");
+	Path location = Paths.get("assets/levels/" + levelName + ".lvl");
 	this.waves = new LinkedList<>();
 
 	try (BufferedReader reader = Files.newBufferedReader(location))
@@ -101,7 +101,6 @@ private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 
 	return nearbyEnemies;
 }
-
 
 /*
  * Set maxDistance to 0 to get unlimited range
@@ -183,6 +182,27 @@ public Unit getNearest (Unit unit, float maxDistance, AttackMode filter)
 
 
 /*
+ * Adds the newly spawned enemy into battle
+ */
+public void spawn (LivingEntity enemy, Spawner funnyToken)
+{
+	this.enemies.add(enemy);
+}
+public void buildTower (Point2D.Float position)
+{
+	Tower newTower = player.buy(this.UI.takeTowerName(), position);
+
+	if (newTower == null)
+	{
+		System.err.println("you are poor");
+		return;
+	}
+
+	this.towers.add(newTower);
+	Point2D.Float cellPos =  this.map.getCellCoordinates(position);
+	this.map.getCell(cellPos).toggleOccupied();
+}
+/*
  * Yeet a unit from the game and make it woe (LOUD)
  */
 public void blight (Unit unit)
@@ -201,6 +221,18 @@ public void blight (Unit unit)
 	{
 		System.err.println(e.getMessage());
 	}
+}
+
+
+/*
+ * Draw enemies, towers then player from bottom to top layer.
+ * Can raise ConcurrentModificationException for funny reasons.
+ */
+private void drawEntities ()
+{
+	this.enemies.stream().forEach(enemy->enemy.draw());
+	this.towers.stream().forEach(tower->tower.draw());
+	this.player.draw();
 }
 
 
@@ -230,41 +262,6 @@ public boolean start () throws UninitializedSpawner
 	// the player made it though all waves
 	return true;
 }
-/*
- * Adds the newly spawned enemy into battle
- */
-public void spawn (LivingEntity enemy, Spawner funnyToken)
-{
-	this.enemies.add(enemy);
-}
-
-
-/*
- * Draws enemies, towers then player from bottom to top layer.
- * Can raise ConcurrentModificationException for funny reasons.
- */
-private void drawEntities ()
-{
-	this.enemies.stream().forEach(enemy->enemy.draw());
-	this.towers.stream().forEach(tower->tower.draw());
-	this.player.draw();
-}
-
-public void buildTower (Point2D.Float position)
-{
-	Tower newTower = player.buy(this.UI.takeTowerName(), position);
-
-	if (newTower == null)
-	{
-		System.err.println("you are poor");
-		return;
-	}
-
-	this.towers.add(newTower);
-	Point2D.Float cellPos =  this.map.getCellCoordinates(position);
-	this.map.getCell(cellPos).toggleOccupied();
-}
-
 
 /*
  * Ticks one wave, this method exists for the sole purpose of reducing indentation level of the game loop.

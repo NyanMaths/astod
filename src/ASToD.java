@@ -1,4 +1,4 @@
-import game.Level;
+import game.Game;
 import java.util.Scanner;
 import libraries.StdDraw;
 
@@ -6,15 +6,15 @@ public class ASToD
 {
 public static void main (String[] args) throws Exception
 {
-    String levelId;
+    String gameID;
     try (Scanner reader = new Scanner(System.in))
 	{
-        System.out.println("Which level ? ");
-        levelId = reader.nextLine();
+        System.out.println("Which game ? ");
+        gameID = reader.nextLine();
     }
-	if (levelId.isEmpty())
+	if (gameID.isEmpty())
 	{
-		levelId = "1";
+		gameID = "1";
 	}
 
 	StdDraw.setCanvasSize(1024, 720);
@@ -22,7 +22,8 @@ public static void main (String[] args) throws Exception
     StdDraw.setYscale(-10, 710);
 	StdDraw.enableDoubleBuffering();
 
-	Level level = new Level(levelId);
-	level.start();
+
+	Game game = new Game(gameID);
+	game.start();
 }
 }
