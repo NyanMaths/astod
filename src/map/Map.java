@@ -231,4 +231,11 @@ public boolean isBuildable (Point2D.Float position)
 
 	return this.getCell((int)position.x, (int)position.y).getType() == CellType.Buildable;
 }
+
+public Point2D.Float getCenterCell(Point2D.Float cell)
+{
+	if(cell.x < 0 || cell.x >= this.getRowsCount() || cell.y < 0 || cell.y >= this.getColumnsCount()) return null;
+	float size = Cell.getSize();
+	return new Point2D.Float((cell.x*size)+size/2, (cell.y*size)+size/2);
+}
 }

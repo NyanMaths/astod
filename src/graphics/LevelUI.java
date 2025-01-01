@@ -20,7 +20,7 @@ private final List<SpawnButton> spawnButtons;
 public LevelUI (Player player)
 {
 	this.player = player;
-	this.spawningTower = null;	
+	this.spawningTower = null;
 
 	this.spawnButtons = new ArrayList<>();
 
@@ -128,7 +128,7 @@ public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
 {
 	StdDraw.text(760,688,"LVL:X/X");
 	StdDraw.text(930,688,"WAVE:X/X");
-	//J'aimerais test de changer le font, mais je sais pas si c'est une très bonne idée, car faudra le changer entre les fonctions. 
+	//J'aimerais test de changer le font, mais je sais pas si c'est une très bonne idée, car faudra le changer entre les fonctions.
 	//Genre pour la vie et la thune, c'est un style différent de celui pour la vague et le niveau en terme d'écriture.
 }
 
