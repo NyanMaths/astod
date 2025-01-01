@@ -23,6 +23,7 @@ import map.InvalidMapException;
 import map.InvalidMapPathException;
 import map.Map;
 import map.NoEnemySpawnException;
+import units.AttackMode;
 import units.Element;
 import units.Spawner;
 import units.UninitializedSpawner;
@@ -101,123 +102,83 @@ private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 	return nearbyEnemies;
 }
 
+
 /*
  * Set maxDistance to 0 to get unlimited range
- * @return the nearest in-range enemy from the unit's side
+ * @return the nearest unit respecting the given filter
  */
-public Unit getNearestEnemy (Unit unit, float maxDistance)
+public Unit getNearest (Unit unit, float maxDistance, AttackMode filter)
 {
 	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
 
-	Unit currentNearest = null;
+	Unit currentTarget = null;
 
 	for (Unit currentEnemy : nearbyEnemies)
 	{
-		if (currentNearest == null)
+		if (currentTarget == null)
 		{
-			currentNearest = currentEnemy;
+			currentTarget = currentEnemy;
 		}
-		else if (unit.getPosition().distance(currentNearest.getPosition()) > unit.getPosition().distance(currentEnemy.getPosition()))
+		else
 		{
-			currentNearest = currentEnemy;
+		switch (filter)
+		{
+			case AttackMode.Nearest ->
+			{
+				if (unit.distance(currentTarget) > unit.distance(currentEnemy))
+				{
+					currentTarget = currentEnemy;
+				}
+			}
+			case AttackMode.Healthiest ->
+			{
+				if (currentEnemy.getHealth() > currentTarget.getHealth())
+				{
+					currentTarget = currentEnemy;
+				}
+				else if (currentEnemy.getHealth() == currentTarget.getHealth() && unit.distance(currentTarget) > unit.distance(currentEnemy))
+				{
+					currentTarget = currentEnemy;
+				}
+			}
+			case AttackMode.MostWounded ->
+			{
+				if (currentEnemy.getHealth() < currentTarget.getHealth())
+				{
+					currentTarget = currentEnemy;
+				}
+				else if (currentEnemy.getHealth() == currentTarget.getHealth() && unit.distance(currentTarget) > unit.distance(currentEnemy))
+				{
+					currentTarget = currentEnemy;
+				}
+			}
+			case AttackMode.Strongest ->
+			{
+				if (currentEnemy.getAttack() > currentTarget.getAttack())
+				{
+					currentTarget = currentEnemy;
+				}
+				else if (currentEnemy.getAttack() == currentTarget.getAttack() && unit.distance(currentTarget) > unit.distance(currentEnemy))
+				{
+					currentTarget = currentEnemy;
+				}
+			}
+			case AttackMode.Weakest ->
+			{
+				if (currentEnemy.getAttack() < currentTarget.getAttack())
+				{
+					currentTarget = currentEnemy;
+				}
+				else if (currentEnemy.getAttack() == currentTarget.getAttack() && unit.distance(currentTarget) > unit.distance(currentEnemy))
+				{
+					currentTarget = currentEnemy;
+				}
+			}
 		}
-	}
-
-	return currentNearest;
-}
-
-/*
- * @return the weakest(attack-wise) in-range enemy from the unit's side
- */
-public Unit getWeakest (Unit unit, float maxDistance)
-{
-	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
-
-	Unit currentWeakest = null;
-
-	for (Unit currentEnemy : nearbyEnemies)
-	{
-		if (currentWeakest == null)
-		{
-			currentWeakest = currentEnemy;
-		}
-		else if (currentEnemy.getAttack() < currentWeakest.getAttack())
-		{
-			currentWeakest = currentEnemy;
-		}
-	}
-
-	return currentWeakest;
-}
-/*
- * @return the strongest(attack-wise) in-range enemy from the unit's side
- */
-public Unit getStrongest (Unit unit, float maxDistance)
-{
-	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
-
-	Unit currentStrongest = null;
-
-	for (Unit currentEnemy : nearbyEnemies)
-	{
-		if (currentStrongest == null)
-		{
-			currentStrongest = currentEnemy;
-		}
-		else if (currentEnemy.getAttack() > currentStrongest.getAttack())
-		{
-			currentStrongest = currentEnemy;
-		}
-	}
-
-	return currentStrongest;
-}
-
-/*
- * @return the most wounded in-range enemy from the unit's side
- */
-public Unit getMostWounded (Unit unit, float maxDistance)
-{
-	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
-
-	Unit currentMostWounded = null;
-
-	for (Unit currentEnemy : nearbyEnemies)
-	{
-		if (currentMostWounded == null)
-		{
-			currentMostWounded = currentEnemy;
-		}
-		else if (currentEnemy.getHealth() < currentMostWounded.getHealth())
-		{
-			currentMostWounded = currentEnemy;
 		}
 	}
 
-	return currentMostWounded;
-}
-/*
- * @return the healthiest in-range enemy from the unit's side
- */
-public Unit getHealthiest (Unit unit, float maxDistance)
-{
-	List<Unit> nearbyEnemies = this.getNearbyEnemies(unit, maxDistance);
-
-	Unit currentHealthiest = null;
-
-	for (Unit currentEnemy : nearbyEnemies)
-	{
-		if (currentHealthiest == null)
-		{
-			currentHealthiest = currentEnemy;
-		}
-		else if (currentEnemy.getHealth() > currentHealthiest.getHealth())
-		{
-			currentHealthiest = currentEnemy;
-		}
-	}
-
-	return currentHealthiest;
+	return currentTarget;
 }
 
 

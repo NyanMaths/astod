@@ -248,6 +248,11 @@ public void setPosition (Point2D.Float newPosition)
 	this.position = newPosition;
 }
 
+public double distance (Unit other)
+{
+	return this.getPosition().distance(other.getPosition());
+}
+
 public void drawHealthBar(Point2D.Float position)
 {
 	position = this.getPosition();
