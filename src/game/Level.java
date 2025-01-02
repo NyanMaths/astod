@@ -270,18 +270,12 @@ public boolean start () throws UninitializedSpawner
  */
 public boolean startWave ()
 {
-	while (this.player.isAlive() || this.spawner.isActive())  // E
+	while (this.player.isAlive() && this.spawner.isActive())  // E
 	{
+		long startFrameTime = System.nanoTime();
+
 		try
 		{
-		StdDraw.clear();
-		map.draw();
-		this.drawEntities();
-		this.UI.draw();
-		StdDraw.show();  // finalize draw
-		//StdDraw.pause(20);
-
-
 		if (StdDraw.isMousePressed())
 		{
 			Point2D.Float position = new Point2D.Float((float)StdDraw.mouseX(), (float)StdDraw.mouseY());
@@ -306,6 +300,19 @@ public boolean startWave ()
 		catch (java.util.ConcurrentModificationException eee)
 		{
 			// dunno how to fix concurrent accesses to entities list between display and game, they are ignored for now as they just stall display for a bit
+		}
+
+		StdDraw.clear();
+		map.draw();
+		this.drawEntities();
+		this.UI.draw();
+		StdDraw.show();
+
+		long elapsedFrameTime = System.nanoTime() - startFrameTime;
+
+		if (elapsedFrameTime < 16666666)  // cap to 60fps the bad way
+		{
+			StdDraw.pause((16666666 - (int)elapsedFrameTime)/1000000);
 		}
 	}
 
