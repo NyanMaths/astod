@@ -35,6 +35,12 @@ public static Tower fromName (String name, Point2D.Float spawnPosition)
 
 public abstract long getCost ();
 
+@Override
+public void move ()
+{
+
+}
+
 
 @Override
 public void draw ()

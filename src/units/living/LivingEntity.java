@@ -2,6 +2,8 @@ package units.living;
 
 import java.awt.geom.Point2D;
 import libraries.StdDraw;
+import map.Cell;
+import map.CellType;
 import units.Element;
 import units.Unit;
 
@@ -35,6 +37,27 @@ public boolean setSpeed (long newSpeed)
 
 	this.speed = newSpeed;
 	return true;
+}
+
+@Override
+public void move ()
+{
+	Cell current = map.getCell(map.getCellCoordinates(this.getPosition()));
+	if (current.getType() == CellType.Player && this.getPosition().distance(current.getCenter()) < Cell.getSize()/10.0f)
+	{
+		level.slapPlayer(this);
+	}
+	else if (current.getType() == CellType.Player)
+	{
+		this.getPosition().x += 1.0f/600.0f * (float)this.speed * (current.getCenter().x-this.getPosition().x);
+		this.getPosition().y += 1.0f/600.0f * (float)this.speed * (current.getCenter().y-this.getPosition().y);
+	}
+	else
+	{
+		Point2D.Float nextPosition = current.getNextCell().getCenter();
+		this.getPosition().x += 1.0f/600.0f * (float)this.speed * (nextPosition.x-this.getPosition().x);
+		this.getPosition().y += 1.0f/600.0f * (float)this.speed * (nextPosition.y-this.getPosition().y);
+	}
 }
 
 

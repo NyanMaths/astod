@@ -97,6 +97,18 @@ public Tower buy (String towerName, Point2D.Float spawnPosition)
 }
 
 
+public void hurt (long damage)
+{
+	if (damage > this.health)
+	{
+		this.health = 0;
+		return;
+	}
+
+	this.health -= damage;
+}
+
+
 @Override
 public Color getColour ()
 {

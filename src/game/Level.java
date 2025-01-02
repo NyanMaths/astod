@@ -3,6 +3,7 @@ package game;
 import graphics.LevelUI;
 import java.awt.geom.Point2D;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -12,6 +13,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.stream.Collectors;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import libraries.StdDraw;
 import map.InvalidMapException;
 import map.InvalidMapPathException;
@@ -225,11 +231,36 @@ public void blight (Unit unit)
 		System.err.println(e.getMessage());
 	}*/
 }
+public void slapPlayer (LivingEntity enemy)
+{
+	this.player.hurt(enemy.getAttack());
+	this.enemies.remove(enemy);
+
+	try
+	{
+		File f = new File("assets/woooooo.wav");
+		AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+		Clip clip = AudioSystem.getClip();
+		clip.open(audioIn);
+		clip.start();
+	}
+	catch (IOException | LineUnavailableException | UnsupportedAudioFileException e)
+	{
+		System.err.println(e.getMessage());
+	}
+}
 
 
+private static void tick (Unit unit)
+{
+	if (unit != null)
+	{
+		unit.tick();
+	}
+}
 private void tickEntities ()
 {
-	this.enemies.stream().forEach(enemy->enemy.tick());
+	this.enemies.stream().forEach(enemy->tick(enemy));
 	this.towers.stream().forEach(tower->tower.tick());
 }
 

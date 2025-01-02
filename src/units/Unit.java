@@ -8,8 +8,6 @@ import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
 import java.util.Timer;
 import libraries.StdDraw;
-import map.Cell;
-import map.CellType;
 import map.Map;
 
 
@@ -44,7 +42,6 @@ private Point2D.Float position;
 
 // the level the units belong to, used to get nearby units to attack or heal
 protected static Level level = null;
-
 protected static Map map = null;
 
 public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long health)
@@ -178,7 +175,7 @@ private boolean setHealth (long newHealth)
 		return true;
 	}
 
-	this.maxHealth = newHealth;
+	this.health = newHealth;
 	return true;
 }
 /** Hurts or heals the Unit
@@ -186,9 +183,11 @@ private boolean setHealth (long newHealth)
 */
 public long hurt (long damage, Element damageElement)
 {
+	System.err.println("life: " + this.health + "  max:" + this.maxHealth);
+
 	long damageToInflict;
 
-	if (damage >= 0)
+	if (damage > 0)
 	{
 		damageToInflict = (long)((float)damage * getDamageMultiplier(damageElement));
 	}
@@ -198,10 +197,9 @@ public long hurt (long damage, Element damageElement)
 	}
 
 
-	if (damageToInflict < this.maxHealth && damage >= 0)  // Normal damage case
+	if (damageToInflict < this.maxHealth && damageToInflict >= 0)  // Normal damage case
 	{
-		this.setHealth(this.maxHealth - damageToInflict);
-		this.drawHealthBar(this.position);
+		this.setHealth(this.health - damageToInflict);
 		return damageToInflict;
 	}
 	else if (damageToInflict < this.maxHealth)  // Healing case
@@ -211,12 +209,10 @@ public long hurt (long damage, Element damageElement)
 		if (uncappedHealth > this.maxHealth)
 		{
 			this.setHealth(this.maxHealth);
-			this.drawHealthBar(this.position);
 			return uncappedHealth - this.maxHealth;
 		}
 
 		this.setHealth(uncappedHealth);
-		this.drawHealthBar(this.position);
 		return damageToInflict;
 	}
 
@@ -314,27 +310,22 @@ public void tick ()
 	{
 		this.target = level.getNearest(this, this.range, this.attackMode);
 	}
-
-	this.attack();
-	this.move();
+	if (this.target != null)
+	{
+		this.attack();
+	}
+	else
+	{
+		this.move();
+	}
 }
 
-public void move()
-{
-	float speed = 1000;
-	float fpscap = 1/60;
-	Cell current = map.getCell(map.getCellCoordinates(this.position));
-	if(current.getNextCell()==null || current.getType() == CellType.Player) return;
-	Point2D.Float nextPosition = current.getNextCell().getCenter();
-	this.position.x += fpscap*speed*(nextPosition.x-this.position.x);
-	this.position.y += fpscap*speed*(nextPosition.y-this.position.y);
-	return;
-}
+public abstract void move ();
 
 
 public void drawHealthBar (Point2D.Float position)
 {
-	position = this.getPosition();
+	/*position = this.getPosition();
 	double healthRemaning = this.getHealth()/this.getMaxHealth();
 	StdDraw.setPenColor(Color.BLACK);
 	StdDraw.filledRectangle(position.x,position.y+20,10,5);
@@ -345,7 +336,11 @@ public void drawHealthBar (Point2D.Float position)
 	StdDraw.setPenColor(Color.RED);
 	StdDraw.rectangle(position.x,position.y+20,9*(1-healthRemaning),4);
 	}
-	StdDraw.setPenColor(Color.BLACK);
+	StdDraw.setPenColor(Color.BLACK);*/
+	StdDraw.setPenColor(StdDraw.BLACK);
+	StdDraw.rectangle(this.position.x, this.position.y+20, 10.5, 3.5);
+	StdDraw.setPenColor(StdDraw.GREEN);
+	StdDraw.filledRectangle(this.position.x, this.position.y+20, (float)this.health/(float)this.maxHealth * 10.5f, 3.0);
 }
 
 @Override
