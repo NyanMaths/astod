@@ -296,23 +296,24 @@ public boolean startWave ()
 				}
 			}
 		}
-		}
-		catch (java.util.ConcurrentModificationException eee)
-		{
-			// dunno how to fix concurrent accesses to entities list between display and game, they are ignored for now as they just stall display for a bit
-		}
 
 		StdDraw.clear();
 		map.draw();
 		this.drawEntities();
 		this.UI.draw();
 		StdDraw.show();
+		}
+		catch (java.util.ConcurrentModificationException eee)
+		{
+			// dunno how to fix concurrent accesses to entities list between display and game, they are ignored for now as they just stall display for a bit
+		}
+
 
 		long elapsedFrameTime = System.nanoTime() - startFrameTime;
 
 		if (elapsedFrameTime < 16666666)  // cap to 60fps the bad way
 		{
-			StdDraw.pause((16666666 - (int)elapsedFrameTime)/1000000);
+			StdDraw.pause((int)((long)16666666 - elapsedFrameTime)/1000000);
 		}
 	}
 
