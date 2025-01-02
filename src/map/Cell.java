@@ -61,7 +61,6 @@ public boolean isOccupied()
 {
 	return this.occupied;
 }
-
 public void toggleOccupied()
 {
 	occupied = !occupied;
@@ -71,7 +70,6 @@ public Cell getNextCell()
 {
 	return this.nextCell;
 }
-
 public void setNextCell(Cell nextCell)
 {
 	this.nextCell = nextCell;
@@ -80,6 +78,10 @@ public void setNextCell(Cell nextCell)
 public Point2D.Float getPosition()
 {
 	return this.position;
+}
+public Point2D.Float getCenter ()
+{
+	return new Point2D.Float(size*this.position.x + 0.5f*size, size*this.position.y + 0.5f*size);
 }
 
 @Override

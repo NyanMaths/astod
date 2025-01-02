@@ -75,7 +75,7 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 		this.spawner.setPosition(this.map.getSpawnerPosition());
 		this.player.setPosition(this.map.getPlayerPosition());
 
-		// then get all waves, possibly none, should result in instant victory
+		// then get all waves, possibly none, this case should result in instant victory
 		currentLine = reader.readLine();
 		while (currentLine != null)
 		{

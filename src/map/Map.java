@@ -77,7 +77,7 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 
 		this.playerPosition = new Point2D.Float(Cell.getSize()*playerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*playerCoordinates.y + 0.5f*Cell.getSize());
 		this.spawnerPosition = new Point2D.Float(Cell.getSize()*spawnerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*spawnerCoordinates.y + 0.5f*Cell.getSize());
-		initializesPath(null, this.getCell(this.getCellCoordinates(this.spawnerPosition)));
+		initializePath(null, this.getCell(this.getCellCoordinates(this.spawnerPosition)));
     }
 	catch (IOException eee)
 	{
@@ -85,7 +85,7 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 	}
 }
 
-public void initializesPath(Cell previous, Cell current) throws NoEnemySpawnException, InvalidMapPathException
+private void initializePath(Cell previous, Cell current) throws NoEnemySpawnException, InvalidMapPathException
 {
 	if (current==null) throw new NoEnemySpawnException(this.name);
 	if (current.getType()==CellType.Player) return;
@@ -97,13 +97,13 @@ public void initializesPath(Cell previous, Cell current) throws NoEnemySpawnExce
         if (next != null && next.getType() == CellType.Path && next != previous)
 		{
             current.setNextCell(next);
-            initializesPath(current, next);
+            initializePath(current, next);
             break;
 		}
 		if (next != null && next.getType() == CellType.Player && next != previous)
 		{
             current.setNextCell(next);
-            initializesPath(current, next);
+            initializePath(current, next);
             break;
 		}
 	}
