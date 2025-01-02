@@ -46,10 +46,10 @@ public Game (String id) throws EmptyGameException, InvalidMapException, InvalidM
 }
 public void start () throws UninitializedSpawner, InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
 {
-	Level currentLevel = new Level(this.levels.poll());
-
-	while (currentLevel != null)
+	while (this.levels.peek() != null)
 	{
+		Level currentLevel = new Level(this.levels.poll());
+
 		if (currentLevel.start())
 		{
 			System.out.println("yepeeeeee, you finished a level");
@@ -59,8 +59,6 @@ public void start () throws UninitializedSpawner, InvalidMapException, InvalidMa
 			System.out.println("yikes, you died");
 			return;
 		}
-
-		currentLevel = new Level(this.levels.poll());
 	}
 
 	// the player finished the game
