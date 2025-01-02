@@ -65,6 +65,7 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 			throw new InvalidLevelException(location);
 		}
 		this.map.load(currentLine);
+		Unit.setMap(this.map);
 
 		this.spawner.setPosition(this.map.getSpawnerPosition());
 		this.player.setPosition(this.map.getPlayerPosition());

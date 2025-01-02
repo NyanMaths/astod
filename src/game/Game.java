@@ -15,7 +15,7 @@ import units.UninitializedSpawner;
 
 public class Game
 {
-private final Queue<Level> levels;
+private final Queue<String> levels;
 
 public Game (String id) throws EmptyGameException, InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
 {
@@ -30,12 +30,12 @@ public Game (String id) throws EmptyGameException, InvalidMapException, InvalidM
 		{
 			throw new EmptyGameException();
 		}
-		this.levels.add(new Level(currentLevelName));
+		this.levels.add(currentLevelName);
 
 		currentLevelName = reader.readLine();
 		while (currentLevelName != null)
 		{
-			this.levels.add(new Level(currentLevelName));
+			this.levels.add(currentLevelName);
 			currentLevelName = reader.readLine();
 		}
 	}
@@ -44,9 +44,9 @@ public Game (String id) throws EmptyGameException, InvalidMapException, InvalidM
 		System.err.println(eee);
 	}
 }
-public void start () throws UninitializedSpawner
+public void start () throws UninitializedSpawner, InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
 {
-	Level currentLevel = this.levels.poll();
+	Level currentLevel = new Level(this.levels.poll());
 
 	while (currentLevel != null)
 	{
@@ -60,7 +60,7 @@ public void start () throws UninitializedSpawner
 			return;
 		}
 
-		currentLevel = this.levels.poll();
+		currentLevel = new Level(this.levels.poll());
 	}
 
 	// the player finished the game

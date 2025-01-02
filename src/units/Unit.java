@@ -8,6 +8,9 @@ import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
 import java.util.Timer;
 import libraries.StdDraw;
+import map.Cell;
+import map.CellType;
+import map.Map;
 
 
 /*
@@ -42,6 +45,7 @@ private Point2D.Float position;
 // the level the units belong to, used to get nearby units to attack or heal
 protected static Level level = null;
 
+protected static Map map = null;
 
 public Unit (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long health)
 {
@@ -82,7 +86,16 @@ public static boolean setLevel (Level newLevel)
 	return true;
 }
 
+public static boolean setMap (Map newMap)
+{
+	if (newMap == null)
+	{
+		return false;
+	}
 
+	map = newMap;
+	return true;
+}
 
 /**
  *
@@ -303,6 +316,16 @@ public void tick ()
 	}
 
 	this.attack();
+	this.move();
+}
+
+public void move()
+{
+	Cell current = map.getCell(map.getCellCoordinates(this.position));
+	if(current.getNextCell()==null || current.getType() == CellType.Player) return;
+	Point2D.Float nextPosition = current.getNextCell().getCenter();
+	this.position = nextPosition;
+	return;
 }
 
 
