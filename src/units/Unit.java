@@ -5,6 +5,8 @@ import graphics.Coloured;
 import graphics.Drawable;
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.util.ConcurrentModificationException;
+import java.util.Timer;
 import libraries.StdDraw;
 
 
@@ -15,7 +17,7 @@ The attacker property is a flag to identify a unit as ally or enemy.
 */
 public abstract class Unit implements Drawable, Coloured
 {
-private static AttackMode defaultAttackMode;
+private static AttackMode defaultAttackMode = AttackMode.Nearest;
 
 private String name;
 private Element element;
@@ -27,6 +29,10 @@ private long attack;
 private float range;  // unit : tiles
 private long attackDelay;  // unit : milliseconds
 private AttackMode attackMode;
+private Unit target;
+private boolean isInCooldown;
+
+private final static Timer rechargeScheduler = new Timer();
 
 // stored as proportion of the screen (centered => (0.5, 0.5) for instance)
 // This is intended to be able to resize the game window without making it die.
@@ -49,6 +55,8 @@ public Unit (String name, boolean attacker, Element element, long maxHealth, lon
     this.range = range;
 	this.attackDelay = attackDelay;
     this.attackMode = defaultAttackMode;
+	this.target = null;
+	this.isInCooldown = false;
 
 	this.position = spawnPosition;
 }
@@ -114,13 +122,18 @@ public void setAttacker (boolean newStatus)  // May require special magician tok
 	this.attacker = newStatus;
 }
 
+public boolean isAlive ()
+{
+	return this.health > 0;
+}
+
 public long getMaxHealth ()
 {
 	return this.maxHealth;
 }
 /** Setter for Unit's max health
  * @return whether the new value is acceptable (> 1) or not
-*/
+ */
 public boolean setMaxHealth (long newMaxHealth)  // May also require special magician token to allow operation
 {
 	if (newMaxHealth < 1)
@@ -230,7 +243,7 @@ public boolean setAttackDelay (long newAttackDelay)
 	return true;
 }
 
-public AttackMode getaAttackMode ()
+public AttackMode getAttackMode ()
 {
 	return this.attackMode;
 }
@@ -253,7 +266,47 @@ public double distance (Unit other)
 	return this.getPosition().distance(other.getPosition());
 }
 
-public void drawHealthBar(Point2D.Float position)
+
+private void cooldown ()
+{
+	this.isInCooldown = true;
+
+	rechargeScheduler.schedule(new RechargeTask(this), this.attackDelay);
+
+}
+public void recharge ()
+{
+	this.isInCooldown = false;
+}
+
+private void attack ()
+{
+	try
+	{
+	if (!this.isInCooldown && this.target != null)
+	{
+		this.target.hurt(this.attack, this.element);
+		this.cooldown();
+	}
+	}
+	catch (ConcurrentModificationException eee)
+	{
+
+	}
+}
+
+public void tick ()
+{
+	if (this.target == null || !this.target.isAlive())
+	{
+		this.target = level.getNearest(this, this.range, this.attackMode);
+	}
+
+	this.attack();
+}
+
+
+public void drawHealthBar (Point2D.Float position)
 {
 	position = this.getPosition();
 	double healthRemaning = this.getHealth()/this.getMaxHealth();

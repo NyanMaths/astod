@@ -37,8 +37,8 @@ public final class Level
 private Queue<String> waves;
 private final Map map;
 private final Spawner spawner;
-private final List<LivingEntity> enemies;
-private final List<Tower> towers;
+private final List<Unit> enemies;
+private final List<Unit> towers;
 
 private final Player player;
 
@@ -207,7 +207,15 @@ public void buildTower (Point2D.Float position)
  */
 public void blight (Unit unit)
 {
-	(unit.isAttacker() ? this.enemies : this.towers).remove(unit);
+	if (unit.isAttacker())
+	{
+		this.player.reward((LivingEntity)unit);
+		this.enemies.remove(unit);
+	}
+	else
+	{
+		this.towers.remove(unit);
+	}
 
 	try
 	{
@@ -221,6 +229,13 @@ public void blight (Unit unit)
 	{
 		System.err.println(e.getMessage());
 	}
+}
+
+
+private void tickEntities ()
+{
+	this.enemies.stream().forEach(enemy->enemy.tick());
+	this.towers.stream().forEach(tower->tower.tick());
 }
 
 
@@ -270,7 +285,7 @@ public boolean start () throws UninitializedSpawner
  */
 public boolean startWave ()
 {
-	while (this.player.isAlive() && this.spawner.isActive())  // E
+	while (this.player.isAlive() && (this.spawner.isActive() || !this.enemies.isEmpty()))
 	{
 		long startFrameTime = System.nanoTime();
 
@@ -296,6 +311,8 @@ public boolean startWave ()
 				}
 			}
 		}
+
+		this.tickEntities();
 
 		StdDraw.clear();
 		map.draw();

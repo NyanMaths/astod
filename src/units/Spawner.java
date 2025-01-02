@@ -112,7 +112,7 @@ public String getWaveName () throws UninitializedSpawner
 	{
 		return this.waveName;
 	}
-	
+
 	throw new UninitializedSpawner();
 }
 
@@ -133,6 +133,10 @@ public void spawnNext (SpawnTask funnyToken)
 	{
 		this.scheduler.schedule(new SpawnTask(this), this.spawnDelays.poll());
 	}
+	else
+	{
+		this.active = false;
+	}
 }
 
 public void start () throws UninitializedSpawner
@@ -143,7 +147,7 @@ public void start () throws UninitializedSpawner
 	}
 
 	this.scheduler.schedule(new SpawnTask(this), this.spawnDelays.poll());
-	
+
 	this.active = true;
 }
 }

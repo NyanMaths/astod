@@ -50,7 +50,15 @@ public void start () throws UninitializedSpawner
 
 	while (currentLevel != null)
 	{
-		currentLevel.start();
+		if (currentLevel.start())
+		{
+			System.out.println("yepeeeeee, you finished a level");
+		}
+		else
+		{
+			System.out.println("yikes, you died");
+			return;
+		}
 
 		currentLevel = this.levels.poll();
 	}
