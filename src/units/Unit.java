@@ -321,10 +321,13 @@ public void tick ()
 
 public void move()
 {
+	float speed = 1000;
+	float fpscap = 1/60;
 	Cell current = map.getCell(map.getCellCoordinates(this.position));
 	if(current.getNextCell()==null || current.getType() == CellType.Player) return;
 	Point2D.Float nextPosition = current.getNextCell().getCenter();
-	this.position = nextPosition;
+	this.position.x += fpscap*speed*(nextPosition.x-this.position.x);
+	this.position.y += fpscap*speed*(nextPosition.y-this.position.y);
 	return;
 }
 
