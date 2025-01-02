@@ -16,7 +16,7 @@ private static float halfHeight = 60.5f;
 
 public SpawnButton (String towerName, Point2D.Float position)
 {
-	this.tower = Tower.fromName(towerName, new Point2D.Float(position.x - halfWidth + 17, position.y));
+	this.tower = Tower.fromName(towerName, new Point2D.Float(position.x - halfWidth + 19, position.y));
 	this.position = position;
 }
 
@@ -69,19 +69,21 @@ public boolean isPressed ()
 
 @Override
 public void draw ()
-{	
+{
 	this.tower.draw();
 
 	StdDraw.setPenColor(Color.BLACK);
 	StdDraw.rectangle(this.position.x, this.position.y, halfWidth, halfHeight);  // draw button border
 
 	// write stats
-	StdDraw.text(this.tower.getPosition().x+60, this.tower.getPosition().y+50, this.tower.getName());  
-	StdDraw.text(this.tower.getPosition().x+15, this.tower.getPosition().y+30,"HP : " + this.tower.getMaxHealth()); 
-	StdDraw.text(this.tower.getPosition().x+80, this.tower.getPosition().y+30,"ATK : " + this.tower.getAttack());
-	StdDraw.text(this.tower.getPosition().x+60, this.tower.getPosition().y+10,"Delay: " + this.tower.getAttackDelay());
-	StdDraw.text(this.tower.getPosition().x+60, this.tower.getPosition().y-10,"Range : " + this.tower.getRange());
-	StdDraw.text(this.tower.getPosition().x+50, this.tower.getPosition().y-30,"Element : " + this.tower.getElement());
-	StdDraw.text(this.tower.getPosition().x+15, this.tower.getPosition().y-50,"$ : " + this.tower.getCost()); 
+
+	float towerX = this.tower.getPosition().x;
+	float towerY = this.tower.getPosition().y;
+	StdDraw.text(towerX+60, towerY+50, this.tower.getName());
+	StdDraw.text(towerX+60, towerY+30,"HP : " + this.tower.getMaxHealth());
+	StdDraw.text(towerX+60, towerY+10,"ATK : " + this.tower.getAttack());
+	StdDraw.text(towerX+60, towerY-10,"Delay: " + this.tower.getAttackDelay());
+	StdDraw.text(towerX+60, towerY-30,"Range : " + this.tower.getRange());
+	StdDraw.text(towerX+20, towerY-50,"$ : " + this.tower.getCost());
 }
 }

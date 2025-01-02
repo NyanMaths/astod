@@ -40,9 +40,9 @@ public abstract long getCost ();
 public void draw ()
 {
 	StdDraw.setPenColor(this.getColour());
-	StdDraw.filledRectangle(this.getPosition().x, this.getPosition().y, 10, 20);
+	StdDraw.filledRectangle(this.getPosition().x, this.getPosition().y, 14, 27);
 	StdDraw.setPenColor(StdDraw.BLACK);
-	StdDraw.rectangle(this.getPosition().x, this.getPosition().y, 10.5, 20.5);
+	StdDraw.rectangle(this.getPosition().x, this.getPosition().y, 14.5, 27.5);
 	this.drawHealthBar(this.getPosition());
 }
 }

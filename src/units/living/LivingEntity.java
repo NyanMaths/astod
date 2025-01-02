@@ -14,7 +14,7 @@ public abstract class LivingEntity extends Unit implements Comparable
 {
 protected long speed;
 
-public LivingEntity (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long speed) 
+public LivingEntity (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long speed)
 {
 	super(name, attacker, element, maxHealth, attack, range, attackDelay, spawnPosition);
 	this.speed = speed;
@@ -40,7 +40,7 @@ public boolean setSpeed (long newSpeed)
 
 private long hashElement (Element e)
 {
-	return switch (e) 
+	return switch (e)
 	{
 		case Element.Neutral -> 0;
 		case Element.Fire -> 1;
@@ -69,9 +69,9 @@ public int compareTo (Object other)
 public void draw ()
 {
 	StdDraw.setPenColor(this.getColour());
-	StdDraw.filledCircle(this.getPosition().x, this.getPosition().y, 20);
+	StdDraw.filledCircle(this.getPosition().x, this.getPosition().y, 12);
 	StdDraw.setPenColor(StdDraw.BLACK);
-	StdDraw.circle(this.getPosition().x, this.getPosition().y, 20.5);
+	StdDraw.circle(this.getPosition().x, this.getPosition().y, 12.5);
 	this.drawHealthBar(this.getPosition());
 }
 }
