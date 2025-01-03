@@ -1,5 +1,6 @@
 package graphics;
 
+import game.Level;
 import game.Player;
 import java.awt.Color;
 import java.awt.geom.Point2D;
@@ -12,14 +13,16 @@ import units.towers.*;
 public class LevelUI implements Drawable
 {
 private final Player player;
+private final Level level;
 private Tower spawningTower;
 
 private final List<SpawnButton> spawnButtons;
 
 
-public LevelUI (Player player)
+public LevelUI (Player player, Level level)
 {
 	this.player = player;
+	this.level = level;
 	this.spawningTower = null;
 
 	this.spawnButtons = new ArrayList<>();
@@ -124,12 +127,10 @@ public void drawHeart()
 		StdDraw.text(980,641, ((Long)this.player.getHealth()).toString());
 }
 
-public void drawLevelInfo() //il va prendre le niveau et la vague actuelle
+public void drawLevelInfo ()
 {
-	StdDraw.text(760,688,"LVL:X/X");
-	StdDraw.text(930,688,"WAVE:X/X");
-	//J'aimerais test de changer le font, mais je sais pas si c'est une très bonne idée, car faudra le changer entre les fonctions.
-	//Genre pour la vie et la thune, c'est un style différent de celui pour la vague et le niveau en terme d'écriture.
+	StdDraw.text(780, 688, "Level:" + this.level.getName());
+	StdDraw.text(930, 688, "Wave:" + this.level.getCurrentWaveName());
 }
 
 public void drawShop ()

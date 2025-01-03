@@ -43,6 +43,8 @@ private final List<Unit> towers;
 private final Player player;
 
 private final LevelUI UI;
+private final String name;
+private String currentWaveName;
 
 
 public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
@@ -52,7 +54,9 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 	this.enemies = new ArrayList<>();
 	this.towers = new ArrayList<>();
 	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 50, 100);
-	this.UI = new LevelUI(this.player);
+	this.UI = new LevelUI(this.player, this);
+	this.name = levelName;
+	this.currentWaveName = "pikmin";
 
 	this.load(levelName);
 }
@@ -88,6 +92,15 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 	{
 		System.err.println(eee);
 	}
+}
+
+public String getName ()
+{
+	return this.name;
+}
+public String getCurrentWaveName ()
+{
+	return this.currentWaveName;
 }
 
 
@@ -307,6 +320,7 @@ public boolean start () throws UninitializedSpawner
 
 	while (wave != null)
 	{
+		this.currentWaveName = wave;
 		this.spawner.setWave(wave);
 		this.spawner.start();
 

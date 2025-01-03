@@ -1,3 +1,3 @@
-level1
-level2
-level3
+easy
+normal
+hard
