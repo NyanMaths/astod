@@ -49,8 +49,8 @@ public void move ()
 	}
 	else if (current.getType() == CellType.Player)
 	{
-		this.getPosition().x += 1.0f/600.0f * (float)this.speed * (current.getCenter().x-this.getPosition().x);
-		this.getPosition().y += 1.0f/600.0f * (float)this.speed * (current.getCenter().y-this.getPosition().y);
+		this.getPosition().x += 1.0f/60.0f * (float)this.speed * (current.getCenter().x-this.getPosition().x);
+		this.getPosition().y += 1.0f/60.0f * (float)this.speed * (current.getCenter().y-this.getPosition().y);
 	}
 	else
 	{
