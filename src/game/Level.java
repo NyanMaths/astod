@@ -93,7 +93,7 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 
 private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 {
-	List<Unit> nearbyEnemies = (List)(List) (unit.isAttacker() ? this.towers : this.enemies);  // no primitive switch ? no dxvk ?
+	List<Unit> nearbyEnemies = unit.isAttacker() ? this.towers : this.enemies;
 	if (maxDistance <= 0.001)
 	{
 		nearbyEnemies = nearbyEnemies.stream().filter(enemy->unit.getPosition().distance(((Unit)enemy).getPosition()) <= maxDistance).collect(Collectors.toList());

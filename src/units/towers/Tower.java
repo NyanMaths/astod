@@ -2,6 +2,7 @@ package units.towers;
 
 import java.awt.geom.Point2D;
 import libraries.StdDraw;
+import map.Cell;
 import units.Element;
 import units.Unit;
 
@@ -41,7 +42,17 @@ public void move ()
 
 }
 
-
+@Override
+public long hurt(long damage, Element damageElement)
+{
+	long damageTaken = super.hurt(damage, damageElement);
+	if (this.getHealth()==0)
+	{
+		Cell here = map.getCell(map.getCellCoordinates(this.getPosition()));
+		here.toggleOccupied();
+	}
+	return damageTaken;
+}
 @Override
 public void draw ()
 {

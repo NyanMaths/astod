@@ -11,7 +11,7 @@ Class for the living entities, inheriting Unit.
 A living entity can move and drops a reward when killed.
 */
 
-public abstract class LivingEntity extends Unit implements Comparable
+public abstract class LivingEntity extends Unit
 {
 protected long speed;
 private Cell destination;
@@ -62,34 +62,6 @@ public void move ()
 		this.getPosition().y += nextY/norme;
 	}
 }
-
-
-private long hashElement (Element e)
-{
-	return switch (e)
-	{
-		case Element.Neutral -> 0;
-		case Element.Fire -> 1;
-		case Element.Earth -> 2;
-		case Element.Wind -> 3;
-		case Element.Water -> 4;
-	};
-}
-/*
- * Far from unique, will do for now as I need sleep
- * @return a hash
- */
-private long hash ()
-{
-	return this.getReward() * 10 + hashElement(this.getElement());
-}
-
-@Override
-public int compareTo (Object other)
-{
-	return (int)(this.hash() - ((LivingEntity)other).hash());
-}
-
 
 @Override
 public void draw ()

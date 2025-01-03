@@ -163,32 +163,12 @@ public long getHealth ()
 {
 	return this.health;
 }
-/** Setter for Unit's health
- * @return whether the unit is still alive or not
-*/
-private boolean setHealth (long newHealth)
-{
-	if (newHealth < 1)
-	{
-		this.health = 0;
-		return false;
-	}
-	else if (newHealth > this.maxHealth)
-	{
-		this.health = this.maxHealth;
-		return true;
-	}
 
-	this.health = newHealth;
-	return true;
-}
 /** Hurts or heals the Unit
  * @return the damage actually taken by the Unit (negative if healed)
 */
 public long hurt (long damage, Element damageElement)
 {
-	System.err.println("life: " + this.health + "  max:" + this.maxHealth);
-
 	long damageToInflict = damage;
 
 	if (damage > 0)
