@@ -8,6 +8,7 @@ import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
 import java.util.Timer;
 import libraries.StdDraw;
+import map.Cell;
 import map.Map;
 
 
@@ -290,6 +291,11 @@ public void tick ()
 	{
 		this.target = level.getNearest(this, this.range, this.attackMode);
 	}
+	if (this.target != null && this.target.distance(this) > this.range*Cell.getSize())
+	{
+		this.target = null;
+	}
+
 	if (this.target != null)
 	{
 		this.attack();

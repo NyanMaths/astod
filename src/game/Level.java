@@ -91,6 +91,9 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 }
 
 
+/**
+ * @return all enemies within maxDistance from the origin
+ */
 private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 {
 	List<Unit> nearbyEnemies = unit.isAttacker() ? this.towers : this.enemies;
@@ -101,6 +104,21 @@ private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
 
 	return nearbyEnemies;
+}
+
+/**
+ * @return all allies within maxDistance from the origin
+ */
+public List<Unit> getNearbyAllies (Unit unit, float maxDistance)
+{
+	List<Unit> nearbyAllies = unit.isAttacker() ? this.enemies : this.towers;
+	if (maxDistance <= 0.001)
+	{
+		nearbyAllies = nearbyAllies.stream().filter(ally->unit.getPosition().distance(((Unit)ally).getPosition()) <= maxDistance).collect(Collectors.toList());
+	}
+	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
+
+	return nearbyAllies;
 }
 
 /*
