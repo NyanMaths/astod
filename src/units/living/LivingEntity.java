@@ -15,11 +15,13 @@ A living entity can move and drops a reward when killed.
 public abstract class LivingEntity extends Unit implements Comparable
 {
 protected long speed;
+private Cell destination;
 
 public LivingEntity (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long speed)
 {
 	super(name, attacker, element, maxHealth, attack, range, attackDelay, spawnPosition);
 	this.speed = speed;
+	this.destination =  map.getSpawn();
 }
 
 public abstract long getReward ();
@@ -43,18 +45,17 @@ public boolean setSpeed (long newSpeed)
 public void move ()
 {
 	Cell current = map.getCell(map.getCellCoordinates(this.getPosition()));
-	if (current.getType() == CellType.Player && this.getPosition().distance(current.getCenter()) < Cell.getSize()/10.0f)
+	if (this.destination == null)
 	{
 		level.slapPlayer(this);
 	}
-	else if (current.getType() == CellType.Player)
+	else if (this.getPosition().distance(this.destination.getCenter()) < Cell.getSize()/10.0f && this.destination.getType() != CellType.Player)
 	{
-		this.getPosition().x += 1.0f/60.0f * (float)this.speed * (current.getCenter().x-this.getPosition().x);
-		this.getPosition().y += 1.0f/60.0f * (float)this.speed * (current.getCenter().y-this.getPosition().y);
+		this.destination = destination.getNextCell();
 	}
 	else
 	{
-		Point2D.Float nextPosition = current.getNextCell().getCenter();
+		Point2D.Float nextPosition = destination.getCenter();
 		Float nextX = 1.0f/60.0f * (float)this.speed * (nextPosition.x-this.getPosition().x);
 		Float nextY = 1.0f/60.0f * (float)this.speed * (nextPosition.y-this.getPosition().y);
 		Point2D.Float difference = new Point2D.Float(nextPosition.x-this.getPosition().x,nextPosition.y-this.getPosition().y);

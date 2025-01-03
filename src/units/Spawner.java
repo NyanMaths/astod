@@ -132,6 +132,7 @@ public void spawnNext (SpawnTask funnyToken)
 	if (this.enemies.peek() != null)
 	{
 		this.scheduler.schedule(new SpawnTask(this), this.spawnDelays.poll());
+		System.out.println("next enemy in " + this.spawnDelays.peek() + " ms");
 	}
 	else
 	{
