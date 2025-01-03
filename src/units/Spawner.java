@@ -41,12 +41,12 @@ private LivingEntity getEntityFromName (String entityName) throws NonExistentEnt
 {
 	return switch (entityName)
 	{
-		case "Minion" -> new Minion(this.position);
-		case "Fire Grognard" -> new FireGrognard(this.position);
-		case "Wind Grognard" -> new WindGrognard(this.position);
-		case "Earth Brute" -> new EarthBrute(this.position);
-		case "Water Brute" -> new WaterBrute(this.position);
-		case "Boss" -> new Boss(this.position);
+		case "Minion" -> new Minion((Point2D.Float)this.position.clone());
+		case "Fire Grognard" -> new FireGrognard((Point2D.Float)this.position.clone());
+		case "Wind Grognard" -> new WindGrognard((Point2D.Float)this.position.clone());
+		case "Earth Brute" -> new EarthBrute((Point2D.Float)this.position.clone());
+		case "Water Brute" -> new WaterBrute((Point2D.Float)this.position.clone());
+		case "Boss" -> new Boss((Point2D.Float)this.position.clone());
 		default -> throw new NonExistentEntity(entityName);
 	};
 }
@@ -132,7 +132,6 @@ public void spawnNext (SpawnTask funnyToken)
 	if (this.enemies.peek() != null)
 	{
 		this.scheduler.schedule(new SpawnTask(this), this.spawnDelays.poll());
-		System.out.println("next enemy in " + this.spawnDelays.peek() + " ms");
 	}
 	else
 	{

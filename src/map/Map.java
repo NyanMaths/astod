@@ -58,7 +58,7 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 			for (Character cellType : currentLine.toCharArray())
 			{
 				Cell newCell = new Cell(cellType, new Point2D.Float(i, j));
-				
+
 				if (cellType == 'B')
 				{
 					playerCoordinates = new Point2D.Float(i, j);
@@ -114,7 +114,8 @@ private void initializePath(Cell previous, Cell current) throws NoEnemySpawnExce
 	//throw new InvalidMapPathException(this.name);
 }
 
-private Cell[] getAdjacentCells(Cell cell) {
+private Cell[] getAdjacentCells(Cell cell)
+{
 	Point2D.Float cellPosition = cell.getPosition();
 	Point2D.Float up = new Point2D.Float(cellPosition.x, (cellPosition.y - 1));
 	Point2D.Float down = new Point2D.Float(cellPosition.x, (cellPosition.y + 1));

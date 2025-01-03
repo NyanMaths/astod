@@ -3,7 +3,6 @@ package units.living;
 import java.awt.geom.Point2D;
 import libraries.StdDraw;
 import map.Cell;
-import map.CellType;
 import units.Element;
 import units.Unit;
 
@@ -44,20 +43,19 @@ public boolean setSpeed (long newSpeed)
 @Override
 public void move ()
 {
-	Cell current = map.getCell(map.getCellCoordinates(this.getPosition()));
 	if (this.destination == null)
 	{
 		level.slapPlayer(this);
 	}
-	else if (this.getPosition().distance(this.destination.getCenter()) < Cell.getSize()/10.0f && this.destination.getType() != CellType.Player)
+	else if (this.getPosition().distance(this.destination.getCenter()) < Cell.getSize()/10.0f)
 	{
 		this.destination = destination.getNextCell();
 	}
 	else
 	{
 		Point2D.Float nextPosition = destination.getCenter();
-		Float nextX = 1.0f/60.0f * (float)this.speed * (nextPosition.x-this.getPosition().x);
-		Float nextY = 1.0f/60.0f * (float)this.speed * (nextPosition.y-this.getPosition().y);
+		Float nextX = 1.0f/3.0f * (float)this.speed * (nextPosition.x-this.getPosition().x);
+		Float nextY = 1.0f/3.0f * (float)this.speed * (nextPosition.y-this.getPosition().y);
 		Point2D.Float difference = new Point2D.Float(nextPosition.x-this.getPosition().x,nextPosition.y-this.getPosition().y);
 		Double norme = Math.sqrt(difference.x*difference.x + difference.y*difference.y);
 		this.getPosition().x += nextX/norme;
