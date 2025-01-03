@@ -8,7 +8,7 @@ import units.Element;
  */
 public final class WindGrognard extends LivingEntity
 {
-public WindGrognard (Point2D.Float spawnPosition) 
+public WindGrognard (Point2D.Float spawnPosition)
 {
 	super("Wind Grognard", true, Element.Wind, 1, 7, 5, 2000, spawnPosition, 4);
 }

@@ -8,9 +8,15 @@ import units.Element;
  */
 public final class EarthBrute extends LivingEntity
 {
-public EarthBrute (Point2D.Float spawnPosition) 
+public EarthBrute (Point2D.Float spawnPosition)
 {
 	super("Earth Brute", true, Element.Earth, 30, 5, 3, 1000, spawnPosition, 2);
+}
+
+@Override
+public float getAttackRadius ()
+{
+	return 1.5f;
 }
 
 @Override

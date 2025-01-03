@@ -8,9 +8,15 @@ import units.Element;
  */
 public final class WaterBrute extends LivingEntity
 {
-public WaterBrute (Point2D.Float spawnPosition) 
+public WaterBrute (Point2D.Float spawnPosition)
 {
 	super("Water Brute", true, Element.Water, 30, 5, 3, 1000, spawnPosition, 2);
+}
+
+@Override
+public float getAttackRadius ()
+{
+	return 1.5f;
 }
 
 @Override

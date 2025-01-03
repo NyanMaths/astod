@@ -6,6 +6,7 @@ import graphics.Drawable;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.Timer;
 import libraries.StdDraw;
 import map.Cell;
@@ -242,6 +243,11 @@ public void setAttackMode (AttackMode newAttackmode)
 	this.attackMode = newAttackmode;
 }
 
+public float getAttackRadius ()
+{
+	return 0.0f;
+}
+
 public Point2D.Float getPosition ()
 {
 	return this.position;
@@ -269,13 +275,31 @@ public void recharge ()
 	this.isInCooldown = false;
 }
 
+private void hurtAux (Unit unit)
+{
+	if (unit != null)
+	{
+		unit.hurt(this.attack, this.element);
+	}
+}
 private void attack ()
 {
 	try
 	{
-	if (!this.isInCooldown && this.target != null)
+	if (!this.isInCooldown)
 	{
-		this.target.hurt(this.attack, this.element);
+		System.out.println(this.getAttackRadius());
+
+		if (this.getAttackRadius()*Cell.getSize() > Cell.getSize()/100.0)  // if the unit does aoe attacks
+		{
+			List<Unit> victims = level.getNearbyAllies(this.target, this.getAttackRadius()*Cell.getSize());
+			victims.stream().forEach(victim->this.hurtAux(victim));
+		}
+		else
+		{
+			this.target.hurt(this.attack, this.element);
+		}
+
 		this.cooldown();
 	}
 	}
