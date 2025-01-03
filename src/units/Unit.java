@@ -212,7 +212,7 @@ public long hurt (long damage, Element damageElement)
 			return damageToInflict + uncappedHealth - this.maxHealth;
 		}
 
-		this.health = uncappedHealth);
+		this.health = uncappedHealth;
 		return damageToInflict;
 	}
 
