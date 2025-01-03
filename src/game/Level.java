@@ -203,7 +203,7 @@ public void buildTower (Point2D.Float position)
 	Point2D.Float cellPos =  this.map.getCellCoordinates(position);
 	this.map.getCell(cellPos).toggleOccupied();
 }
-/*
+/**
  * Yeet a unit from the game and make it woe (LOUD)
  */
 public void blight (Unit unit)

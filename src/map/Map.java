@@ -89,7 +89,7 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 	}
 }
 
-private void initializePath(Cell previous, Cell current) throws NoEnemySpawnException, InvalidMapPathException
+private void initializePath (Cell previous, Cell current) throws NoEnemySpawnException, InvalidMapPathException
 {
 	if (current==null) throw new NoEnemySpawnException(this.name);
 	if (current.getType()==CellType.Player) return;
@@ -113,8 +113,7 @@ private void initializePath(Cell previous, Cell current) throws NoEnemySpawnExce
 	}
 	//throw new InvalidMapPathException(this.name);
 }
-
-private Cell[] getAdjacentCells(Cell cell)
+private Cell[] getAdjacentCells (Cell cell)
 {
 	Point2D.Float cellPosition = cell.getPosition();
 	Point2D.Float up = new Point2D.Float(cellPosition.x, (cellPosition.y - 1));
@@ -184,17 +183,6 @@ public void draw ()
 	}
 }
 
-public void listCells()
-{
-	Point2D.Float spawn = this.spawnerPosition;
-	Cell spawner = getCell(this.getCellCoordinates(spawn));
-	while(spawner.getNextCell() != null)
-	{
-		System.out.println(spawner.getPosition());
-		spawner = spawner.getNextCell();
-	}
-	System.out.println(spawner.getPosition());
-}
 
 /* public boolean isShopClicked()
 {
@@ -217,7 +205,7 @@ public boolean isMapClicked ()
 }
 
 
-/*
+/** Allows to know the coordinates in the map's matrix of a point on the screen
  * @return the coordinates of the point's cell, null if not on the map
  */
 public Point2D.Float getCellCoordinates (Point2D.Float point)
@@ -225,7 +213,7 @@ public Point2D.Float getCellCoordinates (Point2D.Float point)
 	point = (Point2D.Float)point.clone();
 	point.x /= Cell.getSize();
 	point.y /= Cell.getSize();
-	if((int)point.x >= 0 && (int)point.x < this.getRowsCount() && (int)point.y >= 0 && (int)point.y < this.getColumnsCount()) return new Point2D.Float((int)point.x, (int)point.y);
+	if ((int)point.x >= 0 && (int)point.x < this.getRowsCount() && (int)point.y >= 0 && (int)point.y < this.getColumnsCount()) return new Point2D.Float((int)point.x, (int)point.y);
 	return null;
 }
 
@@ -239,12 +227,5 @@ public boolean isBuildable (Point2D.Float position)
 	if (this.getCell((int)position.x, (int)position.y).isOccupied()) return false; //Ici, on pourra mettre le TileOccupiedException quand tu l'auras crée. J'ose pas le faire, j'ai peur de faire de la merde.
 
 	return this.getCell((int)position.x, (int)position.y).getType() == CellType.Buildable;
-}
-
-public Point2D.Float getCenterCell(Point2D.Float cell)
-{
-	if(cell.x < 0 || cell.x >= this.getRowsCount() || cell.y < 0 || cell.y >= this.getColumnsCount()) return null;
-	float size = Cell.getSize();
-	return new Point2D.Float((cell.x*size)+size/2, (cell.y*size)+size/2);
 }
 }
