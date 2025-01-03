@@ -189,34 +189,30 @@ public long hurt (long damage, Element damageElement)
 {
 	System.err.println("life: " + this.health + "  max:" + this.maxHealth);
 
-	long damageToInflict;
+	long damageToInflict = damage;
 
 	if (damage > 0)
 	{
 		damageToInflict = (long)((float)damage * getDamageMultiplier(damageElement));
 	}
-	else
-	{
-		damageToInflict = damage;
-	}
 
 
-	if (damageToInflict < this.maxHealth && damageToInflict >= 0)  // Normal damage case
+	if (damageToInflict < this.health && damageToInflict >= 0)  // Normal damage case
 	{
-		this.setHealth(this.health - damageToInflict);
+		this.health -= damageToInflict;
 		return damageToInflict;
 	}
-	else if (damageToInflict < this.maxHealth)  // Healing case
+	else if (damageToInflict < 0)  // Healing case
 	{
 		long uncappedHealth = this.health + damageToInflict;
 
 		if (uncappedHealth > this.maxHealth)
 		{
-			this.setHealth(this.maxHealth);
-			return uncappedHealth - this.maxHealth;
+			this.health = this.maxHealth;
+			return damageToInflict + uncappedHealth - this.maxHealth;
 		}
 
-		this.setHealth(uncappedHealth);
+		this.health = uncappedHealth);
 		return damageToInflict;
 	}
 
@@ -224,7 +220,7 @@ public long hurt (long damage, Element damageElement)
 	// Dies from death
 
 	long currentHealth = this.health;
-	this.setHealth(0);
+	this.health = 0;
 	level.blight(this);
 	return currentHealth;
 }
