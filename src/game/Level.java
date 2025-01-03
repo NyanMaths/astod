@@ -218,7 +218,7 @@ public void blight (Unit unit)
 		this.towers.remove(unit);
 	}
 
-	/*try
+	try
 	{
 		File f = new File("assets/woe.wav");
 		AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
@@ -229,7 +229,7 @@ public void blight (Unit unit)
 	catch (IOException | LineUnavailableException | UnsupportedAudioFileException e)
 	{
 		System.err.println(e.getMessage());
-	}*/
+	}
 }
 public void slapPlayer (LivingEntity enemy)
 {
