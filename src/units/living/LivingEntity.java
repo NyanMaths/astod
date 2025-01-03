@@ -55,8 +55,12 @@ public void move ()
 	else
 	{
 		Point2D.Float nextPosition = current.getNextCell().getCenter();
-		this.getPosition().x += 1.0f/600.0f * (float)this.speed * (nextPosition.x-this.getPosition().x);
-		this.getPosition().y += 1.0f/600.0f * (float)this.speed * (nextPosition.y-this.getPosition().y);
+		Float nextX = 1.0f/60.0f * (float)this.speed * (nextPosition.x-this.getPosition().x);
+		Float nextY = 1.0f/60.0f * (float)this.speed * (nextPosition.y-this.getPosition().y);
+		Point2D.Float difference = new Point2D.Float(nextPosition.x-this.getPosition().x,nextPosition.y-this.getPosition().y);
+		Double norme = Math.sqrt(difference.x*difference.x + difference.y*difference.y);
+		this.getPosition().x += nextX/norme;
+		this.getPosition().y += nextY/norme;
 	}
 }
 
