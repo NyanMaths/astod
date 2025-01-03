@@ -152,6 +152,10 @@ public boolean setMaxHealth (long newMaxHealth)  // May also require special mag
 	}
 
 	this.maxHealth = newMaxHealth;
+	if (this.health > newMaxHealth)
+	{
+		this.health = newMaxHealth;
+	}
 	return true;
 }
 
