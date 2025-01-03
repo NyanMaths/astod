@@ -19,6 +19,7 @@ private Path name;
 private List<List<Cell>> matrix;
 private Point2D.Float playerPosition;
 private Point2D.Float spawnerPosition;
+private Cell spawn = null;
 
 public Map (String name) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException
 {
@@ -56,6 +57,8 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 			int j = 0;
 			for (Character cellType : currentLine.toCharArray())
 			{
+				Cell newCell = new Cell(cellType, new Point2D.Float(i, j));
+				
 				if (cellType == 'B')
 				{
 					playerCoordinates = new Point2D.Float(i, j);
@@ -63,9 +66,10 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 				if (cellType == 'S')
 				{
 					spawnerCoordinates = new Point2D.Float(i, j);
+					this.spawn = newCell;
 				}
 
-				this.matrix.getLast().addLast(new Cell(cellType, new Point2D.Float(i, j)));
+				this.matrix.getLast().addLast(newCell);
 				j++;
 			}
 
@@ -133,6 +137,10 @@ public Point2D.Float getPlayerPosition ()
 public Point2D.Float getSpawnerPosition ()
 {
 	return this.spawnerPosition;
+}
+public Cell getSpawn ()
+{
+	return this.spawn;
 }
 
 public Path getLocation ()
