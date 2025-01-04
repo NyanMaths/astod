@@ -129,8 +129,8 @@ public void drawHeart()
 
 public void drawLevelInfo ()
 {
-	StdDraw.text(780, 688, "Level:" + this.level.getName());
-	StdDraw.text(930, 688, "Wave:" + this.level.getCurrentWaveName());
+	StdDraw.text(780, 688, "Level : " + this.level.getName());
+	StdDraw.text(930, 688, "Wave : " + this.level.getCurrentWaveName());
 }
 
 public void drawShop ()
