@@ -13,10 +13,10 @@ A living entity can move and drops a reward when killed.
 
 public abstract class LivingEntity extends Unit
 {
-protected long speed;
+protected float speed;
 private Cell destination;
 
-public LivingEntity (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, long speed)
+public LivingEntity (String name, boolean attacker, Element element, long maxHealth, long attack, float range, long attackDelay, Point2D.Float spawnPosition, float speed)
 {
 	super(name, attacker, element, maxHealth, attack, range, attackDelay, spawnPosition);
 	this.speed = speed;
@@ -25,13 +25,13 @@ public LivingEntity (String name, boolean attacker, Element element, long maxHea
 
 public abstract long getReward ();
 
-public long getSpeed ()
+public float getSpeed ()
 {
 	return this.speed;
 }
-public boolean setSpeed (long newSpeed)
+public boolean setSpeed (float newSpeed)
 {
-	if (newSpeed < 0)
+	if (newSpeed < 0.0)
 	{
 		return false;
 	}
@@ -60,8 +60,8 @@ public void move ()
 	{
 		Point2D.Float step = new Point2D.Float(destination.getCenter().x-this.getPosition().x, destination.getCenter().y-this.getPosition().y);
 		float stepLength = (float)Math.sqrt(step.x*step.x + step.y*step.y);
-		step.x /= stepLength * 3.0f / (float)this.speed;
-		step.y /= stepLength * 3.0f / (float)this.speed;
+		step.x /= stepLength * 3.0f / this.speed;
+		step.y /= stepLength * 3.0f / this.speed;
 		this.stride(step);
 	}
 }

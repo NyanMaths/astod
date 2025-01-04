@@ -35,6 +35,7 @@ public LevelUI (Player player, Level level)
 	spawnButtons.add(new SpawnButton("Fire Caster", new Point2D.Float(795 + buttonWidth, 545 - buttonHeight)));
 	spawnButtons.add(new SpawnButton("Water Caster", new Point2D.Float(795, 545 - 2*buttonHeight)));
 	spawnButtons.add(new SpawnButton("Wind Caster", new Point2D.Float(795 + buttonWidth, 545 - 2*buttonHeight)));
+	spawnButtons.add(new SpawnButton("Ice Caster", new Point2D.Float(795, 545 - 3*buttonHeight)));
 }
 
 

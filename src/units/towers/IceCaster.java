@@ -48,7 +48,7 @@ protected void attack ()
 		{
 			List<Unit> victims = level.getNearbyAllies(this.target, this.getAttackRadius()*Cell.getSize());
 			victims.stream().filter(victim->victim != null).forEach(victim->victim.hurt(this.getAttack(), this.getElement()));
-			victims.stream().filter(victim->victim != null).forEach(victim->((LivingEntity)victim).setSpeed((long)((double)((LivingEntity)victim).getSpeed()*0.70)));
+			victims.stream().filter(victim->victim != null).forEach(victim->((LivingEntity)victim).setSpeed((((LivingEntity)victim).getSpeed()*0.70f)));
 		}
 		else
 		{

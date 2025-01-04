@@ -30,6 +30,7 @@ public static Tower fromName (String name, Point2D.Float spawnPosition)
 		case "Fire Caster" -> new FireCaster(spawnPosition);
 		case "Water Caster" -> new WaterCaster(spawnPosition);
 		case "Wind Caster" -> new WindCaster(spawnPosition);
+		case "Ice Caster" -> new IceCaster(spawnPosition);
 		default -> null;
 	};
 }
