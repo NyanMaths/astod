@@ -40,6 +40,11 @@ public boolean setSpeed (long newSpeed)
 	return true;
 }
 
+
+/**
+ * Make the unit progress towards the center of a cell.
+ * If it reaches the center, target the next cell's center and hurts the player if the base is reached
+ */
 @Override
 public void move ()
 {
@@ -47,19 +52,17 @@ public void move ()
 	{
 		level.slapPlayer(this);
 	}
-	else if (this.getPosition().distance(this.destination.getCenter()) < Cell.getSize()/10.0f)
+	else if (this.getPosition().distance(this.destination.getCenter()) < Cell.getSize()/30.0f)
 	{
 		this.destination = destination.getNextCell();
 	}
 	else
 	{
-		Point2D.Float nextPosition = destination.getCenter();
-		Float nextX = 1.0f/3.0f * (float)this.speed * (nextPosition.x-this.getPosition().x);
-		Float nextY = 1.0f/3.0f * (float)this.speed * (nextPosition.y-this.getPosition().y);
-		Point2D.Float difference = new Point2D.Float(nextPosition.x-this.getPosition().x,nextPosition.y-this.getPosition().y);
-		Double norme = Math.sqrt(difference.x*difference.x + difference.y*difference.y);
-		this.getPosition().x += nextX/norme;
-		this.getPosition().y += nextY/norme;
+		Point2D.Float step = new Point2D.Float(destination.getCenter().x-this.getPosition().x, destination.getCenter().y-this.getPosition().y);
+		float stepLength = (float)Math.sqrt(step.x*step.x + step.y*step.y);
+		step.x /= stepLength * 3.0f / (float)this.speed;
+		step.y /= stepLength * 3.0f / (float)this.speed;
+		this.stride(step);
 	}
 }
 

@@ -53,7 +53,7 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 	this.spawner = new Spawner(this);
 	this.enemies = new ArrayList<>();
 	this.towers = new ArrayList<>();
-	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 50, 100);
+	this.player = new Player(System.getProperty("user.name", "Player"), Element.Neutral, 100, 500, 100);
 	this.UI = new LevelUI(this.player, this);
 	this.name = levelName;
 	this.currentWaveName = "pikmin";
@@ -110,9 +110,9 @@ public String getCurrentWaveName ()
 private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 {
 	List<Unit> nearbyEnemies = unit.isAttacker() ? this.towers : this.enemies;
-	if (maxDistance <= 0.001)
+	if (maxDistance >= 0.001)
 	{
-		nearbyEnemies = nearbyEnemies.stream().filter(enemy->unit.getPosition().distance(((Unit)enemy).getPosition()) <= maxDistance).collect(Collectors.toList());
+		nearbyEnemies = nearbyEnemies.stream().filter(enemy->unit.distance((Unit)enemy) <= maxDistance).collect(Collectors.toList());
 	}
 	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
 
@@ -120,14 +120,14 @@ private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 }
 
 /**
- * @return all allies within maxDistance from the origin
+ * @return all allies within maxDistance from the origin, including unit
  */
 public List<Unit> getNearbyAllies (Unit unit, float maxDistance)
 {
 	List<Unit> nearbyAllies = unit.isAttacker() ? this.enemies : this.towers;
-	if (maxDistance <= 0.001)
+	if (maxDistance >= 0.001)
 	{
-		nearbyAllies = nearbyAllies.stream().filter(ally->unit.getPosition().distance(((Unit)ally).getPosition()) <= maxDistance).collect(Collectors.toList());
+		nearbyAllies = nearbyAllies.stream().filter(ally->unit.distance((Unit)ally) <= maxDistance).collect(Collectors.toList());
 	}
 	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
 
@@ -163,11 +163,14 @@ public Unit getNearest (Unit unit, float maxDistance, AttackMode filter)
 			}
 			case AttackMode.Healthiest ->
 			{
-				if (currentEnemy.getHealth() > currentTarget.getHealth())
+				long currentEnemyHealthRatio = currentEnemy.getHealth() / currentEnemy.getMaxHealth();
+				long currentTargetHealthRatio = currentTarget.getHealth() / currentTarget.getMaxHealth();
+
+				if (currentEnemyHealthRatio > currentTargetHealthRatio)
 				{
 					currentTarget = currentEnemy;
 				}
-				else if (currentEnemy.getHealth() == currentTarget.getHealth() && unit.distance(currentTarget) > unit.distance(currentEnemy))
+				else if (currentEnemyHealthRatio == currentTargetHealthRatio && unit.distance(currentTarget) > unit.distance(currentEnemy))
 				{
 					currentTarget = currentEnemy;
 				}
@@ -201,6 +204,24 @@ public Unit getNearest (Unit unit, float maxDistance, AttackMode filter)
 					currentTarget = currentEnemy;
 				}
 				else if (currentEnemy.getAttack() == currentTarget.getAttack() && unit.distance(currentTarget) > unit.distance(currentEnemy))
+				{
+					currentTarget = currentEnemy;
+				}
+			}
+			case AttackMode.Tankiest ->
+			{
+				if (currentEnemy.getHealth() > currentTarget.getHealth())
+				{
+					currentTarget = currentEnemy;
+				}
+				else if (currentEnemy.getHealth() == currentTarget.getHealth() && unit.distance(currentTarget) > unit.distance(currentEnemy))
+				{
+					currentTarget = currentEnemy;
+				}
+			}
+			case AttackMode.MostAdvanced ->
+			{
+				if (currentEnemy.getAdvancement() > currentTarget.getAdvancement())
 				{
 					currentTarget = currentEnemy;
 				}
@@ -282,17 +303,10 @@ public void slapPlayer (LivingEntity enemy)
 }
 
 
-private static void tick (Unit unit)
-{
-	if (unit != null)
-	{
-		unit.tick();
-	}
-}
 private void tickEntities ()
 {
-	this.enemies.stream().forEach(enemy->tick(enemy));
-	this.towers.stream().forEach(tower->tower.tick());
+	this.enemies.stream().filter(enemy->enemy != null).forEach(enemy->enemy.tick());
+	this.towers.stream().filter(tower->tower != null).forEach(tower->tower.tick());
 }
 
 

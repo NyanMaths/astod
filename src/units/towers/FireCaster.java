@@ -14,6 +14,12 @@ public FireCaster (Point2D.Float spawnPosition)
 }
 
 @Override
+public float getAttackRadius ()
+{
+	return 0.75f;
+}
+
+@Override
 public long getCost ()
 {
 	return 100;

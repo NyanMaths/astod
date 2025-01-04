@@ -8,4 +8,6 @@ public enum AttackMode
 	Weakest,
 	Healthiest,
 	MostWounded,
+	Tankiest,
+	MostAdvanced,
 }

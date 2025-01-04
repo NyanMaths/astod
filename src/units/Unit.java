@@ -20,8 +20,6 @@ The attacker property is a flag to identify a unit as ally or enemy.
 */
 public abstract class Unit implements Drawable, Coloured
 {
-private static AttackMode defaultAttackMode = AttackMode.Nearest;
-
 private String name;
 private Element element;
 private boolean attacker;
@@ -31,7 +29,6 @@ private long health;
 private long attack;
 private float range;  // unit : tiles
 private long attackDelay;  // unit : milliseconds
-private AttackMode attackMode;
 private Unit target;
 private boolean isInCooldown;
 
@@ -41,6 +38,7 @@ private final static Timer rechargeScheduler = new Timer();
 // This is intended to be able to resize the game window without making it die.
 // lol nope absolute positioning goes brrrr
 private Point2D.Float position;
+private float advancement;
 
 // the level the units belong to, used to get nearby units to attack or heal
 protected static Level level = null;
@@ -57,11 +55,11 @@ public Unit (String name, boolean attacker, Element element, long maxHealth, lon
     this.attack = attack;
     this.range = range;
 	this.attackDelay = attackDelay;
-    this.attackMode = defaultAttackMode;
 	this.target = null;
 	this.isInCooldown = false;
 
 	this.position = spawnPosition;
+	this.advancement = 0.0f;
 }
 /* Initializes a new Unit with full health, use this if unsure, the other constructor is intended to implement debuffs.
  */
@@ -98,7 +96,7 @@ public static boolean setMap (Map newMap)
 
 /**
  *
- * @param what kind of element is applied to the Unit
+ * @param damageElement what kind of element is applied to the Unit
  * @return the multiplier to be applied to the damage taken
  */
 private float getDamageMultiplier (Element damageElement)
@@ -236,11 +234,7 @@ public boolean setAttackDelay (long newAttackDelay)
 
 public AttackMode getAttackMode ()
 {
-	return this.attackMode;
-}
-public void setAttackMode (AttackMode newAttackmode)
-{
-	this.attackMode = newAttackmode;
+	return AttackMode.Nearest;
 }
 
 public float getAttackRadius ()
@@ -252,9 +246,21 @@ public Point2D.Float getPosition ()
 {
 	return this.position;
 }
-public void setPosition (Point2D.Float newPosition)
+/**
+ * Adds step to the position and updates the advancement towards the player's base
+ * @param step the elementary move of the unit
+*/
+public void stride (Point2D.Float step)
 {
-	this.position = newPosition;
+	this.position.x += step.x;
+	this.position.y += step.y;
+
+	this.advancement += (float)Math.sqrt(step.x*step.x + step.y*step.y);
+}
+
+public float getAdvancement ()
+{
+	return this.advancement;
 }
 
 public double distance (Unit other)
@@ -275,25 +281,16 @@ public void recharge ()
 	this.isInCooldown = false;
 }
 
-private void hurtAux (Unit unit)
-{
-	if (unit != null)
-	{
-		unit.hurt(this.attack, this.element);
-	}
-}
 private void attack ()
 {
 	try
 	{
 	if (!this.isInCooldown)
 	{
-		System.out.println(this.getAttackRadius());
-
 		if (this.getAttackRadius()*Cell.getSize() > Cell.getSize()/100.0)  // if the unit does aoe attacks
 		{
 			List<Unit> victims = level.getNearbyAllies(this.target, this.getAttackRadius()*Cell.getSize());
-			victims.stream().forEach(victim->this.hurtAux(victim));
+			victims.stream().filter(victim->victim != null).forEach(victim->victim.hurt(this.attack, this.element));
 		}
 		else
 		{
@@ -313,7 +310,7 @@ public void tick ()
 {
 	if (this.target == null || !this.target.isAlive())
 	{
-		this.target = level.getNearest(this, this.range, this.attackMode);
+		this.target = level.getNearest(this, this.range*Cell.getSize(), this.getAttackMode());
 	}
 	if (this.target != null && this.target.distance(this) > this.range*Cell.getSize())
 	{
