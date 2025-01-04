@@ -15,7 +15,9 @@ import libraries.StdDraw;
 
 public final class Map implements Drawable
 {
-private Path name;
+private String name;
+private String levelName;
+private Path location;
 private List<List<Cell>> matrix;
 private Point2D.Float playerPosition;
 private Point2D.Float spawnerPosition;
@@ -35,18 +37,20 @@ public Map () throws InvalidMapException, InvalidMapPathException
  */
 public void load (String name, String levelName) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException, MultipleEnemySpawnException
 {
-	this.name = Paths.get("assets/maps/" + name + ".mtp");
+	this.name = name;
+	this.levelName = levelName;
+	this.location = Paths.get("assets/maps/" + name + ".mtp");
 
 	File mapFile = new File("assets/maps/" + name + ".mtp");
 	if (!mapFile.exists() || mapFile.isDirectory())
 	{
-		throw new InvalidMapPathException(this.name);
+		throw new InvalidMapPathException(this.location);
 	}
 
 
 	this.matrix = new ArrayList<>();
 
-	try (BufferedReader reader = Files.newBufferedReader(this.name))
+	try (BufferedReader reader = Files.newBufferedReader(this.location))
 	{
 		String currentLine = reader.readLine();
 
@@ -85,6 +89,8 @@ public void load (String name, String levelName) throws InvalidMapException, Inv
 			i++;
 		}
 
+		if (this.spawn == null) throw new NoEnemySpawnException(this.name, this.levelName);
+
 		Cell.setSize(Math.min(1024.0f, 720.0f) / (float)Math.max(this.getRowsCount(), this.getColumnsCount()));
 
 		this.playerPosition = new Point2D.Float(Cell.getSize()*playerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*playerCoordinates.y + 0.5f*Cell.getSize());
@@ -93,13 +99,12 @@ public void load (String name, String levelName) throws InvalidMapException, Inv
     }
 	catch (IOException eee)
 	{
-		throw new InvalidMapException(this.name);
+		throw new InvalidMapException(this.location);
 	}
 }
 
 private void initializePath (Cell previous, Cell current) throws NoEnemySpawnException, InvalidMapPathException
 {
-	if (current==null) throw new NoEnemySpawnException(this.name);
 	if (current.getType()==CellType.Player) return;
 	Cell[] adjacentCells = getAdjacentCells(current);
 
@@ -153,7 +158,7 @@ public Cell getSpawn ()
 
 public Path getLocation ()
 {
-	return this.name;
+	return this.location;
 }
 
 public int getRowsCount ()
