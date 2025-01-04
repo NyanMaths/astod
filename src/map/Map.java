@@ -21,16 +21,19 @@ private Point2D.Float playerPosition;
 private Point2D.Float spawnerPosition;
 private Cell spawn = null;
 
-public Map (String name) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException
+public Map (String name, String levelName) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException, MultipleEnemySpawnException
 {
-	this.load(name);
+	this.load(name, levelName);
 }
 public Map () throws InvalidMapException, InvalidMapPathException
 {
 	// nothing here
 }
 
-public void load (String name) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException
+/**
+ * Read the map from the given file and validate it
+ */
+public void load (String name, String levelName) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	this.name = Paths.get("assets/maps/" + name + ".mtp");
 
@@ -65,6 +68,11 @@ public void load (String name) throws InvalidMapException, InvalidMapPathExcepti
 				}
 				if (cellType == 'S')
 				{
+					if (this.spawn != null)
+					{
+						throw new MultipleEnemySpawnException(name, levelName, this.spawn.getPosition(), newCell.getPosition());
+					}
+
 					spawnerCoordinates = new Point2D.Float(i, j);
 					this.spawn = newCell;
 				}
@@ -171,16 +179,7 @@ public Cell getCell (Point2D.Float coordinates)
 @Override
 public void draw ()
 {
-    int rowsCount = this.getRowsCount();
-    int columnsCount = this.getColumnsCount();
-
-	for (int i = 0 ; i<rowsCount ; i++)
-	{
-		for (int j = 0 ; j<columnsCount ; j++)
-		{
-			this.getCell(i, j).draw();
-		}
-	}
+	this.matrix.stream().forEachOrdered(row->row.stream().forEachOrdered(cell->cell.draw()));
 }
 
 

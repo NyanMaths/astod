@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import map.InvalidMapException;
 import map.InvalidMapPathException;
+import map.MultipleEnemySpawnException;
 import map.NoEnemySpawnException;
 import units.UninitializedSpawner;
 
@@ -44,7 +45,7 @@ public Game (String id) throws EmptyGameException, InvalidMapException, InvalidM
 		System.err.println(eee);
 	}
 }
-public void start () throws UninitializedSpawner, InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
+public void start () throws UninitializedSpawner, InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	while (this.levels.peek() != null)
 	{

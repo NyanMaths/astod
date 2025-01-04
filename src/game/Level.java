@@ -22,6 +22,7 @@ import libraries.StdDraw;
 import map.InvalidMapException;
 import map.InvalidMapPathException;
 import map.Map;
+import map.MultipleEnemySpawnException;
 import map.NoEnemySpawnException;
 import units.AttackMode;
 import units.Element;
@@ -47,7 +48,7 @@ private final String name;
 private String currentWaveName;
 
 
-public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
+public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	this.map = new Map();
 	this.spawner = new Spawner(this);
@@ -61,7 +62,7 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 	this.load(levelName);
 }
 
-public void load (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
+public void load (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	Path location = Paths.get("assets/levels/" + levelName + ".lvl");
 	this.waves = new LinkedList<>();
@@ -74,7 +75,7 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 		{
 			throw new InvalidLevelException(location);
 		}
-		this.map.load(currentLine);
+		this.map.load(currentLine, levelName);
 		Unit.setMap(this.map);
 
 		this.spawner.setPosition(this.map.getSpawnerPosition());
