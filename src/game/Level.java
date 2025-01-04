@@ -113,9 +113,8 @@ private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 	List<Unit> nearbyEnemies = unit.isAttacker() ? this.towers : this.enemies;
 	if (maxDistance >= 0.001)
 	{
-		nearbyEnemies = nearbyEnemies.stream().filter(enemy->unit.distance((Unit)enemy) <= maxDistance).collect(Collectors.toList());
+		nearbyEnemies = nearbyEnemies.stream().filter(enemy->unit.distance(enemy) <= maxDistance).collect(Collectors.toList());
 	}
-	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
 
 	return nearbyEnemies;
 }
@@ -125,14 +124,8 @@ private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
  */
 public List<Unit> getNearbyAllies (Unit unit, float maxDistance)
 {
-	List<Unit> nearbyAllies = unit.isAttacker() ? this.enemies : this.towers;
-	if (maxDistance >= 0.001)
-	{
-		nearbyAllies = nearbyAllies.stream().filter(ally->unit.distance((Unit)ally) <= maxDistance).collect(Collectors.toList());
-	}
+	return (maxDistance >= 0.001 ? (unit.isAttacker() ? this.enemies : this.towers).stream().filter(ally->unit.distance(ally) <= maxDistance).collect(Collectors.toList()) : (unit.isAttacker() ? this.enemies : this.towers));
 	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
-
-	return nearbyAllies;
 }
 
 /*
@@ -401,9 +394,9 @@ public boolean startWave ()
 
 		long elapsedFrameTime = System.nanoTime() - startFrameTime;
 
-		if (elapsedFrameTime < 16666666)  // cap to 60fps the bad way
+		if (elapsedFrameTime < 14492754)  // cap to 69fps the bad way
 		{
-			StdDraw.pause((int)((long)16666666 - elapsedFrameTime)/1000000);
+			StdDraw.pause((int)((long)14492754 - elapsedFrameTime)/1000000);
 		}
 	}
 

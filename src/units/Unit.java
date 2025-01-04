@@ -29,7 +29,7 @@ private long health;
 private long attack;
 private float range;  // unit : tiles
 private long attackDelay;  // unit : milliseconds
-private Unit target;
+protected Unit target;
 private boolean isInCooldown;
 
 private final static Timer rechargeScheduler = new Timer();
@@ -269,7 +269,12 @@ public double distance (Unit other)
 }
 
 
-private void cooldown ()
+public boolean isCooldowned ()
+{
+	return this.isInCooldown;
+}
+
+protected void cooldown ()
 {
 	this.isInCooldown = true;
 
@@ -281,7 +286,7 @@ public void recharge ()
 	this.isInCooldown = false;
 }
 
-private void attack ()
+protected void attack ()
 {
 	try
 	{
