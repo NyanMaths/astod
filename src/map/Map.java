@@ -9,37 +9,82 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import libraries.StdDraw;
 
 
+/**
+ * Represents the map : stores all cells and their metadata, but not the entities
+ */
 public final class Map implements Drawable
 {
+/**
+ * The identifier of the map
+ */
 private String name;
+/**
+ * The name of the level
+ */
 private String levelName;
+/**
+ * The location of the map
+ */
 private Path location;
+/**
+ * The cells matrix
+ */
 private List<List<Cell>> matrix;
+/**
+ * The player's position
+ */
 private Point2D.Float playerPosition;
+/**
+ * The spawner's position
+ */
 private Point2D.Float spawnerPosition;
-private Cell spawn = null;
+/**
+ * The enepmy spawn cell
+ */
+private List<Cell> spawns;
 
+
+/**
+ * Constructor for map, loads the matrix and computes all useful metadata like spawn and player's position or the enemy path in the map to access it later with O(n) complexity
+ * @param name the identifier of the map, see assets/maps to add more
+ * @param levelName the name of the associated level
+ * @throws InvalidMapException if the map is funky
+ * @throws InvalidMapPathException if the map's path is unreadable (directory or non-existent)
+ * @throws NoEnemySpawnException if there is no enemy spawn
+ * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ */
 public Map (String name, String levelName) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	this.load(name, levelName);
 }
-public Map () throws InvalidMapException, InvalidMapPathException
+/**
+ * Default constructor for map, requires to use Map.load later
+ */
+public Map ()
 {
 	// nothing here
 }
 
 /**
- * Read the map from the given file and validate it
+ * Loads the map's matrix and computes all useful metadata like spawn and player's position or the enemy path in the map to access it later with O(n) complexity
+ * @param name the identifier of the map, see assets/maps to add more
+ * @param levelName the name of the associated level
+ * @throws InvalidMapException if the map is funky
+ * @throws InvalidMapPathException if the map's path is unreadable (directory or non-existent)
+ * @throws NoEnemySpawnException if there is no enemy spawn
+ * @throws MultipleEnemySpawnException if there is multiple enemy spawns
  */
 public void load (String name, String levelName) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	this.name = name;
 	this.levelName = levelName;
 	this.location = Paths.get("assets/maps/" + name + ".mtp");
+	this.spawns = new LinkedList<>();
 
 	File mapFile = new File("assets/maps/" + name + ".mtp");
 	if (!mapFile.exists() || mapFile.isDirectory())
@@ -72,13 +117,8 @@ public void load (String name, String levelName) throws InvalidMapException, Inv
 				}
 				if (cellType == 'S')
 				{
-					if (this.spawn != null)
-					{
-						throw new MultipleEnemySpawnException(name, levelName, this.spawn.getPosition(), newCell.getPosition());
-					}
-
 					spawnerCoordinates = new Point2D.Float(i, j);
-					this.spawn = newCell;
+					this.spawns.addLast(newCell);
 				}
 
 				this.matrix.getLast().addLast(newCell);
@@ -89,7 +129,8 @@ public void load (String name, String levelName) throws InvalidMapException, Inv
 			i++;
 		}
 
-		if (this.spawn == null) throw new NoEnemySpawnException(this.name, this.levelName);
+		if (this.spawns.isEmpty()) throw new NoEnemySpawnException(this.name, this.levelName);
+		else if (this.spawns.size() > 1) throw new MultipleEnemySpawnException(name, levelName, this.spawns);
 
 		Cell.setSize(Math.min(1024.0f, 720.0f) / (float)Math.max(this.getRowsCount(), this.getColumnsCount()));
 
@@ -103,7 +144,12 @@ public void load (String name, String levelName) throws InvalidMapException, Inv
 	}
 }
 
-private void initializePath (Cell previous, Cell current) throws NoEnemySpawnException, InvalidMapPathException
+/**
+ * Recursive path constructor for map
+ * @param previous the previous cell to avoid setting next cell to it, begin with null
+ * @param current the current cell which needs their nextCell to be set, begin with enemy spawn
+ */
+private void initializePath (Cell previous, Cell current) throws NoEnemySpawnException
 {
 	if (current.getType()==CellType.Player) return;
 	Cell[] adjacentCells = getAdjacentCells(current);
@@ -126,6 +172,11 @@ private void initializePath (Cell previous, Cell current) throws NoEnemySpawnExc
 	}
 	//throw new InvalidMapPathException(this.name);
 }
+/**
+ * Get top, bottom, left and right cells from one cell
+ * @param cell the cell in need of friends
+ * @return cell's closest friends
+ */
 private Cell[] getAdjacentCells (Cell cell)
 {
 	Point2D.Float cellPosition = cell.getPosition();
@@ -142,45 +193,83 @@ private Cell[] getAdjacentCells (Cell cell)
     return new Cell[]{cellUp, cellDown, cellLeft, cellRight};
 }
 
+/**
+ * Getter for player's position on map
+ * @return the player's position on map
+ */
 public Point2D.Float getPlayerPosition ()
 {
 	return this.playerPosition;
 }
 
+/**
+ * Getter for enemy spawn position on map
+ * @return the spawner's position
+ */
 public Point2D.Float getSpawnerPosition ()
 {
 	return this.spawnerPosition;
 }
+/**
+ * Getter for spawn cell, supposes unique spawn
+ * @return the spawn cell
+ */
 public Cell getSpawn ()
 {
-	return this.spawn;
+	return this.spawns.getFirst();
 }
 
+/**
+ * Getter for map's location
+ * @return the map's location
+ */
 public Path getLocation ()
 {
 	return this.location;
 }
 
+/**
+ * Getter for map's matrix height
+ * @return the matrix height
+ */
 public int getRowsCount ()
 {
 	return matrix.size();
 }
 
+/**
+ * Getter for map's matrix length
+ * @return the matrix length
+ */
 public int getColumnsCount ()
 {
 	return matrix.get(0).size();
 }
 
+/**
+ * Getter for matrix[row, col]
+ * @param row the row
+ * @param col the ~~row~~ column
+ * @return the cell at (row, col)
+ */
 public Cell getCell (int row, int col)
 {
 	return this.matrix.get(row).get(col);
 }
+/**
+ * Getter for matrix[coordinates.x, coordinates.y]
+ * @param coordinates the point to get the cell from
+ * @return the cell at (coordinates.x, coordinates.y)
+ */
 public Cell getCell (Point2D.Float coordinates)
 {
 	return this.matrix.get((int)coordinates.x).get((int)coordinates.y);
 }
 
 
+/**
+ * Draws the map
+ */
 @Override
 public void draw ()
 {
@@ -198,6 +287,10 @@ public void draw ()
 	return false;
 } */
 
+/**
+ * Know if the map was clicked
+ * @return whether or not the player clicked on the map
+ */
 public boolean isMapClicked ()
 {
 	if(StdDraw.isMousePressed() && StdDraw.mouseX() > 350-350 && StdDraw.mouseX() < 350+350 && StdDraw.mouseY() > 350-350 && StdDraw.mouseY() < 350+350)
@@ -209,7 +302,9 @@ public boolean isMapClicked ()
 }
 
 
-/** Allows to know the coordinates in the map's matrix of a point on the screen
+/**
+ * Allows to know the coordinates in the map's matrix of a point on the screen
+ * @param point the physical position to extract the cell from
  * @return the coordinates of the point's cell, null if not on the map
  */
 public Point2D.Float getCellCoordinates (Point2D.Float point)
@@ -221,6 +316,11 @@ public Point2D.Float getCellCoordinates (Point2D.Float point)
 	return null;
 }
 
+/**
+ * Know if a physical position on the map is buildable
+ * @param position the position to examine
+ * @return whether or not the cell at position is buildable
+ */
 public boolean isBuildable (Point2D.Float position)
 {
 	if (position == null) return false;
