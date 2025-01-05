@@ -15,6 +15,6 @@ public SpawnTask (Spawner parent)
 @Override
 public void run ()
 {
-	parent.spawnNext(this);
+	parent.spawnNext();
 }
 }

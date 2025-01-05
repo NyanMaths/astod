@@ -127,7 +127,7 @@ public boolean isAttacker ()
 {
 	return this.attacker;
 }
-public void setAttacker (boolean newStatus)  // May require special magician token to allow operation as it's quite uncommon to switch teams as easily as Ciotti
+public void setAttacker (boolean newStatus)  // May require special magician token to allow operation as it's quite uncommon to switch teams as easily as politicians
 {
 	this.attacker = newStatus;
 }
@@ -141,7 +141,8 @@ public long getMaxHealth ()
 {
 	return this.maxHealth;
 }
-/** Setter for Unit's max health
+/**
+ * Setter for Unit's max health
  * @return whether the new value is acceptable (> 1) or not
  */
 public boolean setMaxHealth (long newMaxHealth)  // May also require special magician token to allow operation

@@ -125,9 +125,9 @@ public boolean isActive ()
 /*
  * Spawn the next enemy then start the timer for next
  */
-public void spawnNext (SpawnTask funnyToken)
+public void spawnNext ()
 {
-	this.level.spawn(this.enemies.poll(), this);
+	this.level.spawn(this.enemies.poll());
 
 	if (this.enemies.peek() != null)
 	{
