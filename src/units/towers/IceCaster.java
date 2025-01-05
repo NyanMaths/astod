@@ -9,34 +9,53 @@ import units.Element;
 import units.Unit;
 import units.living.LivingEntity;
 
-/*
- * dunno
+/**
+ * Hits light, but so friendly your enemies will never leave it behind
  */
 public final class IceCaster extends Tower
 {
+/**
+ * Constructor of the tower, uses default values for now
+ * @param spawnPosition where to spawn the new tower
+ */
 public IceCaster (Point2D.Float spawnPosition)
 {
 	super("Ice Caster", false, Element.Water, 40, 1, 5.0f, 2000, spawnPosition);
 }
 
+/**
+ * Tactical Camel attack mode, YE SHALL NOT PASS
+ * @return the tower's attack mode
+ */
 @Override
 public AttackMode getAttackMode ()
 {
-	return AttackMode.Tankiest;
+	return AttackMode.MostAdvanced;
 }
 
+/**
+ * AoE damage field radius
+ * @return the tower's attack radius
+ */
 @Override
 public float getAttackRadius ()
 {
 	return 1.0f;
 }
 
+/**
+ * How costly this tower is
+ * @return the tower's cost
+ */
 @Override
 public long getCost ()
 {
 	return 70;
 }
 
+/**
+ * Attacks and slows enemies by 30% of their current speed, maybe nerf this later
+ */
 @Override
 protected void attack ()
 {

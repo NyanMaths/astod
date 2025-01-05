@@ -13,10 +13,10 @@ The gameplay consists in putting towers on the buildable areas and trying to sur
 You will likely need JRE 21 or higher, older versions aren't supported and will never be.
 Open a shell in the repo's root.
 
-On Linux-based (Wayland) : `DISPLAY=:0 /usr/bin/env java -XX:+ShowCodeDetailsInExceptionMessages -cp bin ASToD`
-On Linux-based (Xorg) : `/usr/bin/env java -XX:+ShowCodeDetailsInExceptionMessages -cp bin ASToD`
+On Linux-based (Wayland) : `DISPLAY=:0 /usr/bin/env java -XX:+ShowCodeDetailsInExceptionMessages -cp bin game/ASToD`
+On Linux-based (Xorg) : `/usr/bin/env java -XX:+ShowCodeDetailsInExceptionMessages -cp bin game/ASToD`
 
-Windows is not supported.
+Windows is not supported, we don't know about powershell.
 
 
 ## Todo : todo
