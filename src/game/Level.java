@@ -33,21 +33,60 @@ import units.living.LivingEntity;
 import units.towers.Tower;
 
 
+/**
+ * A level consists in a map, waves and a game loop to get through for the player
+ */
 public final class Level
 {
+/**
+ * The level's waves
+ */
 private Queue<String> waves;
+/**
+ * The level's map
+ */
 private final Map map;
+/**
+ * The level's spawner
+ */
 private final Spawner spawner;
+/**
+ * The level's enemies list, filled by the spawner
+ */
 private final List<Unit> enemies;
+/**
+ * The player's towers
+ */
 private final List<Unit> towers;
 
+/**
+ * The player to protect
+ */
 private final Player player;
 
+/**
+ * The level's user interface, including shop and status
+ */
 private final LevelUI UI;
+/**
+ * The level's identifier
+ */
 private final String name;
+/**
+ * The pushed wave
+ */
 private String currentWaveName;
 
 
+/**
+ * Constructor of level
+ * @param levelName the identifier of the level, see in assets/levels to add more
+ * @throws InvalidMapException if the map's loading fails
+ * @throws InvalidMapPathException if the map's path is unreadable
+ * @throws InvalidLevelException if the level file is corrupted
+ * @throws NoEnemySpawnException if there is no enemy spawn
+ * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ */
 public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	this.map = new Map();
@@ -62,6 +101,15 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
 	this.load(levelName);
 }
 
+/**
+ * Effective constructor of level, loads the map, the waves and checks for errors in resource files
+ * @param levelName the identifier of the level, see in assets/levels to add more
+ * @throws InvalidMapException if the map's loading fails
+ * @throws InvalidMapPathException if the map's path is unreadable
+ * @throws InvalidLevelException if the level file is corrupted
+ * @throws NoEnemySpawnException if there is no enemy spawn
+ * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ */
 public void load (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	Path location = Paths.get("assets/levels/" + levelName + ".lvl");
@@ -95,10 +143,18 @@ public void load (String levelName) throws InvalidMapException, InvalidMapPathEx
 	}
 }
 
+/**
+ * Getter of level's name
+ * @return the level's name or identifier
+ */
 public String getName ()
 {
 	return this.name;
 }
+/**
+ * Getter for currently pushed wave
+ * @return the currently pushed wave
+ */
 public String getCurrentWaveName ()
 {
 	return this.currentWaveName;
@@ -106,6 +162,9 @@ public String getCurrentWaveName ()
 
 
 /**
+ * Allows to get all surrounding enemies of a unit, has O(n) complexity
+ * @param unit the origin of the research
+ * @param maxDistance the radius to look for enemies
  * @return all enemies within maxDistance from the origin
  */
 private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
@@ -120,7 +179,10 @@ private List<Unit> getNearbyEnemies (Unit unit, float maxDistance)
 }
 
 /**
- * @return all allies within maxDistance from the origin, including unit
+ * Allows to get all surrounding allies of a unit, has O(n) complexity
+ * @param unit the origin of the research
+ * @param maxDistance the radius to look for allies
+ * @return all allies within maxDistance from the origin
  */
 public List<Unit> getNearbyAllies (Unit unit, float maxDistance)
 {
@@ -128,9 +190,12 @@ public List<Unit> getNearbyAllies (Unit unit, float maxDistance)
 	// remember kids : don't write unreadable code unless you want to never be replaced because no one would want to maintain your hideous thingy
 }
 
-/*
- * Set maxDistance to 0 to get unlimited range
- * @return the nearest unit respecting the given filter
+/**
+ * Look for unit's nearest enemy respecting the given filter, has O(n) complexity
+ * @param unit the origin of the research
+ * @param maxDistance the radius to look enemies for
+ * @param filter the search criteria (tankiest, weakest, just nearest...)
+ * @return the nearest enemy respecting filter
  */
 public Unit getNearest (Unit unit, float maxDistance, AttackMode filter)
 {
@@ -228,14 +293,19 @@ public Unit getNearest (Unit unit, float maxDistance, AttackMode filter)
 }
 
 
-/*
+/**
  * Adds the newly spawned enemy into battle
+ * @param enemy the spawned unit
  */
-public void spawn (LivingEntity enemy, Spawner funnyToken)
+public void spawn (LivingEntity enemy)
 {
 	this.enemies.add(enemy);
 }
-public void buildTower (Point2D.Float position)
+/**
+ * Adds the newly spawned tower on the map if possible
+ * @param position the spawning position of the new tower
+ */
+public void buildTowerFromUISelection (Point2D.Float position)
 {
 	Tower newTower = player.buy(this.UI.takeTowerName(), position);
 
@@ -251,6 +321,7 @@ public void buildTower (Point2D.Float position)
 }
 /**
  * Yeet a unit from the game and make it woe (LOUD)
+ * @param unit the unit to blight
  */
 public void blight (Unit unit)
 {
@@ -277,6 +348,10 @@ public void blight (Unit unit)
 		System.err.println(e.getMessage());
 	}
 }
+/**
+ * Hurt the player and dispawn the lucky enemy
+ * @param enemy the victorious enemy
+ */
 public void slapPlayer (LivingEntity enemy)
 {
 	this.player.hurt(enemy.getAttack());
@@ -297,6 +372,9 @@ public void slapPlayer (LivingEntity enemy)
 }
 
 
+/**
+ * Make entities move, attack, maybe even die ; in short, make their lives.
+ */
 private void tickEntities ()
 {
 	this.enemies.stream().filter(enemy->enemy != null).forEach(enemy->enemy.tick());
@@ -304,7 +382,7 @@ private void tickEntities ()
 }
 
 
-/*
+/**
  * Draw enemies, towers then player from bottom to top layer.
  * Can raise ConcurrentModificationException for funny reasons.
  */
@@ -316,10 +394,10 @@ private void drawEntities ()
 }
 
 
-/*
- * Starts the level : spawns enemies and ticks the game.
- * Basically the main game loop
+/**
+ * The level's loop, pushes all enemies waves and waits
  * @return whether the player is victorious or not
+ * @throws UninitializedSpawner if the spawner could not load its waves
  */
 public boolean start () throws UninitializedSpawner
 {
@@ -344,9 +422,9 @@ public boolean start () throws UninitializedSpawner
 	return true;
 }
 
-/*
+/**
  * Ticks one wave, this method exists for the sole purpose of reducing indentation level of the game loop.
- * This also is a testing zone
+ * First manages mouse events, then ticks entities and lastly draws the result. Uses timers to cap frame rate, this is awful but just works :tm:
  * @return whether the player was victorious or not
  */
 public boolean startWave ()
@@ -369,7 +447,7 @@ public boolean startWave ()
 			{
 				if (map.isBuildable(position))
 				{
-					buildTower(position);
+					buildTowerFromUISelection(position);
 				}
 				else
 				{

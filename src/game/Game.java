@@ -14,11 +14,22 @@ import map.NoEnemySpawnException;
 import units.UninitializedSpawner;
 
 
+/**
+ * Initiates the game and loops through levels
+ */
 public class Game
 {
+/**
+ * Levels to be played
+ */
 private final Queue<String> levels;
 
-public Game (String id) throws EmptyGameException, InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException
+/**
+ * Load and validate the game's levels
+ * @param id the game's id, see assets/games to add more
+ * @throws EmptyGameException if there is nothing in the game, that would be lame
+ */
+public Game (String id) throws EmptyGameException
 {
 	Path location = Paths.get("assets/games/game" + id + ".g");
 	this.levels = new LinkedList<>();
@@ -45,6 +56,16 @@ public Game (String id) throws EmptyGameException, InvalidMapException, InvalidM
 		System.err.println(eee);
 	}
 }
+
+/**
+ * Start the game loop : loops through each level and each levels loops through their enemies waves
+ * @throws UninitializedSpawner if the spawner could not load its waves
+ * @throws InvalidMapException in case of corrupted map
+ * @throws InvalidMapPathException in case of unreadable map's path
+ * @throws InvalidLevelException if the level file is corrupted
+ * @throws NoEnemySpawnException if there is no enemy spawn
+ * @throws MultipleEnemySpawnException if there is too much enemy spawns
+ */
 public void start () throws UninitializedSpawner, InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	while (this.levels.peek() != null)

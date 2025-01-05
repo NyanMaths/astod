@@ -5,8 +5,16 @@ import libraries.StdDraw;
 import units.Element;
 
 
-public class Utils
+/**
+ * Implementation for various graphics utilities
+ */
+public abstract class Utils
 {
+/**
+ * Get a colour associated with an element
+ * @param element the element to get the colour from
+ * @return the associated colour
+ */
 public static java.awt.Color colorFromElement (Element element)
 {
 	return switch (element)
@@ -18,6 +26,14 @@ public static java.awt.Color colorFromElement (Element element)
 		case Element.Water -> new Color(6, 0, 160);
 	};
 }
+
+/**
+ * Draws a heart wherever you want
+ * @param x the x-coordinate of the center
+ * @param y the y-coordinate of the center
+ * @param height the height of the heart
+ * @param colour the colour of the heart
+ */
 public static void drawHeart(double x, double y, double height, java.awt.Color colour)
 {
 	double centerX = x;
@@ -52,6 +68,12 @@ public static void drawHeart(double x, double y, double height, java.awt.Color c
 		};
 		StdDraw.filledPolygon(listX , listY);
 }
+/**
+ * Draws a heart wherever you want with a default colour
+ * @param x the x-coordinate of the center
+ * @param y the y-coordinate of the center
+ * @param height the height of the heart
+ */
 public static void drawHeart(double x, double y, double height)
 {
 	Utils.drawHeart(x, y, height, new Color(223 , 75 , 95));

@@ -2,8 +2,17 @@ import game.Game;
 import java.util.Scanner;
 import libraries.StdDraw;
 
+
+/**
+ * This is a tower defense game
+ */
 public class ASToD
 {
+/**
+ * Everything starts here, there goes the game
+ * @param args launch params, ignored
+ * @throws Exception funny aah exceptions
+ */
 public static void main (String[] args) throws Exception
 {
     String gameID;
