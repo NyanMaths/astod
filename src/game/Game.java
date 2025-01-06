@@ -10,7 +10,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import map.InvalidMapException;
 import map.MultipleEnemySpawnException;
+import map.MultiplePlayerBaseException;
 import map.NoEnemySpawnException;
+import map.NoPlayerBaseException;
 import map.NonExistentMapException;
 import units.UninitializedSpawner;
 
@@ -69,9 +71,11 @@ public Game (String id) throws EmptyGameException, NoSuchGameException
  * @throws InvalidLevelException if the level file is corrupted
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is too much enemy spawns
+ * @throws NoPlayerBaseException if there is no base for the player
+ * @throws MultiplePlayerBaseException if there is too much bases for player
  * @throws NonExistentMapException in case of unreadable map's path
  */
-public void start () throws UninitializedSpawner, InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException
+public void start () throws UninitializedSpawner, InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException, MultiplePlayerBaseException, NoPlayerBaseException
 {
 	while (this.levels.peek() != null)
 	{
@@ -89,6 +93,6 @@ public void start () throws UninitializedSpawner, InvalidMapException, InvalidLe
 	}
 
 	// the player finished the game
-	System.out.println("noice");
+	System.out.println("noice, you win");
 }
 }

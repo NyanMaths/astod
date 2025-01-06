@@ -44,7 +44,11 @@ private Point2D.Float playerPosition;
  */
 private Point2D.Float spawnerPosition;
 /**
- * The enepmy spawn cell
+ * The player's bases, should be only one
+ */
+private List<Cell> playerBases;
+/**
+ * The enemy spawn cells, sould be only one
  */
 private List<Cell> spawns;
 
@@ -56,9 +60,11 @@ private List<Cell> spawns;
  * @throws InvalidMapException if the map is funky
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ * @throws NoPlayerBaseException if there is no base for the player
+ * @throws MultiplePlayerBaseException if there is too much bases for player
  * @throws NonExistentMapException if the map's path is unreadable (directory or non-existent)
  */
-public Map (String name, String levelName) throws InvalidMapException, NonExistentMapException, NoEnemySpawnException, MultipleEnemySpawnException
+public Map (String name, String levelName) throws InvalidMapException, NonExistentMapException, NoEnemySpawnException, MultipleEnemySpawnException, MultiplePlayerBaseException, NoPlayerBaseException
 {
 	this.load(name, levelName);
 }
@@ -77,13 +83,16 @@ public Map ()
  * @throws InvalidMapException if the map is funky
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ * @throws NoPlayerBaseException if there is no base for the player
+ * @throws MultiplePlayerBaseException if there is too much bases for player
  * @throws NonExistentMapException if the map's path is unreadable (directory or non-existent)
  */
-public void load (String name, String levelName) throws InvalidMapException, NonExistentMapException, NoEnemySpawnException, MultipleEnemySpawnException
+public void load (String name, String levelName) throws InvalidMapException, NonExistentMapException, NoEnemySpawnException, MultipleEnemySpawnException, MultiplePlayerBaseException, NoPlayerBaseException
 {
 	this.name = name;
 	this.levelName = levelName;
 	this.location = Paths.get("assets/maps/" + name + ".mtp");
+	this.playerBases = new LinkedList<>();
 	this.spawns = new LinkedList<>();
 
 	File mapFile = new File("assets/maps/" + name + ".mtp");
@@ -114,6 +123,7 @@ public void load (String name, String levelName) throws InvalidMapException, Non
 				if (cellType == 'B')
 				{
 					playerCoordinates = new Point2D.Float(i, j);
+					this.playerBases.addLast(newCell);
 				}
 				if (cellType == 'S')
 				{
@@ -131,6 +141,9 @@ public void load (String name, String levelName) throws InvalidMapException, Non
 
 		if (this.spawns.isEmpty()) throw new NoEnemySpawnException(this.name, this.levelName);
 		else if (this.spawns.size() > 1) throw new MultipleEnemySpawnException(name, levelName, this.spawns);
+
+		if (this.playerBases.isEmpty()) throw new NoPlayerBaseException(this.name, this.levelName);
+		else if (this.playerBases.size() > 1) throw new MultiplePlayerBaseException(name, levelName, this.playerBases);
 
 		Cell.setSize(Math.min(1024.0f, 720.0f) / (float)Math.max(this.getRowsCount(), this.getColumnsCount()));
 

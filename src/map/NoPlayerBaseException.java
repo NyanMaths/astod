@@ -5,9 +5,9 @@ import java.nio.file.Paths;
 
 
 /**
- * Flags a map without enemy spawn
+ * Flags a map without a base
  */
-public class NoEnemySpawnException extends Exception
+public class NoPlayerBaseException extends Exception
 {
 /**
  * The faulty map's location
@@ -15,13 +15,13 @@ public class NoEnemySpawnException extends Exception
 private final Path location;
 
 /**
- * Constructor for NoEnemySpawnException
+ * Constructor for NoPlayerBaseException
  * @param mapName the faulty map's name
  * @param levelName the calling level
  */
-public NoEnemySpawnException (String mapName, String levelName)
+public NoPlayerBaseException (String mapName, String levelName)
 {
-    super("no enemy spawn found in level " + levelName + " for map" + mapName);
+    super("no player base found in level " + levelName + " for map " + mapName);
     this.location = Paths.get("assets/maps/" + mapName + ".mtp");
 }
 

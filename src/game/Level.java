@@ -22,7 +22,9 @@ import libraries.StdDraw;
 import map.InvalidMapException;
 import map.Map;
 import map.MultipleEnemySpawnException;
+import map.MultiplePlayerBaseException;
 import map.NoEnemySpawnException;
+import map.NoPlayerBaseException;
 import map.NonExistentMapException;
 import units.AttackMode;
 import units.Element;
@@ -85,9 +87,11 @@ private String currentWaveName;
  * @throws InvalidLevelException if the level file is corrupted
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ * @throws NoPlayerBaseException if there is no base for the player
+ * @throws MultiplePlayerBaseException if there is too much bases for player
  * @throws NonExistentMapException if the map's path is unreadable
  */
-public Level (String levelName) throws InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException
+public Level (String levelName) throws InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException, MultiplePlayerBaseException, NoPlayerBaseException
 {
 	this.map = new Map();
 	this.spawner = new Spawner(this);
@@ -108,9 +112,11 @@ public Level (String levelName) throws InvalidMapException, InvalidLevelExceptio
  * @throws InvalidLevelException if the level file is corrupted
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ * @throws NoPlayerBaseException if there is no base for the player
+ * @throws MultiplePlayerBaseException if there is too much bases for player
  * @throws NonExistentMapException if the map's path is unreadable
  */
-public void load (String levelName) throws InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException
+public void load (String levelName) throws InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException, MultiplePlayerBaseException, NoPlayerBaseException
 {
 	Path location = Paths.get("assets/levels/" + levelName + ".lvl");
 	this.waves = new LinkedList<>();

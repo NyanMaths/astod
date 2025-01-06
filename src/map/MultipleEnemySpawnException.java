@@ -28,7 +28,7 @@ public MultipleEnemySpawnException (String mapName, String levelName, List<Cell>
  */
 private static String generateErrorMessage (String mapName, String levelName, List<Cell> spawns)
 {
-	String report = "multiple enemy spawns detected in " + mapName + "read in level " + levelName + " : ";
+	String report = "multiple enemy spawns detected in " + mapName + " called from level " + levelName + " : ";
 	for (Cell spawn : spawns)
 	{
 		report += "\nspawn at : " + spawn.getPosition();
