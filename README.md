@@ -7,7 +7,7 @@ It is a rather barebones tower defense game for a uni project.
 
 You can launch the game and play until victory over the scenario you chose.
 The gameplay consists in putting towers on the buildable areas and trying to survive through all levels.
-There is a "skill issue edition" of the game, named 2 which is possible to finish even if you are not really good.
+There is a "skill issue edition" (SKE) of the game, named 2 which is possible to finish even if you are not really good.
 <br>Some little extras to the base game :
  - Ice Caster tower
  - Funny sounds (keep your computer's volume **low** to avoid surprises)
