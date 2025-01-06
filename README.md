@@ -13,6 +13,8 @@ Some little extras to the base game :
  - Funny sounds (keep your computer's volume **low** to avoid surprises)
  - Somehow helpful error detection with precise exceptions
 
+There is currently two games, one difficult and the other easier, respectively named 1 and 2, choose the one you want when prompted at launch.
+
 
 ## Building and launching
 
