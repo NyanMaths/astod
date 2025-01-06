@@ -54,11 +54,11 @@ private List<Cell> spawns;
  * @param name the identifier of the map, see assets/maps to add more
  * @param levelName the name of the associated level
  * @throws InvalidMapException if the map is funky
- * @throws InvalidMapPathException if the map's path is unreadable (directory or non-existent)
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ * @throws NonExistentMapException if the map's path is unreadable (directory or non-existent)
  */
-public Map (String name, String levelName) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException, MultipleEnemySpawnException
+public Map (String name, String levelName) throws InvalidMapException, NonExistentMapException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	this.load(name, levelName);
 }
@@ -75,11 +75,11 @@ public Map ()
  * @param name the identifier of the map, see assets/maps to add more
  * @param levelName the name of the associated level
  * @throws InvalidMapException if the map is funky
- * @throws InvalidMapPathException if the map's path is unreadable (directory or non-existent)
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ * @throws NonExistentMapException if the map's path is unreadable (directory or non-existent)
  */
-public void load (String name, String levelName) throws InvalidMapException, InvalidMapPathException, NoEnemySpawnException, MultipleEnemySpawnException
+public void load (String name, String levelName) throws InvalidMapException, NonExistentMapException, NoEnemySpawnException, MultipleEnemySpawnException
 {
 	this.name = name;
 	this.levelName = levelName;
@@ -89,7 +89,7 @@ public void load (String name, String levelName) throws InvalidMapException, Inv
 	File mapFile = new File("assets/maps/" + name + ".mtp");
 	if (!mapFile.exists() || mapFile.isDirectory())
 	{
-		throw new InvalidMapPathException(this.location);
+		throw new NonExistentMapException(this.location);
 	}
 
 
@@ -136,7 +136,8 @@ public void load (String name, String levelName) throws InvalidMapException, Inv
 
 		this.playerPosition = new Point2D.Float(Cell.getSize()*playerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*playerCoordinates.y + 0.5f*Cell.getSize());
 		this.spawnerPosition = new Point2D.Float(Cell.getSize()*spawnerCoordinates.x + 0.5f*Cell.getSize(), Cell.getSize()*spawnerCoordinates.y + 0.5f*Cell.getSize());
-		initializePath(null, this.getCell(this.getCellCoordinates(this.spawnerPosition)));
+
+		initializePath(null, this.spawns.getFirst());
     }
 	catch (IOException eee)
 	{
@@ -149,7 +150,7 @@ public void load (String name, String levelName) throws InvalidMapException, Inv
  * @param previous the previous cell to avoid setting next cell to it, begin with null
  * @param current the current cell which needs their nextCell to be set, begin with enemy spawn
  */
-private void initializePath (Cell previous, Cell current) throws NoEnemySpawnException
+private void initializePath (Cell previous, Cell current)
 {
 	if (current.getType()==CellType.Player) return;
 	Cell[] adjacentCells = getAdjacentCells(current);

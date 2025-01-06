@@ -9,9 +9,9 @@ import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.Queue;
 import map.InvalidMapException;
-import map.InvalidMapPathException;
 import map.MultipleEnemySpawnException;
 import map.NoEnemySpawnException;
+import map.NonExistentMapException;
 import units.UninitializedSpawner;
 
 
@@ -66,12 +66,12 @@ public Game (String id) throws EmptyGameException, NoSuchGameException
  * Start the game loop : loops through each level and each levels loops through their enemies waves
  * @throws UninitializedSpawner if the spawner could not load its waves
  * @throws InvalidMapException in case of corrupted map
- * @throws InvalidMapPathException in case of unreadable map's path
  * @throws InvalidLevelException if the level file is corrupted
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is too much enemy spawns
+ * @throws NonExistentMapException in case of unreadable map's path
  */
-public void start () throws UninitializedSpawner, InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
+public void start () throws UninitializedSpawner, InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException
 {
 	while (this.levels.peek() != null)
 	{

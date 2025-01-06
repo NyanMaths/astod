@@ -20,10 +20,10 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import libraries.StdDraw;
 import map.InvalidMapException;
-import map.InvalidMapPathException;
 import map.Map;
 import map.MultipleEnemySpawnException;
 import map.NoEnemySpawnException;
+import map.NonExistentMapException;
 import units.AttackMode;
 import units.Element;
 import units.Spawner;
@@ -82,12 +82,12 @@ private String currentWaveName;
  * Constructor of level
  * @param levelName the identifier of the level, see in assets/levels to add more
  * @throws InvalidMapException if the map's loading fails
- * @throws InvalidMapPathException if the map's path is unreadable
  * @throws InvalidLevelException if the level file is corrupted
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ * @throws NonExistentMapException if the map's path is unreadable
  */
-public Level (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
+public Level (String levelName) throws InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException
 {
 	this.map = new Map();
 	this.spawner = new Spawner(this);
@@ -105,12 +105,12 @@ public Level (String levelName) throws InvalidMapException, InvalidMapPathExcept
  * Effective constructor of level, loads the map, the waves and checks for errors in resource files
  * @param levelName the identifier of the level, see in assets/levels to add more
  * @throws InvalidMapException if the map's loading fails
- * @throws InvalidMapPathException if the map's path is unreadable
  * @throws InvalidLevelException if the level file is corrupted
  * @throws NoEnemySpawnException if there is no enemy spawn
  * @throws MultipleEnemySpawnException if there is multiple enemy spawns
+ * @throws NonExistentMapException if the map's path is unreadable
  */
-public void load (String levelName) throws InvalidMapException, InvalidMapPathException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException
+public void load (String levelName) throws InvalidMapException, InvalidLevelException, NoEnemySpawnException, MultipleEnemySpawnException, NonExistentMapException
 {
 	Path location = Paths.get("assets/levels/" + levelName + ".lvl");
 	this.waves = new LinkedList<>();

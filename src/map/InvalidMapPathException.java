@@ -1,34 +1,29 @@
 package map;
 
-import java.nio.file.Path;
-
 
 /**
- * Flags a unreadable map location
+ * Flags a broken path in map
  */
 public class InvalidMapPathException extends Exception
 {
-/**
- * The unreadable map's location
- */
-private final Path location;
-
-/**
- * Constructor for InvalidMapPathException
- * @param mapLocation the unreadable map's location
- */
-public InvalidMapPathException (Path mapLocation)
+private static String parsePathError (PathError error)
 {
-	super(mapLocation + " does not exist !");
-	this.location = mapLocation;
+	return switch (error)
+	{
+		case PathError.Loop -> "loop";
+		case PathError.MultiplePath -> "multiple paths";
+		case PathError.NoPath -> "no path";
+	};
 }
 
 /**
- * Getter for unreadable map's location
- * @return the unreadable map's location
+ * Constructor for InvalidMapPathException
+ * @param mapName the broken map
+ * @param levelName the calling level
+ * @param error the kind of path error
  */
-public Path getLocation ()
+public InvalidMapPathException (String mapName, String levelName, PathError error)
 {
-	return this.location;
+	super("map " + mapName + " in level " + levelName + " is broken. reason : " + parsePathError(error));
 }
 }
