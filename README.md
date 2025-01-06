@@ -25,6 +25,7 @@ Nothing more should be necessary as there is no external libraries, StdDraw is a
 ### Windows
 
 Windows is not supported, we don't know about powershell. Launch it from VScodium and it *should* work.
+*Works on Apollinaire's machine* trademark.
 
 
 ### Linux :
