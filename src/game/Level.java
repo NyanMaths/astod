@@ -335,6 +335,11 @@ public void blight (Unit unit)
 		this.towers.remove(unit);
 	}
 
+	if (!unit.getClass().getName().equals("units.living.Boss"))
+	{
+		return;
+	}
+
 	try
 	{
 		File f = new File("assets/woe.wav");
@@ -356,6 +361,11 @@ public void slapPlayer (LivingEntity enemy)
 {
 	this.player.hurt(enemy.getAttack());
 	this.enemies.remove(enemy);
+
+	if (this.player.isAlive())
+	{
+		return;
+	}
 
 	try
 	{

@@ -14,7 +14,7 @@ public final class FireCaster extends Tower
  */
 public FireCaster (Point2D.Float spawnPosition)
 {
-	super("Fire Caster", false, Element.Fire, 30, 10, 2.5f, 500, spawnPosition);
+	super("Fire Caster", false, Element.Fire, 45, 10, 2.5f, 500, spawnPosition);
 }
 
 /**

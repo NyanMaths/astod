@@ -20,7 +20,7 @@ public final class IceCaster extends Tower
  */
 public IceCaster (Point2D.Float spawnPosition)
 {
-	super("Ice Caster", false, Element.Water, 40, 1, 5.0f, 2000, spawnPosition);
+	super("Ice Caster", false, Element.Water, 60, 1, 5.0f, 2000, spawnPosition);
 }
 
 /**

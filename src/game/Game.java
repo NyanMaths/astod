@@ -1,6 +1,7 @@
 package game;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -28,10 +29,14 @@ private final Queue<String> levels;
  * Load and validate the game's levels
  * @param id the game's id, see assets/games to add more
  * @throws EmptyGameException if there is nothing in the game, that would be lame
+ * @throws NoSuchGameException when the provided game does not exist
  */
-public Game (String id) throws EmptyGameException
+public Game (String id) throws EmptyGameException, NoSuchGameException
 {
 	Path location = Paths.get("assets/games/game" + id + ".g");
+	File levelFile = new File("assets/games/game" + id + ".g");
+	if (levelFile.isDirectory() || !levelFile.exists()) throw new NoSuchGameException(location);
+
 	this.levels = new LinkedList<>();
 
 	try (BufferedReader reader = Files.newBufferedReader(location))

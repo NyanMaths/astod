@@ -16,7 +16,7 @@ public final class WaterCaster extends Tower
  */
 public WaterCaster (Point2D.Float spawnPosition)
 {
-	super("Water Caster", false, Element.Water, 30, 3, 4.0f, 1000, spawnPosition);
+	super("Water Caster", false, Element.Water, 45, 3, 4.0f, 1000, spawnPosition);
 }
 
 /**
